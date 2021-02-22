@@ -3,6 +3,7 @@ let
 
   pname = builtins.baseNameOf ./.;
   version = "0.1";
+  name = "${pname}-${version}";
 
   pkgsVanilla = with nixpkgs; [
     alacritty
@@ -20,8 +21,21 @@ let
       wrapArgs = [ "--autostart" "${./config/herbstluftwm-autostart}" ];
     })
   ];
+
+  inherit (nixpkgs) writeScriptBin;
+  startxWrapper =
+    # Override startx with a hard-coded mutable path for system startx:
+    writeScriptBin "startx" ''
+      #!/bin/sh
+      exec /run/current-system/sw/bin/startx herbstluftwm "$@"
+    '';
+
+  pkgsOther = [
+    startxWrapper
+  ];
+
+  paths = pkgsVanilla ++ pkgsWrapped ++ pkgsOther;
 in
   nixpkgs.symlinkJoin {
-    name = "${pname}-0.1";
-    paths = pkgsVanilla ++ pkgsWrapped;
+    inherit name paths;
   }
