@@ -1,4 +1,4 @@
-#!/nix/store/vnyfysaya7sblgdyvqjkrjbrb0cy11jf-bash-4.4-p23/bin/bash
+#!/bin/bash
 
 # this is a simple config for herbstluftwm
 
