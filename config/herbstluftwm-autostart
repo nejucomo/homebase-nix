@@ -6,8 +6,6 @@ hc() {
     herbstclient "$@"
 }
 
-hc emit_hook reload
-
 xsetroot -solid '#5A8E3A'
 
 # remove all existing keybindings
@@ -135,3 +133,6 @@ hc unlock
 #    # start it on each monitor
 #    "$panel" "$monitor" &
 #done
+
+hc emit_hook reload
+
