@@ -18,9 +18,9 @@ in
         builder = writeScript "${name}-builder.sh" ''
           source "$stdenv/setup"
           mkdir -p "$out/bin"
-          install -m 555 "$src" "$out/bin/${pkg}"
+          ln -s "${realpkg}/bin"/* "$out/bin/"
+          install -m 555 --backup --suffix ".unwrapped" "$src" "$out/bin/${pkg}"
           chmod -R u+w "$out"
           patchShebangs "$out"
-          ln -s "${realbin}" "$out/bin/${pkg}-unwrapped"
         '';
       }

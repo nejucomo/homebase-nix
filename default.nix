@@ -17,5 +17,12 @@ in
           "${./config/vimrc}"
         ];
       })
+      (wrapBin {
+        pkg = "herbstluftwm";
+        wrapArgs = [
+          "--autostart"
+          "${./config/herbstluftwm-autostart}"
+        ];
+      })
     ];
   }
