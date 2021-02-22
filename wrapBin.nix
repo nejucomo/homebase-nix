@@ -8,11 +8,11 @@ in
       realbin = "${realpkg}/bin/${pkg}";
 
       pkgOverride = nixpkgs.writeScriptBin pkg ''
-        #! /bin/bash
+        #!/bin/sh
         exec "${realbin}" ${toString wrapArgs} "$@"
       '';
     in
       nixpkgs.symlinkJoin {
         inherit name;
-        paths = [ realpkg pkgOverride ];
+        paths = [ pkgOverride realpkg ];
       }
