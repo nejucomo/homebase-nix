@@ -1,26 +1,18 @@
 let
   nixpkgs = import <nixpkgs> {};
-  inherit (nixpkgs) writeScript;
 in
   { pkg, wrapArgs }:
     let
       name = "homebase-${pkg}";
       realpkg = nixpkgs.${pkg};
       realbin = "${realpkg}/bin/${pkg}";
-      wrapbin = writeScript "${name}" ''
+
+      pkgOverride = nixpkgs.writeScriptBin pkg ''
         #! /bin/bash
         exec "${realbin}" ${toString wrapArgs} "$@"
-      ''; 
+      '';
     in
-      nixpkgs.stdenv.mkDerivation {
+      nixpkgs.symlinkJoin {
         inherit name;
-        src = wrapbin;
-        builder = writeScript "${name}-builder.sh" ''
-          source "$stdenv/setup"
-          mkdir -p "$out/bin"
-          ln -s "${realpkg}/bin"/* "$out/bin/"
-          install -m 555 --backup --suffix ".unwrapped" "$src" "$out/bin/${pkg}"
-          chmod -R u+w "$out"
-          patchShebangs "$out"
-        '';
+        paths = [ realpkg pkgOverride ];
       }
