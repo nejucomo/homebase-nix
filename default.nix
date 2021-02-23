@@ -32,6 +32,12 @@ let
 
   pkgsOther = [
     startxWrapper
+    (writeScriptBin "journalctl-sidebar" ''
+      #! /usr/bin/env nix-shell
+      #! nix-shell -i bash -p jq
+        journalctl -f -o json \
+          | jq -r '"\((.__REALTIME_TIMESTAMP | tonumber) / 1000000 | todate) \(.SYSLOG_IDENTIFIER) priority:\(.PRIORITY) \(.USER_UNIT)\n  \(.MESSAGE)\n"'
+     '')
   ];
 
   paths = pkgsVanilla ++ pkgsWrapped ++ pkgsOther;

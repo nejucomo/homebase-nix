@@ -17,8 +17,14 @@ xsetroot -solid '#aa22cc'
 # remove all existing keybindings
 hc keyunbind --all
 
-hc split horizontal 0.125
-hc spawn "$alacritty" --title journalctl -e journalctl -f
+if hc silent new_attr bool my_not_first_autostart
+then
+  hc split horizontal 0.125
+  hc focus right
+  hc split horizontal 0.857
+  hc spawn "$alacritty" --title 'journal left' --class journalctl,panel_left -e journalctl-sidebar
+  hc spawn "$alacritty" --title 'journal right' --class journalctl,panel_right -e journalctl -f -o shortiso
+fi
 
 set +x
 
@@ -117,27 +123,20 @@ hc set window_gap 2
 #hc set smart_window_surroundings off
 #hc set smart_frame_surroundings on
 #hc set mouse_recenter_gap 0
+hc set tree_style '╾│ ├└╼─┐'
 
 # rules
 hc unrule -F
-#hc rule focus=off # normally do not focus new clients
-# give focus to most common terminals
-#hc rule class~'(.*[Rr]xvt.*|.*[Tt]erm|Konsole)' focus=on
-#hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
-#hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
-#hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
-
-#hc set tree_style '╾│ ├└╼─┐'
-
-# unlock, just to be sure
+hc rule focus=off
+hc rule class='alacritty' focus=on
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
+hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
+hc rule class='panel_left' index='0'
+hc rule class='panel_right' index='11'
 
 set -x
 hc unlock
-
-# do multi monitor setup here, e.g.:
-# hc set_monitors 1280x1024+0+0 1280x1024+1280+0
-# or simply:
-# hc detect_monitors
 
 # find the panel
 #panel=~/.config/herbstluftwm/panel.sh
