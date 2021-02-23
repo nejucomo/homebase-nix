@@ -6,19 +6,19 @@ let
   name = "${pname}-${version}";
 
   pkgsVanilla = with nixpkgs; [
-    alacritty
     tmux
   ];
 
   wrapBin = import ./wrapBin.nix;
+  hlwmWrapped = wrapBin {
+    pkg = "herbstluftwm";
+    wrapArgs = [ "--autostart" "${./config/herbstluftwm-autostart}" ];
+  };
   pkgsWrapped = [
+    hlwmWrapped
     (wrapBin {
       pkg = "vim";
       wrapArgs = [ "-u" "${./config/vimrc}" ];
-    })
-    (wrapBin {
-      pkg = "herbstluftwm";
-      wrapArgs = [ "--autostart" "${./config/herbstluftwm-autostart}" ];
     })
   ];
 
@@ -27,7 +27,7 @@ let
     # Override startx with a hard-coded mutable path for system startx:
     writeScriptBin "startx" ''
       #!/bin/sh
-      exec /run/current-system/sw/bin/startx herbstluftwm "$@"
+      exec /run/current-system/sw/bin/startx ${hlwmWrapped}/bin/herbstluftwm "$@"
     '';
 
   pkgsOther = [

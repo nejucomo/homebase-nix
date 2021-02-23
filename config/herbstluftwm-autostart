@@ -1,6 +1,10 @@
-#!/bin/bash
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p xorg.xsetroot alacritty
 
-# this is a simple config for herbstluftwm
+set -efuxo pipefail
+
+exec > ~/.herbstluftwm.log
+exec 2>&1
 
 hc() {
     herbstclient "$@"
@@ -18,7 +22,7 @@ Mod=Mod4   # Use the super key as the main modifier
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Return spawn alacritty
+hc keybind $Mod-Return spawn "$(which alacritty)"
 
 # basic movement in tiling and floating mode
 # focusing clients
