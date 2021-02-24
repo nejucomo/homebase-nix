@@ -2,7 +2,7 @@ let
   inherit (builtins) attrNames readDir;
 
   nixpkgs = import <nixpkgs> {};
-  inherit (nixpkgs.attrsets) filterAttrs;
+  inherit (nixpkgs.lib.attrsets) filterAttrs;
 
   baseDir = ./.;
   dirEntries = readDir baseDir;
@@ -17,8 +17,8 @@ let
   pkglib = import ./pkglib.nix;
   impPkg = n:
     let
-      mkPkg = import (basedir + "/${n}");
+      mkPkg = import (baseDir + "/${n}");
     in
       mkPkg pkglib;
 in
-  map impPkg pkgNames;
+  map impPkg pkgNames

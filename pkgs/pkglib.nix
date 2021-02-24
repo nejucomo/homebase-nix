@@ -3,7 +3,7 @@ let
 in {
   inherit nixpkgs;
 
-  wrapBin: { pkg, wrapArgs }:
+  wrapBin = { pkg, wrapArgs }:
     let
       name = "homebase-${pkg}";
       realpkg = nixpkgs.${pkg};
