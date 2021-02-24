@@ -1,7 +1,9 @@
 let
   nixpkgs = import <nixpkgs> {};
-in
-  { pkg, wrapArgs }:
+in {
+  inherit nixpkgs;
+
+  wrapBin: { pkg, wrapArgs }:
     let
       name = "homebase-${pkg}";
       realpkg = nixpkgs.${pkg};
@@ -15,4 +17,5 @@ in
       nixpkgs.symlinkJoin {
         inherit name;
         paths = [ pkgOverride realpkg ];
-      }
+      };
+}
