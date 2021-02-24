@@ -10,29 +10,26 @@ hc() {
     herbstclient "$@"
 }
 
+Mod=Mod4   # Use the super key as the main modifier
 alacritty="$(which alacritty)"
 
 xsetroot -solid '#aa22cc'
 
 # remove all existing keybindings
 hc keyunbind --all
+hc keybind $Mod-Shift-q quit
 
 if hc silent new_attr bool my_not_first_autostart
 then
   hc split horizontal 0.125
   hc focus right
   hc split horizontal 0.857
-  hc spawn "$alacritty" --title 'journal left' --class journalctl,panel_left -e journalctl-sidebar
-  hc spawn "$alacritty" --title 'journal right' --class journalctl,panel_right -e journalctl -f -o shortiso
+  hc set_layout horizontal
+  hc spawn "$alacritty" --title 'journal' --class journalctl,panel_right -e journalctl-sidebar
 fi
 
 set +x
 
-# keybindings
-# if you have a super key you will be much happier with Mod set to Mod4
-Mod=Mod4   # Use the super key as the main modifier
-
-hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
 hc keybind $Mod-Return spawn "$alacritty"
