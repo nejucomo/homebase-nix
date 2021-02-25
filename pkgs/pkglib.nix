@@ -1,18 +1,18 @@
 let
-  repoName = 
+  repoName =
     let x = baseNameOf ../.;
     in assert x == "nix-homebase"; x;
 
   nixpkgs = import <nixpkgs> {};
 
-in pkgDir: 
+in pkgDir:
   let
     importPkg = pkgName:
       let
         pname = "${repoName}-${pkgName}";
         version = "0.1";
         name = "${pname}-${version}";
-      
+
         pkglib = {
           inherit nixpkgs importPkg pkgName pname version name;
 
