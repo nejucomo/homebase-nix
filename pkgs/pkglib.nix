@@ -16,12 +16,13 @@ in pkgDir:
         pkglib = {
           inherit nixpkgs importPkg pkgName pname version name;
 
-          wrapBin = { pkg, wrapArgs }:
+          wrapBin = { pkg, wrapArgs, binName ? null }:
             let
+              bname = if binName == null then pkg else binName;
               realpkg = nixpkgs.${pkg};
-              realbin = "${realpkg}/bin/${pkg}";
+              realbin = "${realpkg}/bin/${bname}";
 
-              pkgOverride = nixpkgs.writeScriptBin pkg ''
+              pkgOverride = nixpkgs.writeScriptBin bname ''
                 #!/bin/sh
                 exec "${realbin}" ${toString wrapArgs} "$@"
               '';
