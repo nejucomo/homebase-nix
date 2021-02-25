@@ -1,9 +1,9 @@
 # Override startx with a hard-coded mutable path for system startx:
-pkglib @ { nixpkgs, ... }:
+{ pkgName, writeScriptBin, importPkg, ... }:
   let
-    hlwm = import ../herbstluftwm pkglib;
+    hlwm = importPkg "herbstluftwm";
   in
-    nixpkgs.writeScriptBin "startx" ''
+    writeScriptBin pkgName ''
       #!/bin/sh
       exec /run/current-system/sw/bin/startx ${hlwm}/bin/herbstluftwm "$@"
     ''

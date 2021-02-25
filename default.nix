@@ -1,7 +1,7 @@
 let
   inherit (import <nixpkgs> {}) symlinkJoin;
 
-  pname = builtins.baseNameOf ./.;
+  pname = baseNameOf ./.;
   version = "0.1";
 in
   symlinkJoin {

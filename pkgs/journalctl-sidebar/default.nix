@@ -1,4 +1,4 @@
-{ nixpkgs, ... }:
+{ nixpkgs, writeScriptBin, pkgName, ... }:
   let
     jqFmt = toString [
       "\\((.__REALTIME_TIMESTAMP | tonumber) / 1000000 | todate)"
@@ -8,10 +8,9 @@
       "\\(.MESSAGE)\\n"
     ];
 
-    inherit (nixpkgs) bash jq writeScriptBin;
-
+    jq = "${nixpkgs.jq}/bin/jq";
   in
-    writeScriptBin "journalctl-sidebar" ''
-      #! ${bash}/bin/bash
-      journalctl -f -o json | ${jq}/bin/jq -r '"${jqFmt}"'
+    writeScriptBin pkgName ''
+      #! /bin/bash
+      journalctl -f -o json | ${jq} -r '"${jqFmt}"'
     ''

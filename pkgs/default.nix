@@ -14,11 +14,6 @@ let
 
   pkgNames = attrNames dirs;
 
-  pkglib = import ./pkglib.nix;
-  impPkg = n:
-    let
-      mkPkg = import (baseDir + "/${n}");
-    in
-      mkPkg pkglib;
+  importPkg = import ./pkglib.nix baseDir;
 in
-  map impPkg pkgNames
+  map importPkg pkgNames
