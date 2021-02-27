@@ -1,4 +1,6 @@
 let
+  basePkgs = import ./basepkgs.nix;
+
   inherit (builtins) attrNames readDir;
 
   nixpkgs = import <nixpkgs> {};
@@ -15,5 +17,6 @@ let
   pkgNames = attrNames dirs;
 
   importPkg = import ./pkglib.nix baseDir;
+  customPkgs = map importPkg pkgNames;
 in
-  map importPkg pkgNames
+  basePkgs ++ customPkgs
