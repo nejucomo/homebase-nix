@@ -1,8 +1,5 @@
 let
-  repoName =
-    let x = baseNameOf ../.;
-    in assert x == "nix-homebase"; x;
-
+  repoName = baseNameOf ../.;
   nixpkgs = import <nixpkgs> {};
 
 in pkgDir:
