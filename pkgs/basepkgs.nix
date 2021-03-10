@@ -3,7 +3,7 @@ with (import <nixpkgs> {});
   coreutils
   findutils
   firefox
-  git
+  gawk
   gnugrep
   gzip
   less

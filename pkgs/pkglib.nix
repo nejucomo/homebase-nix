@@ -13,16 +13,28 @@ in pkgDir:
         pkglib = {
           inherit nixpkgs importPkg pkgName pname version name;
 
-          wrapBin = { pkg, wrapArgs, binName ? null }:
+          wrapBinArgs = args@{ wrapArgs, ... }:
+            let
+              baseArgs = builtins.removeAttrs args ["wrapArgs"];
+            in
+              pkglib.wrapBinCb (baseArgs // {
+                mkBinBody = {realbin, ...}: ''
+                  #!/bin/sh
+                  exec "${realbin}" ${toString wrapArgs} "$@"
+                '';
+              });
+
+          wrapBinCb = args@{ pkg, binName ? null, mkBinBody }:
             let
               bname = if binName == null then pkg else binName;
               realpkg = nixpkgs.${pkg};
               realbin = "${realpkg}/bin/${bname}";
 
-              pkgOverride = nixpkgs.writeScriptBin bname ''
-                #!/bin/sh
-                exec "${realbin}" ${toString wrapArgs} "$@"
-              '';
+              binBody = mkBinBody (args // {
+                inherit bname realbin realpkg;
+              });
+
+              pkgOverride = nixpkgs.writeScriptBin bname binBody;
             in
               nixpkgs.symlinkJoin {
                 name = pname;
