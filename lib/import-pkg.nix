@@ -1,3 +1,35 @@
+/*
+  Module provides the interface to define "custom packages". A custom
+  package is a directory with a "default.nix" which is a direct child
+  of a base `pkgsDir`. The `default.nix` must evaluate to a function
+  with this interface:
+
+  `pkgParams@{ ... } -> derivation`
+
+  The `pkgParams` attrset argument has these fields:
+
+  {
+    pname,
+    # The custom package's pname (identical to its directory name).
+
+    version,
+    # Version is hard-coded for now.
+
+    name,
+    # name = "${pname}-${version}.
+
+    nixpkgs,
+    # The nixpkgs in-use by homebase.
+
+    importPkg,
+    # A function of `pkgName -> derivation` where `pkgName` names another
+    # package in the `pkgsDir`. This allows custom packages to depend on
+    # each other, but dependency cycles will cause an infinite recursion.
+
+    # Plus some more utility functions that are in flux right now.
+  }
+*/
+
 let
   repoName = baseNameOf ../.;
   nixpkgs = import <nixpkgs> {};
@@ -41,6 +73,7 @@ in pkgDir:
                 paths = [ pkgOverride realpkg ];
               };
 
+          # TODO: rename this and remove `scriptName` which is always `pkgName` in every existing case.
           writeScriptBin = scriptName: text:
             let
               inherit (nixpkgs) stdenv writeScript;

@@ -6,5 +6,5 @@ let
 in
   symlinkJoin {
     name = "${pname}-${version}";
-    paths = import ./pkgs;
+    paths = import ./lib ./pkgs;
   }
