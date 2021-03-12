@@ -31,46 +31,48 @@
 */
 
 let
-  repoName = baseNameOf ../.;
   nixpkgs = import <nixpkgs> {};
 
 in pkgDir:
   let
+    repoName = baseNameOf pkgDir;
     importPkg = pkgName:
       let
         pname = "${repoName}-${pkgName}";
-        version = "0.1";
+        version = "0.1"; # TODO FIXME
         name = "${pname}-${version}";
 
         pkglib = {
           inherit nixpkgs importPkg pkgName pname version name;
 
-          wrapBinArgs = args@{ wrapArgs, ... }:
+          wrapBins = binCallbacks:
             let
-              baseArgs = builtins.removeAttrs args ["wrapArgs"];
-            in
-              pkglib.wrapBinCb (baseArgs // {
-                mkBinBody = {realbin, ...}: ''
-                  #!/bin/sh
-                  exec "${realbin}" ${toString wrapArgs} "$@"
-                '';
-              });
+              realpkg = nixpkgs.${pkgName};
+              wrapBin = binName: wrapBin:
+                let
+                  realbin = "${realpkg}/bin/${binName}";
+                  wrappedBody = wrapBin { inherit realpkg realbin; };
+                in
+                  nixpkgs.writeScriptBin binName wrappedBody;
 
-          wrapBinCb = args@{ pkg, binName ? null, mkBinBody }:
-            let
-              bname = if binName == null then pkg else binName;
-              realpkg = nixpkgs.${pkg};
-              realbin = "${realpkg}/bin/${bname}";
-
-              binBody = mkBinBody (args // {
-                inherit bname realbin realpkg;
-              });
-
-              pkgOverride = nixpkgs.writeScriptBin bname binBody;
+              inherit (builtins) attrValues mapAttrs;
+              wrappers = attrValues (mapAttrs wrapBin binCallbacks);
             in
               nixpkgs.symlinkJoin {
                 name = pname;
-                paths = [ pkgOverride realpkg ];
+                paths = wrappers ++ [ realpkg ];
+              };
+
+          # TODO remove when we make XDG_CONFIG_HOME abstraction:
+          wrapBinArgs = { binName ? null, wrapArgs }:
+            let
+              bname = if binName == null then pkgName else binName;
+            in
+              pkglib.wrapBins {
+                "${bname}" = { realpkg, realbin }: ''
+                  #!/bin/sh
+                  exec "${realbin}" ${toString wrapArgs} "$@"
+                '';
               };
 
           # TODO: rename this and remove `scriptName` which is always `pkgName` in every existing case.
