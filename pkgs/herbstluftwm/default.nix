@@ -1,3 +1,1 @@
-{ wrapBinArgs, ... }: wrapBinArgs {
-  wrapArgs = [ "--autostart" "${./autostart}" ];
-}
+{ xdgWrapper, ... }: xdgWrapper {}

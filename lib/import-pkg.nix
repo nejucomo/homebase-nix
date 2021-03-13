@@ -33,17 +33,46 @@
 let
   nixpkgs = import <nixpkgs> {};
 
-in pkgDir:
+in pkgsDir:
   let
-    repoName = baseNameOf pkgDir;
+    repoName = baseNameOf pkgsDir;
     importPkg = pkgName:
       let
+        pkgDir = pkgsDir + "/${pkgName}";
         pname = "${repoName}-${pkgName}";
         version = "0.1"; # TODO FIXME
         name = "${pname}-${version}";
 
         pkglib = {
           inherit nixpkgs importPkg pkgName pname version name;
+
+          xdgWrapper = { xdgAppName ? pkgName, binsToWrap ? [ pkgName ] }:
+            let
+              xdgpname = "${pname}-xdg-conf";
+              xdgconf = nixpkgs.stdenv.mkDerivation {
+                pname = xdgpname;
+                inherit version;
+
+                src = pkgDir + "/xdg";
+                builder = nixpkgs.writeScript "${xdgpname}-builder.sh" ''
+                  source "$stdenv/setup"
+                  mkdir "$out"
+                  cp -a "$src" "$out/${xdgAppName}"
+                '';
+              };
+              wrapBin = { realbin, ... }: ''
+                #!/bin/sh
+                export XDG_CONFIG_HOME="${xdgconf}"
+                exec "${realbin}" "$@"
+              '';
+              mkWrapBinPair = name: {
+                inherit name;
+                value = wrapBin;
+              };
+              binCallbacksPairs = map mkWrapBinPair binsToWrap; 
+              binCallbacks = builtins.listToAttrs binCallbacksPairs;
+            in
+              pkglib.wrapBins binCallbacks;
 
           wrapBins = binCallbacks:
             let
@@ -94,7 +123,7 @@ in pkgDir:
               };
         };
 
-        makePkg = import (pkgDir + "/${pkgName}");
+        makePkg = import pkgDir;
       in
         makePkg pkglib;
   in

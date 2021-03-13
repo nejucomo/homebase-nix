@@ -1,3 +1,1 @@
-{ wrapBinArgs, ... }: wrapBinArgs {
-  wrapArgs = [ "-u" "${./vimrc}" ];
-}
+{ xdgWrapper, ... }: xdgWrapper {}
