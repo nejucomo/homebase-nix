@@ -92,18 +92,6 @@ in pkgsDir:
                 paths = wrappers ++ [ realpkg ];
               };
 
-          # TODO remove when we make XDG_CONFIG_HOME abstraction:
-          wrapBinArgs = { binName ? null, wrapArgs }:
-            let
-              bname = if binName == null then pkgName else binName;
-            in
-              pkglib.wrapBins {
-                "${bname}" = { realpkg, realbin }: ''
-                  #!/bin/sh
-                  exec "${realbin}" ${toString wrapArgs} "$@"
-                '';
-              };
-
           # TODO: rename this and remove `scriptName` which is always `pkgName` in every existing case.
           writeScriptBin = scriptName: text:
             let

@@ -1,5 +1,6 @@
-{ wrapBinArgs, ... }: wrapBinArgs {
-  binName = "bash";
-  wrapArgs = [ "--rcfile" "${./bashrc}" ];
+{ wrapBins, ... }: wrapBins {
+  bash = { realbin, ... }: ''
+    #!/bin/sh
+    exec "${realbin}" "--rcfile" "${./bashrc}" "$@"
+  '';
 }
-
