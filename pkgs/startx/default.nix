@@ -1,9 +1,14 @@
-# Override startx with a hard-coded mutable path for system startx:
-{ pkgName, writeScriptBin, importPkg, ... }:
-  let
-    hlwm = importPkg "herbstluftwm";
-  in
-    writeScriptBin pkgName ''
-      #!/bin/sh
-      exec /run/current-system/sw/bin/startx ${hlwm}/bin/herbstluftwm "$@"
-    ''
+/* Override startx to launch our homebase-managed window manager. */
+let
+  # Hard-coded dependency:
+  systemStartx = "/run/current-system/sw/bin/startx";
+in
+  { pkgScript, importPkg, ... }:
+    let
+      # peer dependency:
+      hlwm = importPkg "herbstluftwm";
+    in
+      pkgScript ''
+        #!/bin/sh
+        exec "${systemStartx}" "${hlwm}/bin/herbstluftwm" "$@"
+      ''

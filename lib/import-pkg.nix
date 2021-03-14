@@ -93,20 +93,19 @@ in pkgsDir:
               };
 
           # TODO: rename this and remove `scriptName` which is always `pkgName` in every existing case.
-          writeScriptBin = scriptName: text:
+          pkgScript = text:
             let
               inherit (nixpkgs) stdenv writeScript;
             in
               stdenv.mkDerivation {
                 inherit pname version;
 
-                src = writeScript scriptName text;
+                src = writeScript pkgName text;
                 builder = writeScript "${pname}-builder.sh" ''
                   source "$stdenv/setup"
-                  function run { echo "Running: $*"; eval "$@"; }
-                  run mkdir -p "$out/bin"
-                  run install -m 755 "$src" "$out/bin/${scriptName}"
-                  run patchShebangs "$out/bin"
+                  mkdir -p "$out/bin"
+                  install -m 755 "$src" "$out/bin/${pkgName}"
+                  patchShebangs "$out/bin"
                 '';
               };
         };

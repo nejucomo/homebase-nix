@@ -1,4 +1,4 @@
-{ nixpkgs, writeScriptBin, pkgName, ... }:
+{ nixpkgs, pkgScript, ... }:
   let
     jqFmt = toString [
       "\\((.__REALTIME_TIMESTAMP | tonumber) / 1000000 | todate)"
@@ -10,7 +10,7 @@
 
     jq = "${nixpkgs.jq}/bin/jq";
   in
-    writeScriptBin pkgName ''
+    pkgScript ''
       #! /bin/bash
       journalctl -f -o json | ${jq} -r '"${jqFmt}"'
     ''
