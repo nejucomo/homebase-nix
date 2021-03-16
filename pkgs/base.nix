@@ -10,5 +10,6 @@ with (import <nixpkgs> {});
   man
   nix
   ps
+  pstree
   which
 ] 
