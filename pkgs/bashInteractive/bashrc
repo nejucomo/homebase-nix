@@ -1,3 +1,4 @@
+# We must run our startx wrapper before sealing our environment:
 tty | grep -E '^/dev/tty[2-9]' && exec startx
 
 set -o vi
