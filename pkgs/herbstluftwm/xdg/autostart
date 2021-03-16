@@ -1,37 +1,19 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -i bash -p xorg.xsetroot alacritty
-
+#! /bin/bash
 set -efuxo pipefail
 
 exec > ~/.herbstluftwm.log
 exec 2>&1
-
-unclutter -idle 1 &
 
 hc() {
     herbstclient "$@"
 }
 
 Mod=Mod4   # Use the super key as the main modifier
-alacritty="$(which alacritty)"
-
-xsetroot -solid '#555588'
+alacritty="$(nix-shell -p alacritty --run 'which alacritty')"
 
 # remove all existing keybindings
 hc keyunbind --all
 hc keybind $Mod-Shift-q quit
-
-if hc silent new_attr bool my_not_first_autostart
-then
-  hc split horizontal 0.125
-  hc focus right
-  hc split horizontal 0.857
-  hc set_layout horizontal
-  hc spawn "$alacritty" --title 'journal' --class journalctl,panel_right -e journalctl-sidebar
-
-  hc split horizontal 0.71
-  hc split horizontal 0.4
-fi
 
 set +x
 
@@ -150,3 +132,20 @@ hc unlock
 
 hc emit_hook reload
 
+if hc silent new_attr bool my_not_first_autostart
+then
+  hc split horizontal 0.125
+  hc focus right
+  hc split horizontal 0.857
+  hc set_layout horizontal
+  hc spawn "$alacritty" --title 'journal' --class journalctl,panel_right -e journalctl-sidebar
+
+  hc split horizontal 0.71
+  hc split horizontal 0.4
+
+  set +e # If these fail, don't brick the session:
+  nix-shell -p unclutter --run 'unclutter -idle 1' &
+  nix-shell -p xorg.xsetroot --run 'xsetroot -solid "#555588"'
+  eval "$alacritty" &
+  set -e
+fi

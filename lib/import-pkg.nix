@@ -57,7 +57,10 @@ in pkgsDir:
                 builder = nixpkgs.writeScript "${xdgpname}-builder.sh" ''
                   source "$stdenv/setup"
                   mkdir "$out"
-                  cp -a "$src" "$out/${xdgAppName}"
+                  outsub="$out/${xdgAppName}"
+                  cp -a "$src" "$outsub"
+                  chmod -R u+w "$outsub"
+                  patchShebangs "$outsub"
                 '';
               };
               wrapBin = { realbin, ... }: ''

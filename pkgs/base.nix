@@ -10,6 +10,5 @@ with (import <nixpkgs> {});
   man
   nix
   ps
-  unclutter
   which
 ] 
