@@ -1,5 +1,6 @@
 with (import <nixpkgs> {});
 [
+  alacritty
   coreutils
   findutils
   firefox
@@ -11,5 +12,7 @@ with (import <nixpkgs> {});
   nix
   ps
   pstree
+  unclutter
   which
+  xorg.xsetroot
 ] 

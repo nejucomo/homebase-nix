@@ -4,21 +4,29 @@ set -efuxo pipefail
 exec > ~/.herbstluftwm.log
 exec 2>&1
 
+# If anything fails in autostart, quit hlwm:
+trap 'ECODE=$?; [ "$ECODE" == 0 ] || herbstclient quit; exit $ECODE' EXIT
+
 hc() {
     herbstclient "$@"
 }
 
 Mod=Mod4   # Use the super key as the main modifier
-alacritty="$(nix-shell -p alacritty --run 'which alacritty')"
-firefox="$(nix-shell -p firefox --run 'which firefox')"
+
+# Check that homebase has these dependencies:
+# If which exits non-zero, set -e exits.
+which unclutter
+which xsetroot
+which alacritty
+which firefox
 
 hc keyunbind --all
 
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Return spawn "$alacritty"
-hc keybind $Mod-f spawn "$firefox"
+hc keybind $Mod-Return spawn alacritty
+hc keybind $Mod-f spawn firefox
 
 hc keybind $Mod-h     focus left
 hc keybind $Mod-j     focus down
@@ -87,12 +95,12 @@ then
   hc focus right
   hc split horizontal 0.857
   hc set_layout horizontal
-  hc spawn "$alacritty" --title 'journal' --class journalctl,panel_right -e journalctl-sidebar
+  hc spawn 'alacritty' --title 'journal' --class journalctl,panel_right -e journalctl-sidebar
 
   set +e # If these fail, don't brick the session:
-  nix-shell -p unclutter --run 'unclutter -idle 1' &
-  nix-shell -p xorg.xsetroot --run 'xsetroot -solid "#555588"'
-  eval "$alacritty" &
-  eval "$firefox" &
+  unclutter -idle 1 &
+  xsetroot -solid '#555588'
+  alacritty &
+  firefox &
   set -e
 fi
