@@ -10,35 +10,29 @@ hc() {
 
 Mod=Mod4   # Use the super key as the main modifier
 alacritty="$(nix-shell -p alacritty --run 'which alacritty')"
+firefox="$(nix-shell -p firefox --run 'which firefox')"
 
-# remove all existing keybindings
 hc keyunbind --all
+
 hc keybind $Mod-Shift-q quit
-
-set +x
-
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
 hc keybind $Mod-Return spawn "$alacritty"
+hc keybind $Mod-f spawn "$firefox"
 
-# basic movement in tiling and floating mode
-# focusing clients
 hc keybind $Mod-h     focus left
 hc keybind $Mod-j     focus down
 hc keybind $Mod-k     focus up
 hc keybind $Mod-l     focus right
 
-# moving clients in tiling and floating mode
 hc keybind $Mod-Shift-h     shift left
 hc keybind $Mod-Shift-j     shift down
 hc keybind $Mod-Shift-k     shift up
 hc keybind $Mod-Shift-l     shift right
 
-# splitting frames
-# create an empty frame at the specified direction
 hc keybind $Mod-u       split   bottom  0.5
 hc keybind $Mod-o       split   right   0.5
-# let the current frame explode into subframes
+hc keybind $Mod-r       remove
 hc keybind $Mod-Control-space split explode
 
 # resizing frames and floating clients
@@ -53,14 +47,9 @@ hc keybind $Mod-period use_index +1 --skip-visible
 hc keybind $Mod-comma  use_index -1 --skip-visible
 
 # layouting
-hc keybind $Mod-r remove
-hc keybind $Mod-s floating toggle
-hc keybind $Mod-f fullscreen toggle
-#hc keybind $Mod-Shift-f set_attr clients.focus.floating toggle
+hc keybind $Mod-Shift-s floating toggle
+hc keybind $Mod-Shift-f fullscreen toggle
 hc keybind $Mod-p pseudotile toggle
-# The following cycles through the available layouts within a frame, but skips
-# layouts, if the layout change wouldn't affect the actual window positions.
-# I.e. if there are two windows within a frame, the grid layout is skipped.
 hc keybind $Mod-space cycle_layout +1
 
 # mouse
@@ -69,44 +58,14 @@ hc mousebind $Mod-Button1 move
 hc mousebind $Mod-Button2 zoom
 hc mousebind $Mod-Button3 resize
 
-# focus
-#hc keybind $Mod-BackSpace   cycle_monitor
-#hc keybind $Mod-Tab         cycle_all +1
-#hc keybind $Mod-Shift-Tab   cycle_all -1
-hc keybind $Mod-c cycle
-#hc keybind $Mod-i jumpto urgent
-
 # theme
-#hc attr theme.active.color '#9fbc00'
-#hc attr theme.active.inner_color '#3E4A00'
 hc attr theme.active.outer_color '#ff00aa'
-#hc attr theme.background_color '#141414'
 hc attr theme.border_width 2
-#hc attr theme.floating.border_width 4
-#hc attr theme.floating.outer_color black
-#hc attr theme.floating.outer_width 1
-#hc attr theme.floating.reset 1
-#hc attr theme.inner_color black
-#hc attr theme.inner_width 2
-#hc attr theme.normal.color '#454545'
-#hc attr theme.outer_color "#dd00dd"
 hc attr theme.outer_width 2
-#hc attr theme.tiling.reset 1
-#hc attr theme.urgent.color orange
-#hc set always_show_frame on
-#hc set frame_bg_active_color '#345F0C'
-#hc set frame_bg_normal_color '#565656'
-#hc set frame_bg_transparent on
 hc set frame_border_active_color '#aa00aa'
 hc set frame_border_normal_color 'black'
 hc set frame_border_width 1
 hc set frame_gap 0
-#hc set frame_padding 0
-#hc set frame_transparent_width 5
-#hc set mouse_recenter_gap 0
-#hc set smart_frame_surroundings on
-#hc set smart_window_surroundings off
-#hc set tree_style '╾│ ├└╼─┐'
 hc set window_gap 0
 
 # rules
@@ -119,17 +78,7 @@ hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 hc rule class='panel_left' index='0'
 hc rule class='panel_right' index='11'
 
-set -x
 hc unlock
-
-# find the panel
-#panel=~/.config/herbstluftwm/panel.sh
-#[ -x "$panel" ] || panel=/etc/xdg/herbstluftwm/panel.sh
-#for monitor in $(hc list_monitors | cut -d: -f1) ; do
-#    # start it on each monitor
-#    "$panel" "$monitor" &
-#done
-
 hc emit_hook reload
 
 if hc silent new_attr bool my_not_first_autostart
@@ -140,12 +89,10 @@ then
   hc set_layout horizontal
   hc spawn "$alacritty" --title 'journal' --class journalctl,panel_right -e journalctl-sidebar
 
-  hc split horizontal 0.71
-  hc split horizontal 0.4
-
   set +e # If these fail, don't brick the session:
   nix-shell -p unclutter --run 'unclutter -idle 1' &
   nix-shell -p xorg.xsetroot --run 'xsetroot -solid "#555588"'
   eval "$alacritty" &
+  eval "$firefox" &
   set -e
 fi
