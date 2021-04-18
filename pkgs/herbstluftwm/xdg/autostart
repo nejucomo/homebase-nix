@@ -19,12 +19,15 @@ which unclutter
 which xsetroot
 which alacritty
 which firefox
+which i3lock
 
 hc keyunbind --all
 
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
+hc keybind $Mod-Shift-z spawn i3lock
+
 hc keybind $Mod-Return spawn alacritty
 hc keybind $Mod-f spawn firefox
 

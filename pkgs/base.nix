@@ -7,6 +7,7 @@ with (import <nixpkgs> {});
   gawk
   gnugrep
   gzip
+  i3lock
   less
   man
   nix
