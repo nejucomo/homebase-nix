@@ -6,6 +6,7 @@ with (import <nixpkgs> {});
   firefox
   gawk
   gnugrep
+  gnused
   gzip
   i3lock
   less
