@@ -1,3 +1,6 @@
 [user]
 	email = nejucomo+dev@gmail.com
 	name = Nate Wilcox
+
+[init]
+  defaultBranch = main
