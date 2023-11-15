@@ -86,24 +86,19 @@ hc rule class='alacritty' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
-hc rule class='panel_left' index='0'
-hc rule class='panel_right' index='11'
+hc rule class='panel_bottom' index='11'
 
 hc unlock
 hc emit_hook reload
 
 if hc silent new_attr bool my_not_first_autostart
 then
-  hc split horizontal 0.125
-  hc focus right
-  hc split horizontal 0.857
-  hc set_layout horizontal
-  hc spawn 'alacritty' --title 'journal' --class journalctl,panel_right -e journalctl-sidebar
-
-  set +e # If these fail, don't brick the session:
   unclutter -idle 1 &
   xsetroot -solid '#555588'
+
+  hc split vertical 0.95
+  hc focus down
+  hc spawn 'alacritty' --title 'journal' --class journalctl,panel_bottom --option font.size=5 -e journalctl-sidebar
+  hc focus up
   alacritty &
-  firefox &
-  set -e
 fi

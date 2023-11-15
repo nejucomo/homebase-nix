@@ -4,8 +4,8 @@
       "\\((.__REALTIME_TIMESTAMP | tonumber) / 1000000 | todate)"
       "\\(.SYSLOG_IDENTIFIER)"
       "priority:\\(.PRIORITY)"
-      "\\(.USER_UNIT)\\n"
-      "\\(.MESSAGE)\\n"
+      "\\(.USER_UNIT)"
+      "\\(.MESSAGE)"
     ];
 
     jq = "${nixpkgs.jq}/bin/jq";

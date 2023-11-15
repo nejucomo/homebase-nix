@@ -8,6 +8,7 @@ with (import <nixpkgs> {});
   gnugrep
   gnused
   gzip
+  helix
   i3lock
   less
   man
