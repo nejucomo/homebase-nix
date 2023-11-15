@@ -14,6 +14,7 @@ with (import <nixpkgs> {});
   nix
   ps
   pstree
+  ripgrep
   unclutter
   which
   xorg.xsetroot
