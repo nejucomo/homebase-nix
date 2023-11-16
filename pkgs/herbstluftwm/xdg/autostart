@@ -95,10 +95,5 @@ if hc silent new_attr bool my_not_first_autostart
 then
   unclutter -idle 1 &
   xsetroot -solid '#555588'
-
-  hc split vertical 0.95
-  hc focus down
-  hc spawn 'alacritty' --title 'journal' --class journalctl,panel_bottom --option font.size=5 -e journalctl-sidebar
-  hc focus up
   alacritty &
 fi
