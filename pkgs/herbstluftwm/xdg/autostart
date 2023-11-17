@@ -1,7 +1,4 @@
 #! /bin/bash
-#
-# system dependencies:
-# - `dbus-daemon --session` is already running.
 
 set -efuxo pipefail
 
@@ -21,10 +18,8 @@ Mod=Mod4   # Use the super key as the main modifier
 # If which exits non-zero, set -e exits.
 # TODO: Why aren't we using nix to guarantee prereqs?
 which alacritty
-which dbus-daemon
 which firefox
 which i3lock
-which ibus-daemon
 which polybar
 which unclutter
 which xsetroot
@@ -115,7 +110,6 @@ hc emit_hook reload
 
 if hc silent new_attr bool my_not_first_autostart
 then
-  ibus-daemon --xim --replace &
   polybar &
   unclutter -idle 1 &
   xsetroot -solid '#555588'
