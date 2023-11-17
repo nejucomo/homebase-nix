@@ -1,12 +1,6 @@
 # We must run our startx wrapper before sealing our environment:
 tty | grep -E '^/dev/tty[2-9]' && exec startx
 
-# Remove the entire environment:
-for var in $(env | sed 's/=.*$//')
-do
-  unset -vn "$var"
-done
-
 source ~/.nix-profile/etc/profile.d/nix.sh
 
 set -o vi
