@@ -1,5 +1,6 @@
 with (import <nixpkgs> {});
 [
+  acpi
   alacritty
   coreutils
   findutils
