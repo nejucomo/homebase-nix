@@ -11,7 +11,6 @@ with (import <nixpkgs> {});
   helix
   i3lock
   killall
-  kitty
   less
   man
   nix
