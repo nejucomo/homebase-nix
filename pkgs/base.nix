@@ -1,7 +1,6 @@
 with (import <nixpkgs> {});
 [
   acpi
-  alacritty
   coreutils
   findutils
   firefox
@@ -12,6 +11,7 @@ with (import <nixpkgs> {});
   helix
   i3lock
   killall
+  kitty
   less
   man
   nix
