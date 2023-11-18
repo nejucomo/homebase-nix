@@ -44,18 +44,6 @@ hc keybind $Mod-Shift-j     shift down
 hc keybind $Mod-Shift-k     shift up
 hc keybind $Mod-Shift-l     shift right
 
-hc keybind $Mod-u       split   bottom  0.5
-hc keybind $Mod-o       split   right   0.5
-hc keybind $Mod-r       remove
-hc keybind $Mod-Control-space split explode
-
-# resizing frames and floating clients
-resizestep=0.02
-hc keybind $Mod-Control-h       resize left +$resizestep
-hc keybind $Mod-Control-j       resize down +$resizestep
-hc keybind $Mod-Control-k       resize up +$resizestep
-hc keybind $Mod-Control-l       resize right +$resizestep
-
 # tags
 TAG_NAMES=( {1..9} )
 TAG_KEYS=( {1..9} 0 )
@@ -77,8 +65,22 @@ hc keybind $Mod-comma  use_index -1 --skip-visible
 # layouting
 hc keybind $Mod-Shift-s floating toggle
 hc keybind $Mod-Shift-f fullscreen toggle
+hc keybind $Mod-Shift-m set_layout max
 hc keybind $Mod-p pseudotile toggle
 hc keybind $Mod-space cycle_layout +1
+
+# split frames
+hc keybind $Mod-u       split   bottom  0.5
+hc keybind $Mod-o       split   right   0.5
+hc keybind $Mod-r       remove
+hc keybind $Mod-Control-space split explode
+
+# resizing frames and floating clients
+resizestep=0.02
+hc keybind $Mod-Control-h       resize left +$resizestep
+hc keybind $Mod-Control-j       resize down +$resizestep
+hc keybind $Mod-Control-k       resize up +$resizestep
+hc keybind $Mod-Control-l       resize right +$resizestep
 
 # mouse
 hc mouseunbind --all
