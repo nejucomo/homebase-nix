@@ -7,6 +7,9 @@
 - ☐ hlwm keybindings to control audio
 - ☐ git info and other git goodies
 - ☐ mouse pad sensitivity
+- ☑ enable user namespace sandboxing without setuid-root for nix-env-scoped brave
+  - this is enabled, but neither brave nor google-chrome work.
+- ☑ update to nixpkgs-unstable in user environment
 - ☑ link all users to the same nix-profile
 - ☑ screen dimming:
   - sorta working:
