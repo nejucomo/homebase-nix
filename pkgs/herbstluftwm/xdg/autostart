@@ -32,7 +32,7 @@ hc keybind $Mod-Shift-c close
 hc keybind $Mod-Shift-z spawn i3lock
 
 hc keybind $Mod-Return spawn kitty
-hc keybind $Mod-f spawn firefox
+hc keybind $Mod-f spawn firefox --private-window
 
 hc keybind $Mod-h     focus left
 hc keybind $Mod-j     focus down
@@ -115,5 +115,5 @@ then
   polybar &
   unclutter -idle 1 &
   xsetroot -solid '#555588'
-  kitty &
+  kitty tmux new-session -A -s default &
 fi
