@@ -2,6 +2,7 @@ with (import <nixpkgs> {});
 [
   acpi
   coreutils
+  dunst.man
   findutils
   firefox
   gawk
@@ -14,6 +15,7 @@ with (import <nixpkgs> {});
   less
   man
   nix
+  libnotify
   ps
   pstree
   ripgrep

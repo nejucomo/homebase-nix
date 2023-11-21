@@ -112,8 +112,9 @@ hc emit_hook reload
 
 if hc silent new_attr bool my_not_first_autostart
 then
-  polybar &
   unclutter -idle 1 &
   xsetroot -solid '#555588'
+  polybar &
+  dunst &
   kitty tmux new-session -A -s default &
 fi
