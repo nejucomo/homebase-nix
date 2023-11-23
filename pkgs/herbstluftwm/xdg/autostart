@@ -19,7 +19,7 @@ Mod=Mod4   # Use the super key as the main modifier
 # TODO: Why aren't we using nix to guarantee prereqs?
 which firefox
 which i3lock
-which kitty
+which alacritty
 which polybar
 which unclutter
 which xsetroot
@@ -31,7 +31,7 @@ hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
 hc keybind $Mod-Shift-z spawn i3lock -c "${HOMEBASE_USER_COLOR:-554466}"
 
-hc keybind $Mod-Return spawn kitty
+hc keybind $Mod-Return spawn alacritty
 hc keybind $Mod-f spawn firefox --private-window
 
 hc keybind $Mod-h     focus left
@@ -101,7 +101,7 @@ hc set window_gap 0
 # rules
 hc unrule -F
 hc rule focus=off
-hc rule class='kitty' focus=on
+hc rule class='alacritty' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
@@ -120,5 +120,5 @@ then
   xsetroot -solid '#555588'
   polybar &
   dunst &
-  kitty tmux new-session -A -s default &
+  alacritty --command tmux new-session -A -s default &
 fi
