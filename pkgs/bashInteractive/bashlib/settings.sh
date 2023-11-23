@@ -1,8 +1,3 @@
-# We must run our startx wrapper before sealing our environment:
-tty | grep -E '^/dev/tty[2-9]' && exec startx
-
-source ~/.nix-profile/etc/profile.d/nix.sh
-
 set -o vi
 
 export PS1='\n\n  \033[35m---{ \033[33m\$?=$? \033[35m; \033[33m\u \033[35m@ \033[33m\h \033[35m: \033[33m\w \033[35m}---\033[0m\n\$ '

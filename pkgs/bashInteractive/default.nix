@@ -2,7 +2,7 @@
 
   bash = { realbin, ... }: ''
     #!/bin/sh
-    exec "${realbin}" "--rcfile" "${./bashrc}" "$@"
+    exec "${realbin}" "--rcfile" "${./bashlib}/bashrc" "$@"
   '';
 
   sh = bash;

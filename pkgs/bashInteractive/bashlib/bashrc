@@ -1,0 +1,7 @@
+BASHLIB="$(dirname "${BASH_SOURCE[0]}")"
+
+source "$BASHLIB/startx-hook.sh"
+source ~/.nix-profile/etc/profile.d/nix.sh
+source "$BASHLIB/functions.sh"
+source "$BASHLIB/settings.sh"
+source-optional ~/.bashrc-user
