@@ -22,4 +22,5 @@ with (import <nixpkgs> {});
   unclutter
   which
   xorg.xsetroot
+  xss-lock
 ] 

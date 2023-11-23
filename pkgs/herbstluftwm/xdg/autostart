@@ -29,7 +29,7 @@ hc keyunbind --all
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Shift-z spawn i3lock
+hc keybind $Mod-Shift-z spawn i3lock -c "${HOMEBASE_USER_COLOR:-554466}"
 
 hc keybind $Mod-Return spawn kitty
 hc keybind $Mod-f spawn firefox --private-window
@@ -112,6 +112,10 @@ hc emit_hook reload
 
 if hc silent new_attr bool my_not_first_autostart
 then
+  xss-lock --transfer-sleep-lock \
+    -- \
+    i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}" &
+
   unclutter -idle 1 &
   xsetroot -solid '#555588'
   polybar &
