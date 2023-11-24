@@ -3,4 +3,16 @@
 	name = Nate Wilcox
 
 [init]
-  defaultBranch = main
+	defaultBranch = main
+
+[pull]
+	ff = only
+
+[diff]
+	tool = meld
+
+[alias]
+	info = !echo && echo "branch: $(git current-branch)" && echo '~-~' && git status --porcelain && echo '~-~' && git glog -5
+	current-branch = rev-parse --abbrev-ref HEAD
+	glog = log --graph --pretty=format:'%h %Cblue%as%Creset %s %Cblue%ce %Creset%d'
+	meld = difftool --dir-diff

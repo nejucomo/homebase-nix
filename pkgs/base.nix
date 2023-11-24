@@ -15,6 +15,7 @@ let
     killall
     less
     man
+    meld
     nix
     libnotify
     ps
