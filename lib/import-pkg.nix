@@ -89,10 +89,20 @@ in pkgsDir:
 
               inherit (builtins) attrValues mapAttrs;
               wrappers = attrValues (mapAttrs wrapBin binCallbacks);
+              upstreams =
+                let
+                  inherit (builtins) attrNames;
+
+                  mkUpstream = binName: nixpkgs.runCommand "upstream-${binName}-${realpkg.name}" {} ''
+                    mkdir -p "$out/bin";
+                    ln -s "${realpkg}/bin/${binName}" "$out/bin/upstream-${binName}"
+                  '';
+                in
+                  map mkUpstream (attrNames binCallbacks);
             in
               nixpkgs.symlinkJoin {
                 name = pname;
-                paths = wrappers ++ [ realpkg ];
+                paths = wrappers ++ upstreams ++ [ realpkg ];
               };
 
           # TODO: rename this and remove `scriptName` which is always `pkgName` in every existing case.
