@@ -25,38 +25,7 @@ let
         flatten (map include-optional-man pkgs);
 
     ## Wrap binaries from an underlying package:
-    wrap-bins = upstream-pkg: bin-wrappers:
-      let
-        inherit (nixpkgs) symlinkJoin runCommand writeScriptBin;
-        inherit (nixpkgs.lib.attrsets) mapAttrs;
-
-        upstream-name = upstream-pkg.name;
-
-        wrap-bin = bin-name: cb:
-          let
-            wrapper-pkg-name = sub-pname "wrapped-${upstream-name}-${bin-name}";
-            upstream-bin = "${upstream-pkg}/bin/${bin-name}";
-
-            wrapped-bin = writeScriptBin bin-name (cb {
-              inherit upstream-pkg upstream-bin;
-            });
-
-            linked-bin = runCommand "${wrapper-pkg-name}-uplink" {} ''
-              mkdir -vp "$out/bin"
-              ln -s '${upstream-bin}' "$out/bin/upstream-${bin-name}"
-            '';
-          in
-            symlinkJoin {
-              name = wrapper-pkg-name;
-              paths = [ wrapped-bin linked-bin ];
-            };
-
-        bin-pkgs = mapAttrs wrap-bin bin-wrappers;
-      in
-        symlinkJoin {
-          name = sub-pname "wrapped-${upstream-name}";
-          paths = builtins.attrValues bin-pkgs;
-        };
+    wrap-bins = imp ./wrap-bins.nix;
   };
 in
   homebase
