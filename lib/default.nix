@@ -1,7 +1,10 @@
-{ nixpkgs }:
+{ nixpkgs, pname, version }:
 let
   homebase = rec {
-    inherit nixpkgs;
+    inherit nixpkgs pname version;
+
+    ## Name a sub-package
+    sub-pname = subname: "${pname}-${subname}";
 
     ## Import the argument, passing in the closure of homebase:
     imp = mod-path: import mod-path homebase;

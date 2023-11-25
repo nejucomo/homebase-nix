@@ -1,4 +1,6 @@
 /*
+  TO BE DEPRECATED
+
   A function mapping a packages dir to a list of derivations defining
   the user environment.
 
@@ -12,28 +14,40 @@
   `./import-pkg.nix` interface.
 */
 
-homebase:
+homebase: legacy-pkgs-dir: pkgs:
 let
   inherit (builtins) attrNames readDir;
 
-  inherit (homebase.nixpkgs.lib.attrsets) filterAttrs;
-  mkImportPkg = homebase.imp ./import-pkg.nix;
+  import-legacy-pkg = homebase.imp ./import-pkg.nix legacy-pkgs-dir;
 in
-  pkgsDir:
-    let
-      customPkgs =
-        let
-          dirEntries = readDir pkgsDir;
-          dirs =
-            let
-              isDir = _: v: v == "directory";
-            in
-              filterAttrs isDir dirEntries;
+  rec {
+    vim = import-legacy-pkg "vim" {};
+    tmux = import-legacy-pkg "tmux" {};
+    polybar = import-legacy-pkg "polybarFull" {};
+    journalctl-sidebar = import-legacy-pkg "journalctl-sidebar" {};
+    git = import-legacy-pkg "git" {};
+    dunst = import-legacy-pkg "dunst" {};
+    alacritty = import-legacy-pkg "alacritty" {};
 
-          pkgNames = attrNames dirs;
+    herbstluftwm = import-legacy-pkg "herbstluftwm" {
+      bash = pkgs.bash-wrapper;
 
-          importPkg = mkImportPkg pkgsDir;
-        in
-          map importPkg pkgNames;
-    in
-      customPkgs
+      inherit (pkgs)
+        firefox
+        i3lock
+        unclutter
+        xsetroot
+        xss-lock
+      ;
+      inherit
+        alacritty
+        dunst
+        polybar
+        tmux
+      ;
+    };
+
+    startx = import-legacy-pkg "startx" {
+      inherit herbstluftwm;
+    };
+  }

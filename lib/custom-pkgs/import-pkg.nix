@@ -1,47 +1,20 @@
 /*
-  Module provides the interface to define "custom packages". A custom
-  package is a directory with a "default.nix" which is a direct child
-  of a base `pkgsDir`. The `default.nix` must evaluate to a function
-  with this interface:
-
-  `pkgParams@{ ... } -> derivation`
-
-  The `pkgParams` attrset argument has these fields:
-
-  {
-    pname,
-    # The custom package's pname (identical to its directory name).
-
-    version,
-    # Version is hard-coded for now.
-
-    name,
-    # name = "${pname}-${version}.
-
-    nixpkgs,
-    # The nixpkgs in-use by homebase.
-
-    importPkg,
-    # A function of `pkgName -> derivation` where `pkgName` names another
-    # package in the `pkgsDir`. This allows custom packages to depend on
-    # each other, but dependency cycles will cause an infinite recursion.
-
-    # Plus some more utility functions that are in flux right now.
-  }
+  TO BE DEPRECATED.
 */
 
 homebase@{ nixpkgs, ... }: pkgsDir:
   let
-    repoName = baseNameOf pkgsDir;
-    importPkg = pkgName:
+    inherit (homebase) version;
+
+    repoName = homebase.sub-pname (baseNameOf pkgsDir);
+    import-legacy-pkg-with-new-style-dependencies = pkgName: dependencies:
       let
         pkgDir = pkgsDir + "/${pkgName}";
         pname = "${repoName}-${pkgName}";
-        version = "0.1"; # TODO FIXME
         name = "${pname}-${version}";
 
         pkglib = {
-          inherit nixpkgs importPkg pkgName pname version name;
+          inherit nixpkgs pkgName pname version name;
 
           xdgWrapper = { xdgAppName ? pkgName, binsToWrap ? [ pkgName ] }:
             let
@@ -86,20 +59,20 @@ homebase@{ nixpkgs, ... }: pkgsDir:
 
               inherit (builtins) attrValues mapAttrs;
               wrappers = attrValues (mapAttrs wrapBin binCallbacks);
-              upstreams =
+              new-styles =
                 let
                   inherit (builtins) attrNames;
 
-                  mkUpstream = binName: nixpkgs.runCommand "upstream-${binName}-${realpkg.name}" {} ''
+                  mknew-style = binName: nixpkgs.runCommand "new-style-${binName}-${realpkg.name}" {} ''
                     mkdir -p "$out/bin";
-                    ln -s "${realpkg}/bin/${binName}" "$out/bin/upstream-${binName}"
+                    ln -s "${realpkg}/bin/${binName}" "$out/bin/new-style-${binName}"
                   '';
                 in
-                  map mkUpstream (attrNames binCallbacks);
+                  map mknew-style (attrNames binCallbacks);
             in
               nixpkgs.symlinkJoin {
                 name = pname;
-                paths = wrappers ++ upstreams ++ [ realpkg ];
+                paths = wrappers ++ new-styles ++ [ realpkg ];
               };
 
           # TODO: rename this and remove `scriptName` which is always `pkgName` in every existing case.
@@ -122,6 +95,6 @@ homebase@{ nixpkgs, ... }: pkgsDir:
 
         makePkg = import pkgDir;
       in
-        makePkg pkglib;
+        makePkg pkglib dependencies;
   in
-    importPkg
+    import-legacy-pkg-with-new-style-dependencies

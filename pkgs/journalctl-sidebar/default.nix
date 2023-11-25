@@ -1,4 +1,4 @@
-{ nixpkgs, pkgScript, ... }:
+{ nixpkgs, pkgScript, ... }: {}:
   let
     jqFmt = toString [
       "\\((.__REALTIME_TIMESTAMP | tonumber) / 1000000 | todate)"

@@ -1,1 +1,1 @@
-{ xdgWrapper, ... }: xdgWrapper {}
+{ xdgWrapper, ... }: {}: xdgWrapper {}

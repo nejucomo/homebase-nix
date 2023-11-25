@@ -1,12 +1,13 @@
 imparams@{ nixpkgs }:
 let
-  pname = baseNameOf ./.;
-  version = "0.1";
+  homebase = import ./lib {
+    inherit nixpkgs;
+    pname = baseNameOf ./.;
+    version = "0.1";
+  };
 
-  homebase = import ./lib imparams;
-
-  upstream-with-extras-pkgs = homebase.include-extras (
-    with homebase.nixpkgs; [
+  pkgs = {
+    inherit (homebase.nixpkgs)
       acpi
       coreutils
       findutils
@@ -28,20 +29,26 @@ let
       ripgrep
       unclutter
       which
-      xorg.xsetroot
       xss-lock
-    ]
-  );
+    ;
 
-  # TODO: these are the man-pages of custom packages; update the custom packages to include the manpages themselves:
-  man-only-pkgs = map (pkg: pkg.man) (with nixpkgs; [
-    dunst
-    herbstluftwm
-  ]);
+    inherit (homebase.nixpkgs.xorg)
+      xsetroot
+    ;
 
-  custom-pkgs = homebase.custom-pkgs ./pkgs;
+    dunst-man = homebase.nixpkgs.dunst.man;
+    herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
+
+    bash-wrapper = homebase.imp ./bash-wrapper;
+  };
+
+  pkgs-legacy = homebase.custom-pkgs ./pkgs pkgs;
+
+  all-pkgs-without-extras = pkgs // pkgs-legacy;
+
+  all-pkgs = homebase.include-extras (builtins.attrValues all-pkgs-without-extras);
 in
-  nixpkgs.symlinkJoin {
-    name = "${pname}-${version}";
-    paths = upstream-with-extras-pkgs ++ man-only-pkgs ++ custom-pkgs;
+  homebase.nixpkgs.symlinkJoin {
+    name = "${homebase.pname}-${homebase.version}";
+    paths = all-pkgs;
   }

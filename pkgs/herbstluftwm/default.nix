@@ -1,18 +1,27 @@
-{ nixpkgs, pname, importPkg, wrapBins, ... }:
+{ nixpkgs, pname, wrapBins, ... }:
+dependency-pkgs@{
+  alacritty,
+  bash,
+  dunst,
+  firefox,
+  i3lock,
+  polybar,
+  tmux,
+  unclutter,
+  xsetroot,
+  xss-lock
+}:
 let
-  alacritty = "${importPkg "alacritty"}/bin/alacritty";
-  bash = "${importPkg "bashInteractive"}/bin/bash";
-  dunst = "${importPkg "dunst"}/bin/dunst";
-  firefox = "${nixpkgs.firefox}/bin/firefox";
-  i3lock = "${nixpkgs.i3lock}/bin/i3lock";
-  polybar = "${importPkg "polybarFull"}/bin/polybar";
-  tmux = "${importPkg "tmux"}/bin/tmux";
-  unclutter = "${nixpkgs.unclutter}/bin/unclutter";
-  xsetroot = "${nixpkgs.xorg.xsetroot}/bin/xsetroot";
-  xss-lock = "${nixpkgs.xss-lock}/bin/xss-lock";
+  dependencies =
+    let
+      inherit (nixpkgs.lib.attrsets) mapAttrs;
+
+      get-bin = name: pkg: "${pkg}/bin/${name}";
+    in
+      mapAttrs get-bin dependency-pkgs;
 
   autostart = nixpkgs.writeScript "${pname}-autostart" ''
-    #! ${bash}
+    #! ${dependencies.bash}
 
     set -efuxo pipefail
 
@@ -33,11 +42,11 @@ let
     hc keybind $Mod-Shift-q quit
     hc keybind $Mod-Shift-r reload
     hc keybind $Mod-Shift-c close
-    hc keybind $Mod-Shift-z spawn '${i3lock}' -c "''${HOMEBASE_USER_COLOR:-554466}"
+    hc keybind $Mod-Shift-z spawn '${dependencies.i3lock}' -c "''${HOMEBASE_USER_COLOR:-554466}"
 
-    hc keybind $Mod-Return spawn '${alacritty}'
-    hc keybind $Mod-Shift-Return spawn '${alacritty}' --command '${tmux}' new-session -A -s default &
-    hc keybind $Mod-f spawn '${firefox}' --private-window
+    hc keybind $Mod-Return spawn '${dependencies.alacritty}'
+    hc keybind $Mod-Shift-Return spawn '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
+    hc keybind $Mod-f spawn '${dependencies.firefox}' --private-window
 
     hc keybind $Mod-h     focus left
     hc keybind $Mod-j     focus down
@@ -117,15 +126,15 @@ let
 
     if hc silent new_attr bool my_not_first_autostart
     then
-      '${xss-lock}' --transfer-sleep-lock \
+      '${dependencies.xss-lock}' --transfer-sleep-lock \
         -- \
-        '${i3lock}' --nofork -c "''${HOMEBASE_USER_COLOR:-554466}" &
+        '${dependencies.i3lock}' --nofork -c "''${HOMEBASE_USER_COLOR:-554466}" &
 
-      '${unclutter}' -idle 1 &
-      '${xsetroot}' -solid '#555588'
-      '${polybar}' &
-      '${dunst}' &
-      '${alacritty}' --command '${tmux}' new-session -A -s default &
+      '${dependencies.unclutter}' -idle 1 &
+      '${dependencies.xsetroot}' -solid '#555588'
+      '${dependencies.polybar}' &
+      '${dependencies.dunst}' &
+      '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
     fi
   '';
 in

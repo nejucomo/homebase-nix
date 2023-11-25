@@ -1,4 +1,4 @@
-{ wrapBins, ... }: wrapBins rec {
+{ wrapBins, ... }: {}: wrapBins rec {
   alacritty = { realbin, ... }: ''
     #!/bin/sh
     exec "${realbin}" "--config-file" "${./alacritty.yml}" "$@"
