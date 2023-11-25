@@ -52,6 +52,20 @@ let
         exec "${upstream-bin}" -conf "${./pkgs/dunst/dunst.conf}" "$@"
       '';
     };
+
+    polybar = homebase.wrap-bins homebase.nixpkgs.polybarFull {
+      polybar = { upstream-bin, ... }: ''
+        #!/bin/sh
+        exec "${upstream-bin}" -conf "${./pkgs/polybar/config.ini}" "$@"
+      '';
+    };
+
+    vim = homebase.wrap-bins homebase.nixpkgs.vim {
+      vim = { upstream-bin, ... }: ''
+        #!/bin/sh
+        exec "${upstream-bin}" -conf "${./pkgs/vim/vimrc}" "$@"
+      '';
+    };
   };
 
   pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;

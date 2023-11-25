@@ -21,9 +21,7 @@ let
   import-legacy-pkg = homebase.imp ./import-pkg.nix legacy-pkgs-dir;
 in
   rec {
-    vim = import-legacy-pkg "vim" {};
     tmux = import-legacy-pkg "tmux" {};
-    polybar = import-legacy-pkg "polybarFull" {};
     journalctl-sidebar = import-legacy-pkg "journalctl-sidebar" {};
     git = import-legacy-pkg "git" {};
     alacritty = import-legacy-pkg "alacritty" {};
@@ -34,13 +32,13 @@ in
         dunst
         firefox
         i3lock
+        polybar
         unclutter
         xsetroot
         xss-lock
       ;
       inherit
         alacritty
-        polybar
         tmux
       ;
     };
