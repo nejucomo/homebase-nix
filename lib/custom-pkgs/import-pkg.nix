@@ -30,8 +30,7 @@
   }
 */
 
-imparams@{ nixpkgs }:
-pkgsDir:
+homebase@{ nixpkgs, ... }: pkgsDir:
   let
     repoName = baseNameOf pkgsDir;
     importPkg = pkgName:
@@ -70,7 +69,7 @@ pkgsDir:
                 inherit name;
                 value = wrapBin;
               };
-              binCallbacksPairs = map mkWrapBinPair binsToWrap; 
+              binCallbacksPairs = map mkWrapBinPair binsToWrap;
               binCallbacks = builtins.listToAttrs binCallbacksPairs;
             in
               pkglib.wrapBins binCallbacks;
