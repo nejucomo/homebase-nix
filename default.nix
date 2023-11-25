@@ -42,7 +42,7 @@ let
     bash-wrapper = homebase.imp ./bash-wrapper;
   };
 
-  pkgs-legacy = homebase.custom-pkgs ./pkgs pkgs;
+  pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;
 
   all-pkgs-without-extras = pkgs // pkgs-legacy;
 

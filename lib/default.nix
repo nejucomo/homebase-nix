@@ -10,7 +10,7 @@ let
     imp = mod-path: import mod-path homebase;
 
     ## Legacy custom-pkgs importer (to be deprecated):
-    custom-pkgs = imp ./custom-pkgs;
+    legacy-custom-pkgs = imp ./custom-pkgs;
 
     ## Include extras for the given pacakges, such as man pages:
     include-extras = pkgs:
