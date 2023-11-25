@@ -1,6 +1,6 @@
 imparams@{ nixpkgs }:
 let
-  homebase = import ./lib {
+  homebase = import ./lib-homebase {
     inherit nixpkgs;
     pname = baseNameOf ./.;
     version = "0.1";
