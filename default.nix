@@ -39,7 +39,7 @@ let
     dunst-man = homebase.nixpkgs.dunst.man;
     herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
 
-    bash-wrapper = homebase.imp ./bash-wrapper;
+    bash = homebase.imp ./pkgs/bash;
   };
 
   pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;

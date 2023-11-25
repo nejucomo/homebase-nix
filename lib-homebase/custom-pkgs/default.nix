@@ -30,9 +30,8 @@ in
     alacritty = import-legacy-pkg "alacritty" {};
 
     herbstluftwm = import-legacy-pkg "herbstluftwm" {
-      bash = pkgs.bash-wrapper;
-
       inherit (pkgs)
+        bash
         firefox
         i3lock
         unclutter
