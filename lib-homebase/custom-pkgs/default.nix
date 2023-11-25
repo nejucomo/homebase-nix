@@ -21,7 +21,6 @@ let
   import-legacy-pkg = homebase.imp ./import-pkg.nix legacy-pkgs-dir;
 in
   rec {
-    journalctl-sidebar = import-legacy-pkg "journalctl-sidebar" {};
     git = import-legacy-pkg "git" {};
 
     herbstluftwm = import-legacy-pkg "herbstluftwm" {
