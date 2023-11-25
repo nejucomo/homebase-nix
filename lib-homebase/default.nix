@@ -26,6 +26,18 @@ let
 
     ## Wrap binaries from an underlying package:
     wrap-bins = imp ./wrap-bins.nix;
+
+    ## Wrap binaries specialized with specific config args:
+    wrap-configs = pkg: configs:
+      let
+        inherit (nixpkgs.lib.attrsets) mapAttrs;
+
+        wrap-config = name: config-args: { upstream-pkg, upstream-bin }: ''
+          #!/bin/sh
+          exec '${upstream-bin}' ${config-args} "$@"
+        '';
+      in
+        homebase.wrap-bins pkg (mapAttrs wrap-config configs);
   };
 in
   homebase
