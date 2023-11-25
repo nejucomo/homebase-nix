@@ -26,12 +26,12 @@ in
     polybar = import-legacy-pkg "polybarFull" {};
     journalctl-sidebar = import-legacy-pkg "journalctl-sidebar" {};
     git = import-legacy-pkg "git" {};
-    dunst = import-legacy-pkg "dunst" {};
     alacritty = import-legacy-pkg "alacritty" {};
 
     herbstluftwm = import-legacy-pkg "herbstluftwm" {
       inherit (pkgs)
         bash
+        dunst
         firefox
         i3lock
         unclutter
@@ -40,7 +40,6 @@ in
       ;
       inherit
         alacritty
-        dunst
         polybar
         tmux
       ;

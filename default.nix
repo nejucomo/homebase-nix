@@ -45,6 +45,13 @@ let
         exec "${upstream-bin}" "--rcfile" "${./pkgs/bash/bashlib}/bashrc" "$@"
       '';
     };
+
+    dunst = homebase.wrap-bins homebase.nixpkgs.dunst {
+      dunst = { upstream-bin, ... }: ''
+        #!/bin/sh
+        exec "${upstream-bin}" -conf "${./pkgs/dunst/dunst.conf}" "$@"
+      '';
+    };
   };
 
   pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;
