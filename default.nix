@@ -5,33 +5,33 @@ let
 
   homebase = import ./lib imparams;
 
-  upstream-pkgs = with homebase.nixpkgs; [
-    acpi
-    coreutils
-    findutils
-    firefox
-    gawk
-    gnugrep
-    gnused
-    gzip
-    helix
-    i3lock
-    killall
-    less
-    man
-    meld
-    nix
-    libnotify
-    ps
-    pstree
-    ripgrep
-    unclutter
-    which
-    xorg.xsetroot
-    xss-lock
-  ];
-
-  extra-pkgs = homebase.include-extras upstream-pkgs;
+  upstream-with-extras-pkgs = homebase.include-extras (
+    with homebase.nixpkgs; [
+      acpi
+      coreutils
+      findutils
+      firefox
+      gawk
+      gnugrep
+      gnused
+      gzip
+      helix
+      i3lock
+      killall
+      less
+      man
+      meld
+      nix
+      libnotify
+      ps
+      pstree
+      ripgrep
+      unclutter
+      which
+      xorg.xsetroot
+      xss-lock
+    ]
+  );
 
   # TODO: these are the man-pages of custom packages; update the custom packages to include the manpages themselves:
   man-only-pkgs = map (pkg: pkg.man) (with nixpkgs; [
@@ -43,5 +43,5 @@ let
 in
   nixpkgs.symlinkJoin {
     name = "${pname}-${version}";
-    paths = upstream-pkgs ++ extra-pkgs ++ man-only-pkgs ++ custom-pkgs;
+    paths = upstream-with-extras-pkgs ++ man-only-pkgs ++ custom-pkgs;
   }
