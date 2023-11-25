@@ -4,14 +4,8 @@
 
   Pseudo type signature: `pkgsDir -> [ derivation ]`
 
-  The `pkgsDir` must be a directory with a "base.nix" and zero or more
-  "custom package directories".
-
-  The "base.nix" must evaluate to a list of derivations which are
-  included in the final result as-is. The typical body just returns a
-  list of uncustomized nixpkgs, for example:
-
-    with nixpkgs; [ less, gnugrep ]
+  The `pkgsDir` must be a directory with zero or more "custom package
+  directories".
 
   Each custom package directory must have a `default.nix` (so the
   directory can be imported) which provides a function matching the
@@ -27,8 +21,6 @@ let
 in
   pkgsDir:
     let
-      basePkgs = import (pkgsDir + "/base.nix") { inherit (homebase) nixpkgs; };
-
       customPkgs =
         let
           dirEntries = readDir pkgsDir;
@@ -44,4 +36,4 @@ in
         in
           map importPkg pkgNames;
     in
-      basePkgs ++ customPkgs
+      customPkgs
