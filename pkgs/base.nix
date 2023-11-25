@@ -1,6 +1,5 @@
+{ nixpkgs }:
 let
-  nixpkgs = import <nixpkgs> {};
-
   basepkgs = with nixpkgs; [
     acpi
     coreutils

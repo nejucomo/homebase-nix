@@ -30,10 +30,8 @@
   }
 */
 
-let
-  nixpkgs = import <nixpkgs> {};
-
-in pkgsDir:
+imparams@{ nixpkgs }:
+pkgsDir:
   let
     repoName = baseNameOf pkgsDir;
     importPkg = pkgName:

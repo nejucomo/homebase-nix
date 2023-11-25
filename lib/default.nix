@@ -11,24 +11,23 @@
   included in the final result as-is. The typical body just returns a
   list of uncustomized nixpkgs, for example:
 
-    let nixpkgs = import <nixpkgs> {};
-    in [ nixpkgs.less, nixpkgs.gnugrep ]
+    with nixpkgs; [ less, gnugrep ]
 
   Each custom package directory must have a `default.nix` (so the
   directory can be imported) which provides a function matching the
   `./import-pkg.nix` interface.
 */
 
+imparams@{ nixpkgs }:
 let
   inherit (builtins) attrNames readDir;
-  nixpkgs = import <nixpkgs> {};
 
   inherit (nixpkgs.lib.attrsets) filterAttrs;
-  mkImportPkg = import ./import-pkg.nix;
+  mkImportPkg = import ./import-pkg.nix imparams;
 in
   pkgsDir:
     let
-      basePkgs = import (pkgsDir + "/base.nix");
+      basePkgs = import (pkgsDir + "/base.nix") imparams;
 
       customPkgs =
         let

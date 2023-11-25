@@ -1,10 +1,11 @@
+imparams@{ nixpkgs }:
 let
-  inherit (import <nixpkgs> {}) symlinkJoin;
-
   pname = baseNameOf ./.;
   version = "0.1";
+
+  mkPkgs = import ./lib imparams;
 in
-  symlinkJoin {
+  nixpkgs.symlinkJoin {
     name = "${pname}-${version}";
-    paths = import ./lib ./pkgs;
+    paths = mkPkgs ./pkgs;
   }
