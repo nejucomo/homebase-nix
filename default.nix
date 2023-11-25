@@ -46,38 +46,40 @@ let
       '';
     };
 
+    bash-bin = "${bash}/bin/bash";
+
+    alacritty = homebase.wrap-bins homebase.nixpkgs.alacritty {
+      alacritty = { upstream-bin, ... }: ''
+        #! ${bash-bin}
+        exec "${upstream-bin}" -conf "${./pkgs/alacritty/alacritty.yml}" "$@"
+      '';
+    };
+
     dunst = homebase.wrap-bins homebase.nixpkgs.dunst {
       dunst = { upstream-bin, ... }: ''
-        #!/bin/sh
+        #! ${bash-bin}
         exec "${upstream-bin}" -conf "${./pkgs/dunst/dunst.conf}" "$@"
       '';
     };
 
     polybar = homebase.wrap-bins homebase.nixpkgs.polybarFull {
       polybar = { upstream-bin, ... }: ''
-        #!/bin/sh
+        #! ${bash-bin}
         exec "${upstream-bin}" -conf "${./pkgs/polybar/config.ini}" "$@"
-      '';
-    };
-
-    alacritty = homebase.wrap-bins homebase.nixpkgs.alacritty {
-      alacritty = { upstream-bin, ... }: ''
-        #!/bin/sh
-        exec "${upstream-bin}" -conf "${./pkgs/alacritty/alacritty.yml}" "$@"
-      '';
-    };
-
-    vim = homebase.wrap-bins homebase.nixpkgs.vim {
-      vim = { upstream-bin, ... }: ''
-        #!/bin/sh
-        exec "${upstream-bin}" -conf "${./pkgs/vim/vimrc}" "$@"
       '';
     };
 
     tmux = homebase.wrap-bins homebase.nixpkgs.tmux {
       tmux = { upstream-bin, ... }: ''
-        #!/bin/sh
+        #! ${bash-bin}
         exec "${upstream-bin}" -f "${./pkgs/tmux/tmux.conf}" "$@"
+      '';
+    };
+
+    vim = homebase.wrap-bins homebase.nixpkgs.vim {
+      vim = { upstream-bin, ... }: ''
+        #! ${bash-bin}
+        exec "${upstream-bin}" -conf "${./pkgs/vim/vimrc}" "$@"
       '';
     };
   };
