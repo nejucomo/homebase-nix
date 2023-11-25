@@ -21,25 +21,21 @@ let
   import-legacy-pkg = homebase.imp ./import-pkg.nix legacy-pkgs-dir;
 in
   rec {
-    tmux = import-legacy-pkg "tmux" {};
     journalctl-sidebar = import-legacy-pkg "journalctl-sidebar" {};
     git = import-legacy-pkg "git" {};
-    alacritty = import-legacy-pkg "alacritty" {};
 
     herbstluftwm = import-legacy-pkg "herbstluftwm" {
       inherit (pkgs)
+        alacritty
         bash
         dunst
         firefox
         i3lock
         polybar
+        tmux
         unclutter
         xsetroot
         xss-lock
-      ;
-      inherit
-        alacritty
-        tmux
       ;
     };
 

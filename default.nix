@@ -60,10 +60,24 @@ let
       '';
     };
 
+    alacritty = homebase.wrap-bins homebase.nixpkgs.alacritty {
+      alacritty = { upstream-bin, ... }: ''
+        #!/bin/sh
+        exec "${upstream-bin}" -conf "${./pkgs/alacritty/alacritty.yml}" "$@"
+      '';
+    };
+
     vim = homebase.wrap-bins homebase.nixpkgs.vim {
       vim = { upstream-bin, ... }: ''
         #!/bin/sh
         exec "${upstream-bin}" -conf "${./pkgs/vim/vimrc}" "$@"
+      '';
+    };
+
+    tmux = homebase.wrap-bins homebase.nixpkgs.tmux {
+      tmux = { upstream-bin, ... }: ''
+        #!/bin/sh
+        exec "${upstream-bin}" -f "${./pkgs/tmux/tmux.conf}" "$@"
       '';
     };
   };
