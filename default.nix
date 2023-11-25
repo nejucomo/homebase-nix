@@ -39,7 +39,12 @@ let
     dunst-man = homebase.nixpkgs.dunst.man;
     herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
 
-    bash = homebase.imp ./pkgs/bash;
+    bash = homebase.wrap-bins homebase.nixpkgs.bashInteractive {
+      bash = { upstream-bin, ... }: ''
+        #! ${upstream-bin}
+        exec "${upstream-bin}" "--rcfile" "${./pkgs/bash/bashlib}/bashrc" "$@"
+      '';
+    };
   };
 
   pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;
