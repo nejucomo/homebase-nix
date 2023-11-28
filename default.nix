@@ -6,6 +6,21 @@ let
     version = "0.1";
   };
 
+  config-pkgs =
+    let
+      upstream-pkgs = homebase.nixpkgs // {
+        bash = homebase.nixpkgs.bashInteractive;
+      };
+    in
+      homebase.wrap-config-pkgs upstream-pkgs {
+        bash = ''--rcfile '${./pkgs/bash/bashlib}/bashrc' '';
+        alacritty = ''--config-file '${./pkgs/alacritty/alacritty.yml}' '';
+        dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
+        polybar = ''--config='${./pkgs/polybar/config.ini}' '';
+        tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
+        vim = ''-u '${./pkgs/vim/vimrc}' '';
+      };
+
   pkgs = {
     inherit (homebase.nixpkgs)
       acpi
@@ -38,31 +53,8 @@ let
 
     dunst-man = homebase.nixpkgs.dunst.man;
     herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
-
-    bash = homebase.wrap-configs homebase.nixpkgs.bashInteractive {
-      bash = ''--rcfile '${./pkgs/bash/bashlib}/bashrc' '';
-    };
-
-    alacritty = homebase.wrap-configs homebase.nixpkgs.alacritty {
-      alacritty = ''--config-file '${./pkgs/alacritty/alacritty.yml}' '';
-    };
-
-    dunst = homebase.wrap-configs homebase.nixpkgs.dunst {
-      dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
-    };
-
-    polybar = homebase.wrap-configs homebase.nixpkgs.polybarFull {
-      polybar = ''--config='${./pkgs/polybar/config.ini}' '';
-    };
-
-    tmux = homebase.wrap-configs homebase.nixpkgs.tmux {
-      tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
-    };
-
-    vim = homebase.wrap-configs homebase.nixpkgs.vim {
-      vim = ''-u '${./pkgs/vim/vimrc}' '';
-    };
-  };
+  }
+  // config-pkgs;
 
   pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;
 

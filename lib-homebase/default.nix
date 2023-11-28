@@ -38,6 +38,20 @@ let
         '';
       in
         homebase.wrap-bins pkg (mapAttrs wrap-config configs);
+
+    ## wrap-config-pkgs :: upstream-pkgs -> config-attrset -> pkgs-attrset
+    ##
+    ## Wrap configs of an attrset where each name is for a package with
+    ## a single identical binary. The result is an attrset where each
+    ## value is the `wrap-config` derivations.
+    wrap-config-pkgs = upstream-pkgs:
+      let
+        inherit (nixpkgs.lib.attrsets) mapAttrs;
+
+        wrap-config-pkg = name: config-args:
+          wrap-configs upstream-pkgs."${name}" { "${name}" = config-args; };
+      in
+        mapAttrs wrap-config-pkg;
   };
 in
   homebase
