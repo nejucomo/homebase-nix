@@ -33,33 +33,47 @@ let
 
     echo $PATH | tr ':' '\n'
 
-    hc() {
+    function hc
+    {
         herbstclient "$@"
+    }
+
+    function keybind
+    {
+      local kb="$1"
+      shift
+      local old="$(hc list_keybinds | tr '\t' ' ' | tr '+' '-' | grep "$kb ")"
+      if [ -z "$old" ]
+      then
+        hc keybind "$kb" "$@"
+      else
+        exit 1
+      fi
     }
 
     Mod=Mod4   # Use the super key as the main modifier
 
     hc keyunbind --all
 
-    hc keybind $Mod-Shift-q quit
-    hc keybind $Mod-Shift-r reload
-    hc keybind $Mod-Shift-c close
-    hc keybind $Mod-Shift-z spawn '${dependencies.i3lock}' -c "''${HOMEBASE_USER_COLOR:-554466}"
+    keybind $Mod-Shift-q quit
+    keybind $Mod-Shift-r reload
+    keybind $Mod-Shift-c close
+    keybind $Mod-Shift-z spawn '${dependencies.i3lock}' -c "''${HOMEBASE_USER_COLOR:-554466}"
 
-    hc keybind $Mod-Return spawn '${dependencies.alacritty}'
-    hc keybind $Mod-Shift-Return spawn '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
-    hc keybind $Mod-f spawn '${dependencies.firefox}' --private-window
-    hc keybind $Mod-Control-f spawn '${dependencies.firefox}' -P authenticated
+    keybind $Mod-Return spawn '${dependencies.alacritty}'
+    keybind $Mod-Shift-Return spawn '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
+    keybind $Mod-b spawn '${dependencies.firefox}' --private-window
+    keybind $Mod-Shift-b spawn '${dependencies.firefox}' -P authenticated
 
-    hc keybind $Mod-h     focus left
-    hc keybind $Mod-j     focus down
-    hc keybind $Mod-k     focus up
-    hc keybind $Mod-l     focus right
+    keybind $Mod-h     focus left
+    keybind $Mod-j     focus down
+    keybind $Mod-k     focus up
+    keybind $Mod-l     focus right
 
-    hc keybind $Mod-Shift-h     shift left
-    hc keybind $Mod-Shift-j     shift down
-    hc keybind $Mod-Shift-k     shift up
-    hc keybind $Mod-Shift-l     shift right
+    keybind $Mod-Shift-h     shift left
+    keybind $Mod-Shift-j     shift down
+    keybind $Mod-Shift-k     shift up
+    keybind $Mod-Shift-l     shift right
 
     # tags
     TAG_NAMES=( {1..9} )
@@ -70,34 +84,34 @@ let
         hc add "''${TAG_NAMES[$i]}"
         key="''${TAG_KEYS[$i]}"
         if ! [ -z "$key" ] ; then
-            hc keybind "$Mod-$key" use_index "$i"
-            hc keybind "$Mod-Shift-$key" move_index "$i"
+            keybind "$Mod-$key" use_index "$i"
+            keybind "$Mod-Shift-$key" move_index "$i"
         fi
     done
 
     # cycle through tags
-    hc keybind $Mod-period use_index +1 --skip-visible
-    hc keybind $Mod-comma  use_index -1 --skip-visible
+    keybind $Mod-period use_index +1 --skip-visible
+    keybind $Mod-comma  use_index -1 --skip-visible
 
     # layouting
-    hc keybind $Mod-Shift-s floating toggle
-    hc keybind $Mod-Shift-f fullscreen toggle
-    hc keybind $Mod-Shift-m set_layout max
-    hc keybind $Mod-p pseudotile toggle
-    hc keybind $Mod-space cycle_layout +1
+    keybind $Mod-Shift-s floating toggle
+    keybind $Mod-Shift-f fullscreen toggle
+    keybind $Mod-Shift-m set_layout max
+    keybind $Mod-p pseudotile toggle
+    keybind $Mod-space cycle_layout +1
 
     # split frames
-    hc keybind $Mod-u       split   bottom  0.5
-    hc keybind $Mod-o       split   right   0.5
-    hc keybind $Mod-r       remove
-    hc keybind $Mod-Control-space split explode
+    keybind $Mod-u       split   bottom  0.5
+    keybind $Mod-o       split   right   0.5
+    keybind $Mod-r       remove
+    keybind $Mod-Control-space split explode
 
     # resizing frames and floating clients
     resizestep=0.02
-    hc keybind $Mod-Control-h       resize left +$resizestep
-    hc keybind $Mod-Control-j       resize down +$resizestep
-    hc keybind $Mod-Control-k       resize up +$resizestep
-    hc keybind $Mod-Control-l       resize right +$resizestep
+    keybind $Mod-Control-h       resize left +$resizestep
+    keybind $Mod-Control-j       resize down +$resizestep
+    keybind $Mod-Control-k       resize up +$resizestep
+    keybind $Mod-Control-l       resize right +$resizestep
 
     # mouse
     hc mouseunbind --all
