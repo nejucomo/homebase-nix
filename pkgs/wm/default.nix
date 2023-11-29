@@ -1,4 +1,4 @@
-{ nixpkgs, pname, wrapBins, ... }:
+{ nixpkgs, sub-pname, wrap-configs, ... }:
 dependency-pkgs@{
   alacritty,
   bash,
@@ -20,7 +20,7 @@ let
     in
       mapAttrs get-bin dependency-pkgs;
 
-  autostart = nixpkgs.writeScript "${pname}-autostart" ''
+  autostart = nixpkgs.writeScript (sub-pname "wm-autostart") ''
     #! ${dependencies.bash}
 
     set -efuxo pipefail
@@ -30,6 +30,8 @@ let
 
     # If anything fails in autostart, quit hlwm:
     trap 'ECODE=$?; [ "$ECODE" == 0 ] || herbstclient quit; exit $ECODE' EXIT
+
+    echo $PATH | tr ':' '\n'
 
     hc() {
         herbstclient "$@"
@@ -138,9 +140,6 @@ let
     fi
   '';
 in
-  wrapBins {
-    herbstluftwm = { realbin, ... }: ''
-      #!/bin/sh
-      exec "${realbin}" --autostart "${autostart}" "$@"
-    '';
+  wrap-configs nixpkgs.herbstluftwm {
+    herbstluftwm = ''--autostart "${autostart}" '';
   }

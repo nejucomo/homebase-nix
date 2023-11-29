@@ -2,7 +2,7 @@ imparams@{ nixpkgs }:
 let
   homebase = import ./lib-homebase {
     inherit nixpkgs;
-    pname = baseNameOf ./.;
+    pname = "homebase";
     version = "0.1";
   };
 
@@ -21,7 +21,16 @@ let
         vim = ''-u '${./pkgs/vim/vimrc}' '';
       };
 
-  pkgs = {
+  pkgs = rec {
+    inherit (config-pkgs)
+      bash
+      alacritty
+      dunst
+      polybar
+      tmux
+      vim
+    ;
+
     inherit (homebase.nixpkgs)
       acpi
       coreutils
@@ -55,8 +64,22 @@ let
     herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
 
     git = homebase.wrap-xdg-config homebase.nixpkgs.git ./pkgs/git-xdg [ "git" ];
-  }
-  // config-pkgs;
+
+    herbstluftwm = homebase.imp ./pkgs/wm {
+      inherit
+        alacritty
+        bash
+        dunst
+        firefox
+        i3lock
+        polybar
+        tmux
+        unclutter
+        xsetroot
+        xss-lock
+      ;
+    };
+  };
 
   pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;
 

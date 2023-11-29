@@ -21,22 +21,7 @@ let
   import-legacy-pkg = homebase.imp ./import-pkg.nix legacy-pkgs-dir;
 in
   rec {
-    herbstluftwm = import-legacy-pkg "herbstluftwm" {
-      inherit (pkgs)
-        alacritty
-        bash
-        dunst
-        firefox
-        i3lock
-        polybar
-        tmux
-        unclutter
-        xsetroot
-        xss-lock
-      ;
-    };
-
     startx = import-legacy-pkg "startx" {
-      inherit herbstluftwm;
+      inherit (pkgs) herbstluftwm;
     };
   }

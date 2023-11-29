@@ -30,6 +30,6 @@ let
 in
   symlinkJoin {
     inherit name;
-    paths = builtins.attrValues bin-pkgs;
+    paths = (builtins.attrValues bin-pkgs) ++ [ upstream-pkg ];
   }
 
