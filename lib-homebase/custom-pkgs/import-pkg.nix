@@ -16,37 +16,6 @@ homebase@{ nixpkgs, ... }: pkgsDir:
         pkglib = {
           inherit nixpkgs pkgName pname version name;
 
-          xdgWrapper = { xdgAppName ? pkgName, binsToWrap ? [ pkgName ] }:
-            let
-              xdgpname = "${pname}-xdg-conf";
-              xdgconf = nixpkgs.stdenv.mkDerivation {
-                pname = xdgpname;
-                inherit version;
-
-                src = pkgDir + "/xdg";
-                builder = nixpkgs.writeScript "${xdgpname}-builder.sh" ''
-                  source "$stdenv/setup"
-                  mkdir "$out"
-                  outsub="$out/${xdgAppName}"
-                  cp -a "$src" "$outsub"
-                  chmod -R u+w "$outsub"
-                  patchShebangs "$outsub"
-                '';
-              };
-              wrapBin = { realbin, ... }: ''
-                #!/bin/sh
-                export XDG_CONFIG_HOME="${xdgconf}"
-                exec "${realbin}" "$@"
-              '';
-              mkWrapBinPair = name: {
-                inherit name;
-                value = wrapBin;
-              };
-              binCallbacksPairs = map mkWrapBinPair binsToWrap;
-              binCallbacks = builtins.listToAttrs binCallbacksPairs;
-            in
-              pkglib.wrapBins binCallbacks;
-
           wrapBins = binCallbacks:
             let
               realpkg = nixpkgs.${pkgName};

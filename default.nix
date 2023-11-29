@@ -53,6 +53,8 @@ let
 
     dunst-man = homebase.nixpkgs.dunst.man;
     herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
+
+    git = homebase.wrap-xdg-config homebase.nixpkgs.git ./pkgs/git-xdg [ "git" ];
   }
   // config-pkgs;
 

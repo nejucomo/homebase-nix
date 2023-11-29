@@ -21,8 +21,6 @@ let
   import-legacy-pkg = homebase.imp ./import-pkg.nix legacy-pkgs-dir;
 in
   rec {
-    git = import-legacy-pkg "git" {};
-
     herbstluftwm = import-legacy-pkg "herbstluftwm" {
       inherit (pkgs)
         alacritty

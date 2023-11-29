@@ -52,6 +52,9 @@ let
           wrap-configs upstream-pkgs."${name}" { "${name}" = config-args; };
       in
         mapAttrs wrap-config-pkg;
+
+    ## wrap-xdg-config :: xdg-name -> xdg-config-dir -> upstream-bins -> deriv
+    wrap-xdg-config = imp ./wrap-xdg-config.nix;
   };
 in
   homebase
