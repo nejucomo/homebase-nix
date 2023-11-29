@@ -79,13 +79,18 @@ let
         xss-lock
       ;
     };
+
+    startx =
+      let
+        # Hard-coded external dependency:
+        systemStartx = "/run/current-system/sw/bin/startx";
+      in
+        homebase.nixpkgs.writeScriptBin "startx" ''
+          exec "${systemStartx}" "${herbstluftwm}/bin/herbstluftwm" "$@"
+        '';
   };
 
-  pkgs-legacy = homebase.legacy-custom-pkgs ./legacy-pkgs pkgs;
-
-  all-pkgs-without-extras = pkgs // pkgs-legacy;
-
-  all-pkgs = homebase.include-extras (builtins.attrValues all-pkgs-without-extras);
+  all-pkgs = homebase.include-extras (builtins.attrValues pkgs);
 in
   homebase.nixpkgs.symlinkJoin {
     name = "${homebase.pname}-${homebase.version}";
