@@ -49,6 +49,7 @@ let
     hc keybind $Mod-Return spawn '${dependencies.alacritty}'
     hc keybind $Mod-Shift-Return spawn '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
     hc keybind $Mod-f spawn '${dependencies.firefox}' --private-window
+    hc keybind $Mod-Control-f spawn '${dependencies.firefox}' -P authenticated
 
     hc keybind $Mod-h     focus left
     hc keybind $Mod-j     focus down
