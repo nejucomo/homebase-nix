@@ -1,4 +1,4 @@
-imparams@{ nixpkgs }:
+imparams@{ nixpkgs, git-clone-canonical }:
 let
   homebase = import ./lib-homebase {
     inherit nixpkgs;
@@ -22,6 +22,10 @@ let
       };
 
   pkgs = rec {
+    inherit
+      git-clone-canonical
+    ;
+
     inherit (config-pkgs)
       bash
       alacritty
