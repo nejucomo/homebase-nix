@@ -48,6 +48,7 @@ let
       i3lock
       killall
       less
+      magic-wormhole
       man
       meld
       nix
