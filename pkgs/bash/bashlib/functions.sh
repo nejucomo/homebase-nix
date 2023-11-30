@@ -5,3 +5,10 @@ function source-optional
     source "$1"
   fi
 }
+
+function git-clone-canonical
+{
+  local url="$1"
+  command git-clone-canonical "$url" && \
+    cd "$(command git-clone-canonical --show-path "$url")"
+}
