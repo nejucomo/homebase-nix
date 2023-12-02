@@ -11,7 +11,7 @@ let
     in
       suffix: s:
         assert hasSuffix suffix s;
-        substring 0 (sub (stringLength s) (stringLength suffix)) s;
+        substring 0 ((stringLength s) - (stringLength suffix)) s;
 
   shell-suffix = ".bash";
 
