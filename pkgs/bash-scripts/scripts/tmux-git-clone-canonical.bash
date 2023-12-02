@@ -5,5 +5,3 @@ function main
   git-clone-canonical "$url"
   tmux-dir-session "$(git-clone-canonical --show-path "$url")"
 }
-
-main "$@"

@@ -7,5 +7,3 @@ function main
     cd "$dir"
     tmux new-session -At "$session"
 }
-
-main "$@"

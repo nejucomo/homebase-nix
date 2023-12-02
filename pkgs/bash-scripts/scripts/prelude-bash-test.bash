@@ -87,5 +87,3 @@ function exit-with-results
 ____EOF
     exit $FAILURES
 }
-
-main "$@"
