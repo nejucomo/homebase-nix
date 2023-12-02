@@ -93,6 +93,8 @@ let
         homebase.nixpkgs.writeScriptBin "startx" ''
           exec "${systemStartx}" "${herbstluftwm}/bin/herbstluftwm" "$@"
         '';
+
+    bash-scripts = homebase.imp ./pkgs/bash-scripts;
   };
 
   all-pkgs = homebase.include-extras (builtins.attrValues pkgs);
