@@ -1,4 +1,4 @@
-imparams@{ nixpkgs, git-clone-canonical }:
+imparams@{ nixpkgs, git-clone-canonical, cargo-checkmate }:
 let
   homebase = import ./lib-homebase {
     inherit nixpkgs;
@@ -24,6 +24,7 @@ let
   pkgs = rec {
     inherit
       git-clone-canonical
+      cargo-checkmate
     ;
 
     inherit (config-pkgs)
