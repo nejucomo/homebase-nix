@@ -57,6 +57,7 @@ let
       ps
       pstree
       ripgrep
+      rustup
       unclutter
       which
       xss-lock
