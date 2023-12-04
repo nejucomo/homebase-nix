@@ -94,7 +94,7 @@ let
           dunst
           firefox
           i3lock
-          polybar
+          polybar # Note: this has non-explicit dependency on `touchpad`
           tmux
           unclutter
           xsetroot
