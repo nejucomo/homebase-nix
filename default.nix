@@ -6,9 +6,14 @@ let
     version = "0.1";
   };
 
+  # We use foldl' to build up successively larger attrsets of packages
+  # in a way that they can depend on earlier results. This can be done
+  # without a fold using explicit names, eg 'pkgs4 = pkgs3 // { ... }`
+  # This approach seems easier to read/maintain:
+
   pkgs = builtins.foldl' (pkgs: mk-pkgs: pkgs // (mk-pkgs pkgs)) {} [
     # Flake input packages:
-    (_: {
+    (_upstream-pkgs: {
       inherit
         git-clone-canonical
         cargo-checkmate
@@ -16,7 +21,7 @@ let
     })
 
     # Off-the-shelf nixpkgs packages:
-    (_: {
+    (_upstream-pkgs: {
       inherit (homebase.nixpkgs)
         acpi
         coreutils
@@ -52,12 +57,12 @@ let
     })
 
     # Local packages defined in this repo:
-    (_: {
+    (_upstream-pkgs: {
       bash-scripts = homebase.imp ./pkgs/bash-scripts;
     })
 
     # These are packages which we supply custom config args to in wrappers:
-    (_:
+    (_upstream-pkgs:
       let
         upstream-pkgs = homebase.nixpkgs // {
           bash = homebase.nixpkgs.bashInteractive;
