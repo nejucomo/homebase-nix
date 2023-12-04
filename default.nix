@@ -6,98 +6,106 @@ let
     version = "0.1";
   };
 
-  config-pkgs =
-    let
-      upstream-pkgs = homebase.nixpkgs // {
-        bash = homebase.nixpkgs.bashInteractive;
-      };
-    in
-      homebase.wrap-config-pkgs upstream-pkgs {
-        bash = ''--rcfile '${./pkgs/bash/bashlib}/bashrc' '';
-        alacritty = ''--config-file '${./pkgs/alacritty/alacritty.yml}' '';
-        dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
-        helix = ''--config '${./pkgs/helix/config.toml}' '';
-        polybar = ''--config='${./pkgs/polybar/config.ini}' '';
-        tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
-        vim = ''-u '${./pkgs/vim/vimrc}' '';
-      };
-
-  pkgs = rec {
-    inherit
-      git-clone-canonical
-      cargo-checkmate
-    ;
-
-    inherit (config-pkgs)
-      bash
-      alacritty
-      dunst
-      polybar
-      tmux
-      vim
-    ;
-
-    inherit (homebase.nixpkgs)
-      acpi
-      coreutils
-      findutils
-      firefox
-      gawk
-      gnugrep
-      gnused
-      gzip
-      i3lock
-      killall
-      less
-      magic-wormhole
-      man
-      meld
-      nix
-      libnotify
-      ps
-      pstree
-      ripgrep
-      rustup
-      unclutter
-      which
-      xss-lock
-    ;
-
-    inherit (homebase.nixpkgs.xorg)
-      xsetroot
-    ;
-
-    dunst-man = homebase.nixpkgs.dunst.man;
-    herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
-
-    git = homebase.wrap-xdg-config homebase.nixpkgs.git ./pkgs/git-xdg [ "git" ];
-
-    herbstluftwm = homebase.imp ./pkgs/wm {
+  pkgs = builtins.foldl' (pkgs: mk-pkgs: pkgs // (mk-pkgs pkgs)) {} [
+    # Flake input packages:
+    (_: {
       inherit
-        alacritty
-        bash
-        dunst
+        git-clone-canonical
+        cargo-checkmate
+      ;
+    })
+
+    # Off-the-shelf nixpkgs packages:
+    (_: {
+      inherit (homebase.nixpkgs)
+        acpi
+        coreutils
+        findutils
         firefox
+        gawk
+        gnugrep
+        gnused
+        gzip
         i3lock
-        polybar
-        tmux
+        killall
+        less
+        magic-wormhole
+        man
+        meld
+        nix
+        libnotify
+        ps
+        pstree
+        ripgrep
+        rustup
         unclutter
-        xsetroot
+        which
         xss-lock
       ;
-    };
 
-    startx =
+      inherit (homebase.nixpkgs.xorg)
+        xsetroot
+      ;
+
+      dunst-man = homebase.nixpkgs.dunst.man;
+      herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
+    })
+
+    # Local packages defined in this repo:
+    (_: {
+      bash-scripts = homebase.imp ./pkgs/bash-scripts;
+    })
+
+    # These are packages which we supply custom config args to in wrappers:
+    (_:
       let
-        # Hard-coded external dependency:
-        systemStartx = "/run/current-system/sw/bin/startx";
+        upstream-pkgs = homebase.nixpkgs // {
+          bash = homebase.nixpkgs.bashInteractive;
+        };
       in
-        homebase.nixpkgs.writeScriptBin "startx" ''
-          exec "${systemStartx}" "${herbstluftwm}/bin/herbstluftwm" "$@"
-        '';
+        homebase.wrap-config-pkgs upstream-pkgs {
+          bash = ''--rcfile '${./pkgs/bash/bashlib}/bashrc' '';
+          alacritty = ''--config-file '${./pkgs/alacritty/alacritty.yml}' '';
+          dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
+          polybar = ''--config='${./pkgs/polybar/config.ini}' '';
+          tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
+          vim = ''-u '${./pkgs/vim/vimrc}' '';
+        } // {
+          helix = homebase.wrap-configs homebase.nixpkgs.helix {
+            hx = ''--config '${./pkgs/helix/config.toml}' '';
+          };
 
-    bash-scripts = homebase.imp ./pkgs/bash-scripts;
-  };
+          git = homebase.wrap-xdg-config homebase.nixpkgs.git ./pkgs/git-xdg [ "git" ];
+        }
+    )
+
+    # Customized packages with intra-package dependencies:
+    (upstream-pkgs: rec {
+      herbstluftwm = homebase.imp ./pkgs/wm {
+        inherit (upstream-pkgs)
+          alacritty
+          bash
+          dunst
+          firefox
+          i3lock
+          polybar
+          tmux
+          unclutter
+          xsetroot
+          xss-lock
+        ;
+      };
+
+      startx =
+        let
+          # Hard-coded external dependency:
+          systemStartx = "/run/current-system/sw/bin/startx";
+        in
+          homebase.nixpkgs.writeScriptBin "startx" ''
+            exec "${systemStartx}" "${herbstluftwm}/bin/herbstluftwm" "$@"
+          '';
+    })
+  ];
 
   all-pkgs = homebase.include-extras (builtins.attrValues pkgs);
 in
