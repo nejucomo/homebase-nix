@@ -2,7 +2,7 @@ function main
 {
   parse-args 'cmd' "$@"
   case "$cmd" in
-    is-enabled|toggle-enabled|get-name) set-touchpad-device-name ;;
+    is-enabled|toggle-enabled|get-name|show-enabled) set-touchpad-device-name ;;
     *) fail "unknown command: $cmd"
   esac
 
@@ -48,5 +48,15 @@ function toggle-enabled
     log-run xinput disable "\"$TOUCHPAD\""
   else
     log-run xinput enable "\"$TOUCHPAD\""
+  fi
+}
+
+function show-enabled
+{
+  if is-enabled
+  then
+    echo ' T'
+  else
+    echo '!T'
   fi
 }

@@ -90,6 +90,7 @@ let
         inherit (upstream-pkgs)
           alacritty
           bash
+          bash-scripts
           dunst
           firefox
           i3lock

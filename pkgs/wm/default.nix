@@ -2,6 +2,7 @@
 dependency-pkgs@{
   alacritty,
   bash,
+  bash-scripts,
   dunst,
   firefox,
   i3lock,
@@ -17,8 +18,12 @@ let
       inherit (nixpkgs.lib.attrsets) mapAttrs;
 
       get-bin = name: pkg: "${pkg}/bin/${name}";
+
+      synonymous-bins = mapAttrs get-bin (removeAttrs dependency-pkgs [ "bash-scripts" ]);
     in
-      mapAttrs get-bin dependency-pkgs;
+      synonymous-bins // {
+        touchpad = "${bash-scripts}/bin/touchpad";
+      };
 
   autostart = nixpkgs.writeScript (sub-pname "wm-autostart") ''
     #! ${dependencies.bash}
@@ -55,11 +60,16 @@ let
 
     hc keyunbind --all
 
+    # Top-level WM control
     keybind $Mod-Shift-q quit
     keybind $Mod-Shift-r reload
     keybind $Mod-Shift-c close
     keybind $Mod-Shift-z spawn '${dependencies.i3lock}' -c "''${HOMEBASE_USER_COLOR:-554466}"
 
+    # Input mode controls
+    keybind $Mod-Escape spawn '${dependencies.touchpad}' 'toggle-enabled'
+
+    # App shortcuts
     keybind $Mod-Return spawn '${dependencies.alacritty}'
     keybind $Mod-Shift-Return spawn '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
     keybind $Mod-b spawn '${dependencies.firefox}' --private-window
