@@ -3,8 +3,9 @@
 - ☐ herbstluftwm feature to add/jump-to/move-to tags by name
 - ☐ hlwm keybindings to control audio
 - ☐ hlwm keybindings to control brightness
-- ☐ screen lock all desktops with hot-key
-- ☐ add `git-clone-canonical` dependency
+- ☐ polybar display of whether or not the touchpad is enabled
+- ☐ hlwm keybindings to enable/disable the touchpad
+- ☑ add `git-clone-canonical` dependency
 - ☑ simplify/refactor nix framework
   - enable cross-package dependencies for any package type
   - override base packages in a cleaner manner
