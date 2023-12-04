@@ -16,6 +16,7 @@ let
         bash = ''--rcfile '${./pkgs/bash/bashlib}/bashrc' '';
         alacritty = ''--config-file '${./pkgs/alacritty/alacritty.yml}' '';
         dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
+        helix = ''--config '${./pkgs/helix/config.toml}' '';
         polybar = ''--config='${./pkgs/polybar/config.ini}' '';
         tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
         vim = ''-u '${./pkgs/vim/vimrc}' '';
@@ -45,7 +46,6 @@ let
       gnugrep
       gnused
       gzip
-      helix
       i3lock
       killall
       less
