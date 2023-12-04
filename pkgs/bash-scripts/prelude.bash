@@ -49,6 +49,7 @@ function log-run
 {
     log "running: $*"
     eval "$@"
+    return $?
 }
 
 # function: log-error MESSAGE+
@@ -148,8 +149,8 @@ function parse-args
     [ $# -eq 0 ] || fail "Unexpected arguments: $*"
 }
 
-# If `YADOTS_DEBUG` is not the empty string, then enable xtrace:
-if [ -n "${YADOTS_DEBUG:-}" ]
+# If `HOMEBASE_DEBUG` is not the empty string, then enable xtrace:
+if [ -n "${HOMEBASE_DEBUG:-}" ]
 then
     echo-err '[yadots debug enabled]'
     set -x
