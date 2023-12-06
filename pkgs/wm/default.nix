@@ -19,10 +19,12 @@ let
 
       get-bin = name: pkg: "${pkg}/bin/${name}";
 
-      synonymous-bins = mapAttrs get-bin (removeAttrs dependency-pkgs [ "bash-scripts" ]);
+      synonymous-bins =
+        mapAttrs get-bin (removeAttrs dependency-pkgs ["bash-scripts"]);
     in
       synonymous-bins // {
         touchpad = "${bash-scripts}/bin/touchpad";
+        backlight = "${bash-scripts}/bin/backlight";
       };
 
   autostart = nixpkgs.writeScript (sub-pname "wm-autostart") ''
@@ -66,8 +68,10 @@ let
     keybind $Mod-Shift-c close
     keybind $Mod-Shift-z spawn '${dependencies.i3lock}' -c "''${HOMEBASE_USER_COLOR:-554466}"
 
-    # Input mode controls
+    # I/O controls
     keybind $Mod-Escape spawn '${dependencies.touchpad}' 'toggle-enabled'
+    keybind $Mod-XF86MonBrightnessUp   spawn '${dependencies.backlight}' 'brighter'
+    keybind $Mod-XF86MonBrightnessDown spawn '${dependencies.backlight}' 'dimmer'
 
     # App shortcuts
     keybind $Mod-Return spawn '${dependencies.alacritty}'

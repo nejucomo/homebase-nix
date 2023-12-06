@@ -51,21 +51,21 @@ function set
 
 function brighter
 {
-  mutate-value '5 / 4'
+  mutate-value '+ 1' '5 / 4'
 }
 
 function dimmer
 {
-  mutate-value '4 / 5'
+  mutate-value '- 1' '4 / 5'
 }
 
 function mutate-value
 {
-  local factor="$1"
+  parse-args 'delta factor' "$@"
   local min=1
   local max="$(cat "$DEV_PREFIX/$DEVICE/max_brightness")"
   local v="$(get)"
-  local v=$(( "$v" * $factor ))
+  local v=$(( ( "$v" $delta ) * $factor ))
   if (( "$v" < "$min" ))
   then
     local v="$min"
