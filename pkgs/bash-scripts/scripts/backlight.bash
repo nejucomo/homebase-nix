@@ -2,16 +2,15 @@ DEV_PREFIX='/sys/class/backlight'
 
 function main
 {
-  [ $# -gt 0 ] || fail 'usage: {get-name|get-value|set-value VALUE}'
-  local cmd="$1"; shift;
+  parse-args 'cmd=get *' "$@"
 
   case "$cmd" in
-    get-name|get-value)
-      [ -$# -eq 0 ] || fail "Unexpected arguments: $*"
+    device|get|brighter|dimmer)
+      parse-args '' "$@"
       set-device-name
       ;;
-    set-value)
-      set-device-name
+    set)
+      set-device-name "$value"
       ;;
     *) fail "unknown command: $cmd"
   esac
@@ -34,18 +33,45 @@ function set-device-name
   fi
 }
 
-function get-name
+function device
 {
   echo "$DEVICE"
 }
 
-function get-value
+function get
 {
   cat "$DEV_PREFIX/$DEVICE/brightness"
 }
 
-function set-value
+function set
 {
   parse-args 'value' "$@"
-  echo "$value" > "$DEV_PREFIX/$DEVICE/brightness"
+  echo "$value" | tee "$DEV_PREFIX/$DEVICE/brightness"
+}
+
+function brighter
+{
+  mutate-value '5 / 4'
+}
+
+function dimmer
+{
+  mutate-value '4 / 5'
+}
+
+function mutate-value
+{
+  local factor="$1"
+  local min=1
+  local max="$(cat "$DEV_PREFIX/$DEVICE/max_brightness")"
+  local v="$(get)"
+  local v=$(( "$v" * $factor ))
+  if (( "$v" < "$min" ))
+  then
+    local v="$min"
+  elif (( "$v" > "$max" ))
+  then
+    local v="$max"
+  fi
+  set "$v"
 }

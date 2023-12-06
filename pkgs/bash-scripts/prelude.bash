@@ -86,7 +86,8 @@ function fail
 #
 # `VAR_NAMES` must be a space separated of `<var spec>` fields.
 # Each `<var spec>` is a variable name, optionally followed by
-# `=<default value>` (with no spaces).
+# `=<default value>` (with no spaces), except the final `<var spec>`
+# may be `*`.
 #
 # If a `<var spec>` specifies a default value, then every `<var spec>`
 # which occurs after that must also specify a default value.
@@ -113,45 +114,55 @@ function parse-args
 {
     local varnames="$1"; shift
     local defaults_section='false'
+    local star='false'
 
-    for parse_args_varname in $varnames
+    for varspec in $varnames
     do
-        if echo "$parse_args_varname" | grep -q '='
+        if [ "$star" = 'true' ]
+        then
+            fail "Disallowed varspec after '*': $varspec"
+        elif [ "$varspec" = '*' ]
+        then
+            star='true'
+        elif echo "$varspec" | grep -q '='
         then
             defaults_section='true'
         elif [ "$defaults_section" = 'true' ]
         then
-            fail "Missing default value: $parse_args_varname"
+            fail "Missing default value: $varspec"
         fi
 
-        case "$defaults_section"
-        in
-            false)
-                [ $# -gt 0 ] || fail "Missing argument: $parse_args_varname"
-                declare -g "$parse_args_varname=$1"
-                shift
-                ;;
-            true)
-                local parse_args_value="$(echo "$parse_args_varname" | sed 's|^.*=||')"
-                if [ $# -gt 0 ]
-                then
-                    parse_args_value="$1"
+        if [ "$star" = 'false' ]
+        then
+            case "$defaults_section"
+            in
+                false)
+                    [ $# -gt 0 ] || fail "Missing argument: $varspec"
+                    declare -g "$varspec=$1"
                     shift
-                fi
-                parse_args_varname="$(echo "$parse_args_varname" | sed 's|=.*$||')"
-                declare -g "$parse_args_varname=$parse_args_value"
-                ;;
-            *)
-                fail "internal invariant failed \$defaults_section=$defaults_section"
-        esac
+                    ;;
+                true)
+                    local parse_args_value="$(echo "$varspec" | sed 's|^.*=||')"
+                    if [ $# -gt 0 ]
+                    then
+                        parse_args_value="$1"
+                        shift
+                    fi
+                    varspec="$(echo "$varspec" | sed 's|=.*$||')"
+                    declare -g "$varspec=$parse_args_value"
+                    ;;
+                *)
+                    fail "internal invariant failed \$defaults_section=$defaults_section"
+            esac
+        fi
     done
 
-    [ $# -eq 0 ] || fail "Unexpected arguments: $*"
+    [ "$star" = 'false' -o $# -eq 0 ] || fail "Unexpected arguments: $*"
 }
 
 # If `HOMEBASE_DEBUG` is not the empty string, then enable xtrace:
 if [ -n "${HOMEBASE_DEBUG:-}" ]
 then
-    echo-err '[yadots debug enabled]'
+    echo-err '[homebase debug enabled]'
     set -x
 fi
