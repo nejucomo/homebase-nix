@@ -28,6 +28,7 @@ let
         findutils
         firefox
         gawk
+        gcc
         gnugrep
         gnused
         gzip
