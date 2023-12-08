@@ -40,6 +40,8 @@ let
 
     echo $PATH | tr ':' '\n'
 
+    [ -f ~/.bashrc-user ] && source ~/.bashrc-user
+
     function hc
     {
         herbstclient "$@"
