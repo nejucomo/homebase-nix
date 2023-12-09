@@ -1,7 +1,9 @@
 function main
 {
-  (
-    cd "$(mktemp --directory --tmpdir "${SCRIPT_NAME}.XXX")"
+  D="$(mktemp --directory --tmpdir "${SCRIPT_NAME}.XXX")"
+  ( 
+    cd "$D"
     exec "$SHELL" "$@"
   )
+  log-run rm -rf "$D"
 }
