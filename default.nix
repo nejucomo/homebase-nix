@@ -44,6 +44,7 @@ let
         pstree
         ripgrep
         rustup
+        signal-desktop
         unclutter
         which
         xss-lock
