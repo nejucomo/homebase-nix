@@ -1,2 +1,5 @@
+[editor]
+autopairs = false
+
 [editor.soft-wrap]
 enable = true
