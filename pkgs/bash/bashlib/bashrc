@@ -1,6 +1,8 @@
 export HOMEBASE_BASHRC="$(readlink -f "${BASH_SOURCE[0]}")"
 export HOMEBASE_BASHLIB="$(dirname "$HOMEBASE_BASHRC")"
 
+ln -sf "$HOMEBASE_BASHRC" ~/.bashrc
+
 source "$HOMEBASE_BASHLIB/startx-hook.sh"
 source ~/.nix-profile/etc/profile.d/nix.sh
 source "$HOMEBASE_BASHLIB/functions.sh"
