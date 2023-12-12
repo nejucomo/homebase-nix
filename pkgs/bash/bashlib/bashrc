@@ -1,4 +1,4 @@
-BASHLIB="$(dirname "${BASH_SOURCE[0]}")"
+BASHLIB="$(dirname "$(readlink -f "{BASH_SOURCE[0]}")")"
 
 source "$BASHLIB/startx-hook.sh"
 source ~/.nix-profile/etc/profile.d/nix.sh
