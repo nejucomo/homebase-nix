@@ -1,7 +1,8 @@
-BASHLIB="$(dirname "$(readlink -f "{BASH_SOURCE[0]}")")"
+export HOMEBASE_BASHRC="$(readlink -f "${BASH_SOURCE[0]}")"
+export HOMEBASE_BASHLIB="$(dirname "$HOMEBASE_BASHRC")"
 
-source "$BASHLIB/startx-hook.sh"
+source "$HOMEBASE_BASHLIB/startx-hook.sh"
 source ~/.nix-profile/etc/profile.d/nix.sh
-source "$BASHLIB/functions.sh"
-source "$BASHLIB/settings.sh"
+source "$HOMEBASE_BASHLIB/functions.sh"
+source "$HOMEBASE_BASHLIB/settings.sh"
 source-optional ~/.bashrc-user
