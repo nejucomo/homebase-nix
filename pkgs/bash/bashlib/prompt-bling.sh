@@ -35,6 +35,13 @@ prompt_append bg ' @ '
 prompt_append norm '\h'
 prompt_append bg ' : '
 prompt_append norm '\w'
+
+if [ -n "$IN_NIX_SHELL" ]
+then
+  prompt_append bg ' ; '
+  prompt_append green "$IN_NIX_SHELL"
+fi
+
 prompt_append bg ' }'
 prompt_append green "$band"
 prompt_append bg '---'
