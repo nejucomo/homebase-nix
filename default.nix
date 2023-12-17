@@ -54,6 +54,11 @@ let
         xsetroot
       ;
 
+      # Necessary for meld:
+      inherit (homebase.nixpkgs.gnome3)
+        adwaita-icon-theme
+      ;
+
       dunst-man = homebase.nixpkgs.dunst.man;
       herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
     })
