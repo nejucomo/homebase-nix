@@ -25,6 +25,7 @@ let
       inherit (homebase.nixpkgs)
         acpi
         coreutils
+        file
         findutils
         firefox
         gawk
