@@ -40,6 +40,7 @@ let
         man
         meld
         nix
+        nix-index
         libnotify
         ps
         pstree
