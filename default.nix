@@ -68,10 +68,11 @@ let
     # Local packages defined in this repo:
     (_upstream-pkgs: {
       bash-scripts = homebase.imp ./pkgs/bash-scripts;
+      bashrc-dir = homebase.imp ./pkgs/bashrc-dir;
     })
 
     # These are packages which we supply custom config args to in wrappers:
-    (_upstream-pkgs:
+    (upstream-pkgs:
       homebase.wrap-config-pkgs homebase.nixpkgs {
         alacritty = ''--config-file '${./pkgs/alacritty/alacritty.yml}' '';
         dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
@@ -80,7 +81,7 @@ let
         vim = ''-u '${./pkgs/vim/vimrc}' '';
       } // {
         bash = homebase.wrap-configs homebase.nixpkgs.bashInteractive {
-          bash = ''--rcfile '${./pkgs/bash/bashlib}/bashrc' '';
+          bash = ''--rcfile '${upstream-pkgs.bashrc-dir}/share/bashrc-dir/bashrc' '';
         };
 
         helix = homebase.wrap-configs homebase.nixpkgs.helix {

@@ -52,6 +52,28 @@ let
 
     ## wrap-xdg-config :: xdg-name -> xdg-config-dir -> upstream-bins -> deriv
     wrap-xdg-config = imp ./wrap-xdg-config.nix;
+
+    ## copy-to-prefix :: src-path -> prefix -> derivation
+    ##
+    ## Copy src to a specific out prefix.
+    copy-to-prefix = src: prefix:
+      let
+        inherit (builtins) baseNameOf replaceStrings;
+        basename = baseNameOf src;
+        prefix_ = replaceStrings ["/"] ["_"] prefix;
+      in
+        nixpkgs.stdenv.mkDerivation {
+          name = "copy-${basename}-to-${prefix_}";
+          inherit src;
+
+          installPhase = ''
+            set -x
+            dest="$out/${prefix}"
+            mkdir -p "$dest"
+            cp -a "$src"/* "$dest"
+            set +x
+          '';
+        };
   };
 in
   homebase
