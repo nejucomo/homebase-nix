@@ -40,7 +40,7 @@ let
 
     echo $PATH | tr ':' '\n'
 
-    [ -f ~/.bashrc-user ] && source ~/.bashrc-user
+    source ~/.nix-profile/share/bashrc-dir/without-startx.sh
 
     function hc
     {
