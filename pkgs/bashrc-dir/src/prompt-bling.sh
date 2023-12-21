@@ -19,10 +19,11 @@ function prompt_append
   ps1+='\033[0m'
 }
 
+band_start=3
 band=''
-if (( $HOMEBASE_NEST_LEVEL > 1 ))
+if (( $HOMEBASE_NEST_LEVEL >= "$band_start" ))
 then
-  band="$(printf '%0.s=' $(seq 2 $HOMEBASE_NEST_LEVEL))"
+  band="$(printf '%0.s=' $(seq "$band_start" $HOMEBASE_NEST_LEVEL))"
 fi
 
 prompt_append bg '---'
@@ -49,3 +50,4 @@ prompt_append off '\n\$ '
 
 unset prompt_append
 unset band
+unset band_start
