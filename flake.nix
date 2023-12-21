@@ -12,7 +12,7 @@
       packages."${system}".default = import ./default.nix {
         nixpkgs = nixpkgs.legacyPackages."${system}";
         git-clone-canonical = git-clone-canonical.packages."${system}".default;
-        cargo-checkmate = cargo-checkmate.packages."${system}".default;
+        cargo-checkmate = cargo-checkmate.packages."${system}".unwrapped;
       };
     };
 }
