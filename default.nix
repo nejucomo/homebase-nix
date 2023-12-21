@@ -115,7 +115,8 @@ let
           # Hard-coded external dependency:
           systemStartx = "/run/current-system/sw/bin/startx";
         in
-          homebase.nixpkgs.writeScriptBin "startx" ''
+          homebase.nixpkgs.writeScriptBin "homebase-startx" ''
+            source "${upstream-pkgs.bashrc-dir}/share/bashrc-dir/without-startx.sh"
             exec "${systemStartx}" "${herbstluftwm}/bin/herbstluftwm" "$@"
           '';
     })

@@ -40,8 +40,6 @@ let
 
     echo $PATH | tr ':' '\n'
 
-    source ~/.nix-profile/share/bashrc-dir/without-startx.sh
-
     function hc
     {
         herbstclient "$@"
