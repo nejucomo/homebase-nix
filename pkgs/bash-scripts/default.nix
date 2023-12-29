@@ -1,7 +1,7 @@
 homebase:
 let
   inherit (builtins) readDir attrNames;
-  inherit (homebase.nixpkgs) bash symlinkJoin writeScriptBin;
+  inherit (homebase.nixpkgs) bash symlinkJoin writeScriptBin stdenvNoCC;
   inherit (homebase.nixpkgs.lib.attrsets) filterAttrs;
   inherit (homebase.nixpkgs.lib.strings) hasSuffix;
 
@@ -27,8 +27,29 @@ let
     source '${./scripts}/${name}'
     source '${./postlude.bash}'
   '';
-in
-  symlinkJoin {
-    name = "bash-scripts";
+
+  wrapped-pkg = symlinkJoin {
+    name = "bash-script-wrappers";
     paths = map mk-wrapper script-names;
+  };
+in
+  # Ref: https://msfjarvis.dev/posts/writing-your-own-nix-flake-checks/
+  stdenvNoCC.mkDerivation {
+    name = "bash-scripts";
+    buildInputs = [ wrapped-pkg ];
+    src = ./.;
+
+    # Checks:
+    doCheck = true;
+    checkPhase = ''
+      selftest='${wrapped-pkg}/bin/prelude-bash-test'
+      ls -l "$selftest"
+      exec "$selftest"
+    '';
+
+    # Dummy build
+    doBuild = false;
+    installPhase = ''
+      mkdir "$out"
+    '';
   }
