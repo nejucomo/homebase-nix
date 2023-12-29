@@ -23,6 +23,8 @@ SCRIPT_NAME="$(basename "$SCRIPT_PATH")"
 # peer scripts, etc...
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
+PRELUDE_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+
 # function: log [FLAGS] MESSAGE+
 #
 # Log the argument to stdout with a `$SCRIPT_NAME:` prefix.
@@ -133,16 +135,16 @@ function parse-args
 {
     local varnames="$1"; shift
     local defaults_section='false'
-    local star='false'
+    local starvar=''
 
     for varspec in $varnames
     do
-        if [ "$star" = 'true' ]
+        if [ -n "$starvar" ]
         then
-            fail "Disallowed varspec after '*': $varspec"
-        elif [ "$varspec" = '*' ]
+            fail "Disallowed varspec after '*${starvar}': ${varspec}"
+        elif [[ "$varspec" =~ ^\*[A-Za-z0-9_]+$ ]]
         then
-            star='true'
+            starvar="$(echo $varspec | sed 's/^\*//')"
         elif echo "$varspec" | grep -q '='
         then
             defaults_section='true'
@@ -151,8 +153,11 @@ function parse-args
             fail "Missing default value: $varspec"
         fi
 
-        if [ "$star" = 'false' ]
+        if [ -n "$starvar" ]
         then
+            declare -ga "${starvar}=(\"\$@\")"
+            set --
+        else
             case "$defaults_section"
             in
                 false)
@@ -176,7 +181,7 @@ function parse-args
         fi
     done
 
-    [ "$star" = 'true' -o $# -eq 0 ] || fail "Unexpected arguments: $*"
+    [ $# -eq 0 ] || fail "Unexpected arguments: $*"
 }
 
 # If `HOMEBASE_DEBUG` is not the empty string, then enable xtrace:

@@ -26,10 +26,7 @@ function main
     test-parse-args positive star-args-captures-four 'x *y' '42 a b c d'
 
     test-parsed-default-args
-
-    test-parse-args-example-one
-    test-parse-args-example-two
-    test-parse-args-example-three
+    test-doc-examples "${PRELUDE_PATH}"
 
     exit-with-results
 }
@@ -74,21 +71,28 @@ function test-parsed-default-args
     fi
 }
 
-function test-parse-args-example-one
+function test-doc-examples
 {
-    log "$FUNCNAME"
-    outdir="$(mktemp -d "${SCRIPT_NAME}-data.XXX")"
+    log "$FUNCNAME $1:"
+    outdir="$(test-data-dir)"
 
+    cat "$1" \
+        | sed -n '/^# ```$/,/^# ```$/p' \
+        | grep -v '^# ```$' \
+        > "$outdir/snippet"
+
+    cat "$outdir/snippet" \
+        | grep '^# \$ ' \
+        | sed 's/^# \$ //' \
+        > "$outdir/script"
+
+    cat "$outdir/snippet" \
+        | grep -v '^# \$ ' \
+        | sed 's/^# //' \
+        > "$outdir/expected"
     (
-        parse-args 'x y z=blah' foo bar
-        echo $x
-        echo $z
+        source "$outdir/script"
     ) > "$outdir/actual" 2>&1
-
-    sed 's|^      ||' > "$outdir/expected" <<____EOF
-      foo
-      blah
-____EOF
 
     if diff -u "$outdir/expected" "$outdir/actual"
     then pass-test
@@ -96,52 +100,9 @@ ____EOF
     fi
 }
 
-function test-parse-args-example-two
+function test-data-dir
 {
-    log "$FUNCNAME"
-    outdir="$(mktemp -d "${SCRIPT_NAME}-${FUNCNAME}-data.XXX")"
-
-    (
-      parse-args 'x y=yeet *extra' foo
-      echo $x
-      echo $y
-      echo "${#extra[@]}"
-    ) > "$outdir/actual" 2>&1
-
-    sed 's|^      ||' > "$outdir/expected" <<____EOF
-      foo
-      yeet
-      0
-____EOF
-
-    if diff -u "$outdir/expected" "$outdir/actual"
-    then pass-test
-    else fail-test
-    fi
-}
-
-function test-parse-args-example-three
-{
-    log "$FUNCNAME"
-    outdir="$(mktemp -d "${SCRIPT_NAME}-${FUNCNAME}-data.XXX")"
-
-    (
-       parse-args 'x y=yeet *extra' a b c d e f
-       echo $x
-       echo $y
-       echo "${#extra[@]}"
-    ) > "$outdir/actual" 2>&1
-
-    sed 's|^      ||' > "$outdir/expected" <<____EOF
-       a
-       b
-       4
-____EOF
-
-    if diff -u "$outdir/expected" "$outdir/actual"
-    then pass-test
-    else fail-test
-    fi
+    mktemp -d "${SCRIPT_NAME}_${FUNCNAME[1]}_data.XXX"
 }
 
 function pass-test
