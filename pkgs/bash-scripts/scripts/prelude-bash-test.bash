@@ -22,7 +22,14 @@ function main
     test-parse-args negative two-args-one-default-unexpected 'x y=7' 'a' 'b' 'c'
     test-parse-args negative internally-invalid-default-specification 'x y=7 z' 'a' 'b' 'c'
 
+    test-parse-args positive star-args-captures-none 'x *y' '42'
+    test-parse-args positive star-args-captures-four 'x *y' '42 a b c d'
+
     test-parsed-default-args
+
+    test-parse-args-example-one
+    test-parse-args-example-two
+    test-parse-args-example-three
 
     exit-with-results
 }
@@ -62,6 +69,76 @@ function test-parsed-default-args
     log -n 'Checking parsed provided (over default) value... '
     parse-args 'x y=7' 7 'woot'
     if [ $x -eq 7 -a $y = 'woot' ]
+    then pass-test
+    else fail-test
+    fi
+}
+
+function test-parse-args-example-one
+{
+    log "$FUNCNAME"
+    outdir="$(mktemp -d "${SCRIPT_NAME}-data.XXX")"
+
+    (
+        parse-args 'x y z=blah' foo bar
+        echo $x
+        echo $z
+    ) > "$outdir/actual" 2>&1
+
+    sed 's|^      ||' > "$outdir/expected" <<____EOF
+      foo
+      blah
+____EOF
+
+    if diff -u "$outdir/expected" "$outdir/actual"
+    then pass-test
+    else fail-test
+    fi
+}
+
+function test-parse-args-example-two
+{
+    log "$FUNCNAME"
+    outdir="$(mktemp -d "${SCRIPT_NAME}-${FUNCNAME}-data.XXX")"
+
+    (
+      parse-args 'x y=yeet *extra' foo
+      echo $x
+      echo $y
+      echo "${#extra[@]}"
+    ) > "$outdir/actual" 2>&1
+
+    sed 's|^      ||' > "$outdir/expected" <<____EOF
+      foo
+      yeet
+      0
+____EOF
+
+    if diff -u "$outdir/expected" "$outdir/actual"
+    then pass-test
+    else fail-test
+    fi
+}
+
+function test-parse-args-example-three
+{
+    log "$FUNCNAME"
+    outdir="$(mktemp -d "${SCRIPT_NAME}-${FUNCNAME}-data.XXX")"
+
+    (
+       parse-args 'x y=yeet *extra' a b c d e f
+       echo $x
+       echo $y
+       echo "${#extra[@]}"
+    ) > "$outdir/actual" 2>&1
+
+    sed 's|^      ||' > "$outdir/expected" <<____EOF
+       a
+       b
+       4
+____EOF
+
+    if diff -u "$outdir/expected" "$outdir/actual"
     then pass-test
     else fail-test
     fi

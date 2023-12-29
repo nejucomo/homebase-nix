@@ -78,30 +78,25 @@ function fail
     exit 1
 }
 
-# function: parse-args VAR_NAMES [VALUE]*
+# function: parse-args VAR_SPECS [VALUE]*
 #
-# Assign the respective `VALUE` args to the global variable names
-# specified in `VAR_NAMES`. If assignment fails to match the specification
-# in `VAR_NAMES`, a usage error is shown then the script exits.
+# Assign the respective `VALUE` args to the global variable names specified in `VAR_SPECS`. If assignment fails to match the specification in `VAR_SPECS`, a usage error is shown then the script exits.
 #
-# `VAR_NAMES` must be a space separated of `<var spec>` fields.
-# Each `<var spec>` is a variable name, optionally followed by
-# `=<default value>` (with no spaces), except the final `<var spec>`
-# may be `*`.
+# `VAR_SPECS` must be a space separated of "spec" fields. Each spec is a variable name, optionally followed by `=<default value>` (with no spaces), except the final spec may be `*` followed by an array name.
 #
-# If a `<var spec>` specifies a default value, then every `<var spec>`
-# which occurs after that must also specify a default value.
+# If a spec specifies a default value, then every spec which occurs after that must also specify a default value, unless it is the final `*<name>` spec.
 #
-# If the number of `VALUE` args is no less than the number of `<var spec>`
-# definitions without defaults, and it is also no more than the number of
-# total `<var spec>` definitions, then parsing succeeds. Otherwise,
-# parsing fails and a usage error is displayed and the process exits.
+# Parsing proceeds by assigning the parameters in `VALUE` to the variables defined in `VAR_SPECS`. If a final `*<name>` spec is provided, then `name` becomes an array capturing 0 or more final parameters. If parameters are not present for variables with a default in their spec, those variables are assigned the default value.
 #
-# If parsing succeeds, then each variable named in `<var spec>` is
-# assigned a value from the `VALUE` args, unless there are move `<var spec>`
-# definitions than `VALUE` args, in which case, the defaults are assigned.
+# # Errors
 #
-# # Example:
+# If an error is detected, a usage error is passed to `fail`.
+#
+# Error cases:
+# - a spec which lacks a default definition is not assigned a parameter value
+# - there is no final `*<name>` spec, but more parameters are present than the number of specs
+#
+# # Example 1
 #
 # ```
 # $ parse-args 'x y z=blah' foo bar
@@ -109,6 +104,30 @@ function fail
 # foo
 # $ echo $z
 # blah
+# ```
+#
+# # Example 2
+#
+# ```
+# $ parse-args 'x y=yeet *extra' foo
+# $ echo $x
+# foo
+# $ echo $y
+# yeet
+# $ echo "${#extra[@]}"
+# 0
+# ```
+#
+# # Example 3
+#
+# ```
+# $ parse-args 'x y=yeet *extra' a b c d e f
+# $ echo $x
+# a
+# $ echo $y
+# b
+# $ echo "${#extra[@]}"
+# 4
 # ```
 function parse-args
 {
