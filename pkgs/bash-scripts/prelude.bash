@@ -157,7 +157,7 @@ function parse-args
         fi
     done
 
-    [ "$star" = 'false' -o $# -eq 0 ] || fail "Unexpected arguments: $*"
+    [ "$star" = 'true' -o $# -eq 0 ] || fail "Unexpected arguments: $*"
 }
 
 # If `HOMEBASE_DEBUG` is not the empty string, then enable xtrace:

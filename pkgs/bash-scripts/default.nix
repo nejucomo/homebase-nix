@@ -39,17 +39,17 @@ in
     buildInputs = [ wrapped-pkg ];
     src = ./.;
 
+    # Forward `wrapped-pkg` to the output:
+    buildPhase = ''
+      mkdir "$out"
+      cp -av '${wrapped-pkg.out}'/* "$out"
+    '';
+
     # Checks:
     doCheck = true;
     checkPhase = ''
       selftest='${wrapped-pkg}/bin/prelude-bash-test'
       ls -l "$selftest"
       exec "$selftest"
-    '';
-
-    # Dummy build
-    doBuild = false;
-    installPhase = ''
-      mkdir "$out"
     '';
   }
