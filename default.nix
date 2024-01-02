@@ -69,6 +69,7 @@ let
     (_upstream-pkgs: {
       bash-scripts = homebase.imp ./pkgs/bash-scripts;
       bashrc-dir = homebase.imp ./pkgs/bashrc-dir;
+      cargo-depgraph-svg = homebase.imp ./pkgs/cargo-depgraph-svg;
     })
 
     # These are packages which we supply custom config args to in wrappers:
