@@ -24,6 +24,7 @@ let
     (_upstream-pkgs: {
       inherit (homebase.nixpkgs)
         acpi
+        cargo-udeps
         coreutils
         file
         findutils
