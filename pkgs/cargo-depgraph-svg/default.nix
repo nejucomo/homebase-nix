@@ -6,7 +6,7 @@ let
   dot = "${homebase.nixpkgs.graphviz}/bin/dot";
 in
   writeShellScriptBin "cargo-depgraph-svg" ''
-    ${cargo-depgraph} depgraph --workspace-only --all-features \
+    ${cargo-depgraph} depgraph "$@" \
       | sed 's/^digraph {$/\0\nrankdir="LR"/' \
       | ${dot} -Tsvg \
       > target/depgraph.svg
