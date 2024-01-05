@@ -2,20 +2,21 @@ DEV_PREFIX='/sys/class/backlight'
 
 function main
 {
-  parse-args 'cmd=get *' "$@"
+  parse-args 'cmd=get *args' "$@"
 
   case "$cmd" in
     device|get|brighter|dimmer)
-      parse-args '' "$@"
+      parse-args '' "${args[@]}"
       set-device-name
       ;;
     set)
+      parse-args 'value' "${args[@]}"
       set-device-name "$value"
       ;;
     *) fail "unknown command: $cmd"
   esac
 
-  if eval "$cmd" "$@"
+  if eval "$cmd" "${args[@]}"
   then
     return 0
   else
