@@ -4,19 +4,14 @@ function main
 {
   parse-args 'cmd=get *args' "$@"
 
+  set-device-name
   case "$cmd" in
-    device|get|brighter|dimmer)
-      parse-args '' "${args[@]}"
-      set-device-name
-      ;;
-    set)
-      parse-args 'value' "${args[@]}"
-      set-device-name "$value"
+    device|get|set|brighter|dimmer)
       ;;
     *) fail "unknown command: $cmd"
   esac
 
-  if eval "$cmd" "${args[@]}"
+  if eval "cmd-$cmd" "${args[@]}"
   then
     return 0
   else
@@ -34,28 +29,28 @@ function set-device-name
   fi
 }
 
-function device
+function cmd-device
 {
   echo "$DEVICE"
 }
 
-function get
+function cmd-get
 {
   cat "$DEV_PREFIX/$DEVICE/brightness"
 }
 
-function set
+function cmd-set
 {
   parse-args 'value' "$@"
   echo "$value" | tee "$DEV_PREFIX/$DEVICE/brightness"
 }
 
-function brighter
+function cmd-brighter
 {
   mutate-value '+ 1' '5 / 4'
 }
 
-function dimmer
+function cmd-dimmer
 {
   mutate-value '- 1' '4 / 5'
 }
@@ -65,7 +60,7 @@ function mutate-value
   parse-args 'delta factor' "$@"
   local min=1
   local max="$(cat "$DEV_PREFIX/$DEVICE/max_brightness")"
-  local v="$(get)"
+  local v="$(cmd-get)"
   local v=$(( ( "$v" $delta ) * $factor ))
   if (( "$v" < "$min" ))
   then
@@ -74,5 +69,5 @@ function mutate-value
   then
     local v="$max"
   fi
-  set "$v"
+  cmd-set "$v"
 }
