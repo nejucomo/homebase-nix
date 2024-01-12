@@ -76,7 +76,7 @@ let
     # These are packages which we supply custom config args to in wrappers:
     (upstream-pkgs:
       homebase.wrap-config-pkgs homebase.nixpkgs {
-        alacritty = ''--config-file '${./pkgs/alacritty/alacritty.yml}' '';
+        alacritty = ''--config-file '${./pkgs/alacritty/alacritty.toml}' '';
         dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
         polybar = ''--config='${./pkgs/polybar/config.ini}' '';
         tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
