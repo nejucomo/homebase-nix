@@ -7,6 +7,7 @@ dependency-pkgs@{
   firefox,
   i3lock,
   polybar,
+  scrot,
   tmux,
   unclutter,
   xsetroot,
@@ -72,6 +73,8 @@ let
     keybind $Mod-Escape spawn '${dependencies.touchpad}' 'toggle-enabled'
     keybind $Mod-XF86MonBrightnessUp   spawn '${dependencies.backlight}' 'brighter'
     keybind $Mod-XF86MonBrightnessDown spawn '${dependencies.backlight}' 'dimmer'
+    keybind $Mod-Print spawn '${dependencies.scrot}' '--select'
+    keybind $Mod-Shift-Print spawn '${dependencies.scrot}' '--select' '--freeze'
 
     # App shortcuts
     keybind $Mod-Return spawn '${dependencies.alacritty}'

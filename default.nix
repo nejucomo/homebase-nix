@@ -48,6 +48,7 @@ let
         ripgrep
         rustup
         signal-desktop
+        scrot
         unclutter
         which
         xss-lock
@@ -105,6 +106,7 @@ let
           firefox
           i3lock
           polybar # Note: this has non-explicit dependency on `touchpad`
+          scrot
           tmux
           unclutter
           xsetroot
