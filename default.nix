@@ -82,6 +82,7 @@ let
         polybar = ''--config='${./pkgs/polybar/config.ini}' '';
         tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
         vim = ''-u '${./pkgs/vim/vimrc}' '';
+        zellij = ''--config-dir '${./pkgs/zellij/confdir}' '';
       } // {
         bash = homebase.wrap-configs homebase.nixpkgs.bashInteractive {
           bash = ''--rcfile '${upstream-pkgs.bashrc-dir}/share/bashrc-dir/bashrc' '';

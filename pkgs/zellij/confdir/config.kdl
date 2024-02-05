@@ -1,0 +1,12 @@
+plugins {
+    tab-bar { path "tab-bar"; }
+    status-bar { path "status-bar"; }
+    strider { path "strider"; }
+    compact-bar { path "compact-bar"; }
+    session-manager { path "session-manager"; }
+}
+
+pane_frames false
+serialize_pane_viewport true
+mouse_mode false
+copy_command "xclip -selection clipboard" // x11
