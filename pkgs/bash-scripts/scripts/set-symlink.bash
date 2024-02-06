@@ -13,7 +13,7 @@ function main
 
     if [ "$actual" = "$src" ]
     then
-      log "Already set: ${dst} -> ${src}"
+      log "$(vt100-disp "Already set: ${dst} -> ${src}" dim)"
     else
       fail "Cannot set ${dst} -> ${src}; it points elsewhere: ${dst} -> ${actual}"
     fi

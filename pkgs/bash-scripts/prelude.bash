@@ -59,7 +59,7 @@ function log-run
 # Log the message to `stderr` with `$SCRIPT_NAME` and `error` prefix.
 function log-error
 {
-    echo-err "${SCRIPT_NAME} error: $*"
+    echo-err "$(vt100-disp "${SCRIPT_NAME} error: $*" yellow)"
 }
 
 # function: echo-err [FLAGS] MESSAGE+
@@ -183,6 +183,58 @@ function parse-args
 
     [ $# -eq 0 ] || fail "Unexpected arguments: $*"
 }
+
+# Generic VT100 display attributes:
+function vt100-disp
+{
+    parse-args 'content *escapes' "$@"
+
+    for esc in "${escapes[*]}"
+    do
+        vt100-disp-attr-escape "$esc"
+    done
+    echo -ne "$content"
+    vt100-disp-attr-escape 'reset'
+}
+
+function vt100-disp-attr-escape
+{
+    parse-args 'attrname' "$@"
+    echo -en "\033[$(vt100-disp-attr-code "${attrname}")m"
+}
+
+function vt100-disp-attr-code
+{
+    parse-args 'attrname' "$@"
+    case "$attrname"
+    in
+        reset) echo 0 ;;
+        bright) echo 1 ;;
+        dim) echo 2 ;;
+        underscore) echo 4 ;;
+        blink) echo 5 ;;
+        reverse) echo 7 ;;
+        hidden) echo 8 ;;
+        black) echo 30 ;;
+        red) echo 31 ;;
+        green) echo 32 ;;
+        yellow) echo 33 ;;
+        blue) echo 34 ;;
+        magenta) echo 35 ;;
+        cyan) echo 36 ;;
+        white) echo 37 ;;
+        bg_black) echo 40 ;;
+        bg_red) echo 41 ;;
+        bg_green) echo 42 ;;
+        bg_yellow) echo 43 ;;
+        bg_blue) echo 44 ;;
+        bg_magenta) echo 45 ;;
+        bg_cyan) echo 46 ;;
+        bg_white) echo 47 ;;
+        *) fail "Unknown vt100 display attribute name: $attrname"
+    esac
+}
+
 
 # If `HOMEBASE_DEBUG` is not the empty string, then enable xtrace:
 if [ -n "${HOMEBASE_DEBUG:-}" ]
