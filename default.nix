@@ -28,11 +28,17 @@ let
           git-clone-canonical = { upstream-bin, ... }:
             ''
             #! /usr/bin/env bash
-            if [ "$#" -gt 0 ] && [ "$1" = '--show-path' ]
+            if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
             then
+              # update links after execution:
+              '${upstream-bin}' "$@" && update-hack-links
+            elif [ "$#" -eq 2 ] && [ "$1" = '--show-path' ]
+            then
+              # Modify path:
               echo "$HOME/hack/$(basename "$('${upstream-bin}' "$@")")"
             else
-              '${upstream-bin}' "$@" && update-hack-links
+              # passthru:
+              exec '${upstream-bin}' "$@"
             fi
             '';
         }
