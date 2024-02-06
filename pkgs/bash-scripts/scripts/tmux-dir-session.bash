@@ -1,7 +1,6 @@
 function main
 {
-    parse-args 'dir=.' "$@"
-    dir="$(readlink -f "$dir")"
+    parse-args "dir=$(pwd)" "$@"
     session="$(basename "$dir")"
     mkdir -p "$dir"
     cd "$dir"
