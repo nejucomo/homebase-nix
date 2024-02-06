@@ -1,8 +1,10 @@
 layout {
-    pane edit="" size="60%"
-    pane
-    pane command="git" {
-        args "info"
+    pane edit="" size="70%"
+    pane split_direction="vertical" {
+        pane size="60%"
+        pane command="git" {
+            args "info"
+        }
     }
     pane size=2 borderless=true {
         plugin location="zellij:status-bar"
