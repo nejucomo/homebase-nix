@@ -7,7 +7,7 @@ function main
     dst="${dst}/$(basename "$src")"
   fi
 
-  if [ -l "$dst" ]
+  if [ -L "$dst" ]
   then
     actual="$(readlink "$dst")"
 
