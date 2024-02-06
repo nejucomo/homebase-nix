@@ -1,0 +1,14 @@
+layout {
+    pane edit="" size="60%"
+    pane
+    pane command="git" {
+        args "info"
+    }
+    pane size=2 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+    pane size=1 borderless=true {
+        plugin location="zellij:tab-bar"
+    }
+}
+
