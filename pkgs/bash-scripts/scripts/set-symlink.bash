@@ -19,7 +19,8 @@ function main
     fi
   elif ! [ -e "$dst" ]
   then
-    ln -sv "$src" "$dst"
+    log "Setting: ${dst} -> ${src}"
+    ln -s "$src" "$dst"
   else
     fail "Cannot set ${dst} -> ${src}; it already exists: $(ls -ld "$dst")"
   fi
