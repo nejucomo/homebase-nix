@@ -11,13 +11,32 @@ let
   # without a fold using explicit names, eg 'pkgs4 = pkgs3 // { ... }`
   # This approach seems easier to read/maintain:
 
+  # Rename this for clarity below:
+  git-clone-canonical-flake-pkg = git-clone-canonical;
+
   pkgs = builtins.foldl' (pkgs: mk-pkgs: pkgs // (mk-pkgs pkgs)) {} [
     # Flake input packages:
-    (_upstream-pkgs: {
+    (_empty-upstream-pkgs: {
       inherit
-        git-clone-canonical
         cargo-checkmate
       ;
+
+      git-clone-canonical = (
+        homebase.wrap-bins
+        git-clone-canonical-flake-pkg
+        {
+          git-clone-canonical = { upstream-bin, ... }:
+            ''
+            #! /usr/bin/env bash
+            if [ "$#" -gt 0 ] && [ "$1" = '--show-path' ]
+            then
+              echo "$HOME/hack/$(basename "$('${upstream-bin}' "$@")")"
+            else
+              '${upstream-bin}' "$@" && update-hack-links
+            fi
+            '';
+        }
+      );
     })
 
     # Off-the-shelf nixpkgs packages:
