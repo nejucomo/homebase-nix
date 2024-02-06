@@ -6,7 +6,7 @@ function main
 
   for repo in $(find ~/src -type d -name .git | xargs dirname)
   do
-    set-symlink "$repo" . || failures=(( "$failures" + 1 ))
+    set-symlink "$repo" . || failures=$(( "$failures" + 1 ))
   done
 
   exit "$failures"
