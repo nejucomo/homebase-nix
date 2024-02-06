@@ -168,6 +168,7 @@ let
       '${dependencies.xsetroot}' -solid '#555588'
       '${dependencies.polybar}' &
       '${dependencies.dunst}' &
+      '${dependency-pkgs.alacritty}/bin/alacritty' &
       '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
     fi
   '';
