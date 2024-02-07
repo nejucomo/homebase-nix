@@ -4,5 +4,5 @@ function main
     session="$(basename "$dir")"
     mkdir -p "$dir"
     cd "$dir"
-    tmux new-session -At "$session"
+    zellij attach --create "$session"
 }
