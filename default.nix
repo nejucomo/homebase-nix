@@ -119,7 +119,7 @@ let
           zellij action new-tab \
             --layout-dir '${./pkgs/zellij/confdir}/layouts' \
             --layout "$layout" \
-            "$@"
+            "''${args[@]}"
         }
 
         source '${./pkgs/bash-scripts/postlude.bash}'
