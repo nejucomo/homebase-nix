@@ -93,10 +93,38 @@ let
     })
 
     # Local packages defined in this repo:
-    (_upstream-pkgs: {
+    (upstream-pkgs: {
       bash-scripts = homebase.imp ./pkgs/bash-scripts;
-      bashrc-dir = homebase.imp ./pkgs/bashrc-dir;
       cargo-depgraph-svg = homebase.imp ./pkgs/cargo-depgraph-svg;
+      bashrc-dir = homebase.imp ./pkgs/bashrc-dir;
+    })
+
+    # bash:
+    (upstream-pkgs: {
+        bash = homebase.wrap-configs homebase.nixpkgs.bashInteractive {
+          bash = ''--rcfile '${upstream-pkgs.bashrc-dir}/share/bashrc-dir/bashrc' '';
+        };
+    })
+
+    # super hacky zellij tool:
+    (upstream-pkgs: {
+      # This is super ugly. How can we expose `mk-wrapper` from bash-scripts package?
+      zellij-new-tab-wrapper = homebase.nixpkgs.writeScriptBin "zellij-new-tab" ''
+        #! ${upstream-pkgs.bash}/bin/bash
+        source '${./pkgs/bash-scripts/prelude.bash}'
+
+        function main
+        {
+          parse-args 'layout=default *args' "$@"
+          zellij action new-tab \
+            --layout-dir '${./pkgs/zellij/confdir}/layouts' \
+            --layout "$layout" \
+            "$@"
+        }
+
+        source '${./pkgs/bash-scripts/postlude.bash}'
+
+      '';
     })
 
     # These are packages which we supply custom config args to in wrappers:
@@ -109,10 +137,6 @@ let
         vim = ''-u '${./pkgs/vim/vimrc}' '';
         zellij = ''--config-dir '${./pkgs/zellij/confdir}' '';
       } // {
-        bash = homebase.wrap-configs homebase.nixpkgs.bashInteractive {
-          bash = ''--rcfile '${upstream-pkgs.bashrc-dir}/share/bashrc-dir/bashrc' '';
-        };
-
         helix = homebase.wrap-configs homebase.nixpkgs.helix {
           hx = ''--config '${./pkgs/helix/config.toml}' '';
         };

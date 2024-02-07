@@ -1,3 +1,13 @@
+keybinds {
+    normal {
+        bind "Ctrl b" {
+            Run "autobuild" {
+                direction "Down"
+            }
+        }
+    }
+}
+
 plugins {
     tab-bar { path "tab-bar"; }
     status-bar { path "status-bar"; }
