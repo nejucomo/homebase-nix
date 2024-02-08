@@ -12,7 +12,7 @@
 	tool = meld
 
 [alias]
-	info = !echo "= branch: $(git current-branch)" && echo && git glog -5 && echo && git status --porcelain
+	info = !echo "= branch: $(git current-branch)" && echo && git glog -5 && echo -e '\n' && git status --porcelain
 	current-branch = rev-parse --abbrev-ref HEAD
 	glog = log --graph --pretty=format:'%h %Cblue%as%Creset %s %Cblue%ce %Creset%d'
 	meld = difftool --dir-diff
