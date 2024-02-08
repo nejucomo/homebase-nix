@@ -4,5 +4,11 @@ function main
     session="$(basename "$dir")"
     mkdir -p "$dir"
     cd "$dir"
-    zellij attach --create "$session"
+
+    if [ -z "$ZELLIJ" ]
+    then
+        zellij attach --create "$session"
+    else
+        alacritty --command zellij attach --create "$session" &
+    fi
 }
