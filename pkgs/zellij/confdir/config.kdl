@@ -30,3 +30,4 @@ pane_frames false
 serialize_pane_viewport true
 mouse_mode false
 copy_command "xclip -selection clipboard" // x11
+session_serialization false
