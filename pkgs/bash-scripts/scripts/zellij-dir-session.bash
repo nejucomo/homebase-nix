@@ -4,5 +4,5 @@ function main
     session="$(basename "$dir")"
     mkdir -p "$dir"
     cd "$dir"
-    zellij --session "$session" --layout edit
+    zellij --session "$session" --layout default
 }
