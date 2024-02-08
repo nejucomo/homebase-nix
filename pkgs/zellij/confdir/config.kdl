@@ -1,16 +1,16 @@
 keybinds {
     normal {
-        bind "Ctrl Shift k" {
+        bind "Alt c" {
             Run "zellij" "setup" "--dump-config" {
                 direction "Right"
             }
         }
-        bind "Ctrl Shift b" {
+        bind "Alt b" {
             Run "autobuild" {
                 direction "Down"
             }
         }
-        bind "Ctrl Shift g" {
+        bind "Alt g" {
             Run "git" "info" {
                 direction "Right"
             }
