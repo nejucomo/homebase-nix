@@ -5,11 +5,14 @@ session_serialization false
 
 keybinds {
     normal {
-        bind "Alt c" {
-            Run "zellij" "setup" "--dump-config"
-        }
         bind "Alt b" {
             Run "autobuild"
+        }
+        bind "Alt c" {
+            Run "sh" "-c" "zellij setup --dump-config | less"
+        }
+        bind "Alt e" {
+            Run "zellij" "edit" "."
         }
         bind "Alt g" {
             Run "watch" "git" "info"
