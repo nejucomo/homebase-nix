@@ -8,7 +8,6 @@ dependency-pkgs@{
   i3lock,
   polybar,
   scrot,
-  tmux,
   unclutter,
   xsetroot,
   xss-lock
@@ -17,16 +16,28 @@ let
   dependencies =
     let
       inherit (nixpkgs.lib.attrsets) mapAttrs;
+      inherit (builtins) listToAttrs;
 
       get-bin = name: pkg: "${pkg}/bin/${name}";
 
       synonymous-bins =
         mapAttrs get-bin (removeAttrs dependency-pkgs ["bash-scripts"]);
+
+      selected-bash-scripts =
+        let
+          to-select = [
+            "touchpad"
+            "backlight"
+            "zellij-dir-session"
+          ];
+
+          select-script = name: {
+            inherit name;
+            value = "${bash-scripts}/bin/${name}";
+          };
+        in listToAttrs (map select-script to-select);
     in
-      synonymous-bins // {
-        touchpad = "${bash-scripts}/bin/touchpad";
-        backlight = "${bash-scripts}/bin/backlight";
-      };
+      synonymous-bins // selected-bash-scripts;
 
   autostart = nixpkgs.writeScript (sub-pname "wm-autostart") ''
     #! ${dependencies.bash}
@@ -78,7 +89,7 @@ let
 
     # App shortcuts
     keybind $Mod-Return spawn '${dependencies.alacritty}'
-    keybind $Mod-Shift-Return spawn '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
+    keybind $Mod-Shift-Return spawn '${dependencies.alacritty}' --command '${dependencies.zellij-dir-session}' "$HOME" &
     keybind $Mod-b spawn '${dependencies.firefox}' --private-window
     keybind $Mod-Shift-b spawn '${dependencies.firefox}' -P authenticated
 
@@ -168,8 +179,7 @@ let
       '${dependencies.xsetroot}' -solid '#555588'
       '${dependencies.polybar}' &
       '${dependencies.dunst}' &
-      '${dependency-pkgs.alacritty}/bin/alacritty' &
-      '${dependencies.alacritty}' --command '${dependencies.tmux}' new-session -A -s default &
+      '${dependencies.alacritty}' --command '${dependencies.zellij-dir-session}' "$HOME" &
     fi
   '';
 in

@@ -157,7 +157,6 @@ let
           i3lock
           polybar # Note: this has non-explicit dependency on `touchpad`
           scrot
-          tmux
           unclutter
           xsetroot
           xss-lock
