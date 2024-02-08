@@ -12,10 +12,13 @@ keybinds {
             Run "sh" "-c" "zellij setup --dump-config | less"
         }
         bind "Alt e" {
-            Run "zellij" "edit" "."
+            Run "hx"
         }
         bind "Alt g" {
             Run "watch" "git" "info"
+        }
+        bind "Alt s" {
+            NewPane
         }
     }
 }
