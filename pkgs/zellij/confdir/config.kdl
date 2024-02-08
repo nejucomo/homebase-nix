@@ -1,19 +1,18 @@
+default_layout "compact"
+pane_frames false
+mouse_mode false
+session_serialization false
+
 keybinds {
     normal {
         bind "Alt c" {
-            Run "zellij" "setup" "--dump-config" {
-                direction "Right"
-            }
+            Run "zellij" "setup" "--dump-config"
         }
         bind "Alt b" {
-            Run "autobuild" {
-                direction "Down"
-            }
+            Run "autobuild"
         }
         bind "Alt g" {
-            Run "watch" "git" "info" {
-                direction "Right"
-            }
+            Run "watch" "git" "info"
         }
     }
 }
@@ -25,11 +24,6 @@ plugins {
     compact-bar { path "compact-bar"; }
     session-manager { path "session-manager"; }
 }
-
-default_layout "compact"
-pane_frames false
-mouse_mode false
-session_serialization false
 
 theme "dracula"
 themes {
