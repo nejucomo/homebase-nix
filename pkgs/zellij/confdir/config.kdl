@@ -1,8 +1,18 @@
 keybinds {
     normal {
-        bind "Ctrl b" {
+        bind "Ctrl Shift k" {
+            Run "zellij" "setup" "--dump-config" {
+                direction "Right"
+            }
+        }
+        bind "Ctrl Shift b" {
             Run "autobuild" {
                 direction "Down"
+            }
+        }
+        bind "Ctrl Shift g" {
+            Run "git" "info" {
+                direction "Right"
             }
         }
     }
