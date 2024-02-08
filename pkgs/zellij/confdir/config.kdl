@@ -11,7 +11,7 @@ keybinds {
             }
         }
         bind "Alt g" {
-            Run "git" "info" {
+            Run "watch" "git" "info" {
                 direction "Right"
             }
         }
