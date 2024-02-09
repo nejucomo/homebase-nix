@@ -4,6 +4,11 @@ mouse_mode false
 session_serialization false
 
 keybinds {
+    // Unbind tmux mode:
+    shared_except "tmux" "locked" {
+        unbind "Ctrl b"
+    }
+
     normal {
         bind "Alt b" {
             Run "autobuild"
