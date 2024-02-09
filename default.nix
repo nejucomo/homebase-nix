@@ -140,7 +140,7 @@ let
         };
 
         git = homebase.wrap-xdg-config homebase.nixpkgs.git ./pkgs/git-xdg [ "git" ];
-        leftwm = homebase.wrap-xdg-config homebase.nixpkgs.leftwm ./pkgs/leftwm-xdg [ "leftwm" ];
+        leftwm = homebase.wrap-xdg-config upstream-pkgs.leftwm ./pkgs/leftwm-xdg [ "leftwm" ];
       }
     )
 
