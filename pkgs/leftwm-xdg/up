@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+set -efuxo pipefail
+
+function main
+{
+  xss-lock --transfer-sleep-lock \
+  	i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}" &
+
+  unclutter -idle 1 &
+  xsetroot -solid '#555588'
+  polybar &
+  dunst &
+  alacritty --command zellij-dir-session "$HOME" &
+}

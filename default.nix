@@ -1,7 +1,7 @@
-imparams@{ nixpkgs, git-clone-canonical, cargo-checkmate }:
+flake-inputs:
 let
   homebase = import ./lib-homebase {
-    inherit nixpkgs;
+    inherit (flake-inputs) nixpkgs;
     pname = "homebase";
     version = "0.1";
   };
@@ -11,19 +11,17 @@ let
   # without a fold using explicit names, eg 'pkgs4 = pkgs3 // { ... }`
   # This approach seems easier to read/maintain:
 
-  # Rename this for clarity below:
-  git-clone-canonical-flake-pkg = git-clone-canonical;
-
   pkgs = builtins.foldl' (pkgs: mk-pkgs: pkgs // (mk-pkgs pkgs)) {} [
     # Flake input packages:
     (_empty-upstream-pkgs: {
-      inherit
+      inherit (flake-inputs)
         cargo-checkmate
+        leftwm
       ;
 
       git-clone-canonical = (
         homebase.wrap-bins
-        git-clone-canonical-flake-pkg
+        flake-inputs.git-clone-canonical
         {
           git-clone-canonical = { upstream-bin, ... }:
             ''
@@ -89,7 +87,6 @@ let
       ;
 
       dunst-man = homebase.nixpkgs.dunst.man;
-      herbstluftwm-man = homebase.nixpkgs.herbstluftwm.man;
     })
 
     # Local packages defined in this repo:
@@ -142,27 +139,12 @@ let
         };
 
         git = homebase.wrap-xdg-config homebase.nixpkgs.git ./pkgs/git-xdg [ "git" ];
+        leftwm = homebase.wrap-xdg-config homebase.nixpkgs.leftwm ./pkgs/leftwm-xdg [ "leftwm" ];
       }
     )
 
     # Customized packages with intra-package dependencies:
-    (upstream-pkgs: rec {
-      herbstluftwm = homebase.imp ./pkgs/wm {
-        inherit (upstream-pkgs)
-          alacritty
-          bash
-          bash-scripts
-          dunst
-          firefox
-          i3lock
-          polybar # Note: this has non-explicit dependency on `touchpad`
-          scrot
-          unclutter
-          xsetroot
-          xss-lock
-        ;
-      };
-
+    (upstream-pkgs: {
       startx =
         let
           # Hard-coded external dependency:
@@ -170,7 +152,7 @@ let
         in
           homebase.nixpkgs.writeScriptBin "homebase-startx" ''
             source "${upstream-pkgs.bashrc-dir}/share/bashrc-dir/without-startx.sh"
-            exec "${systemStartx}" "${herbstluftwm}/bin/herbstluftwm" "$@"
+            exec "${systemStartx}" "${upstream-pkgs.leftwm}/bin/leftwm" "$@"
           '';
     })
   ];
