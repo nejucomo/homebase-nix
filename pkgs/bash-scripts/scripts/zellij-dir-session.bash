@@ -5,10 +5,10 @@ function main
     mkdir -p "$dir"
     cd "$dir"
 
-    if [ -z "${ZELLIJ-:}" ]
+    if [ -n "${ZELLIJ-:}" ] && xhost >& /dev/null
     then
-        zellij attach --create "$session"
-    else
         alacritty --command zellij attach --create "$session" &
+    else
+        zellij attach --create "$session"
     fi
 }

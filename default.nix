@@ -78,6 +78,7 @@ let
       ;
 
       inherit (homebase.nixpkgs.xorg)
+        xhost
         xsetroot
       ;
 
