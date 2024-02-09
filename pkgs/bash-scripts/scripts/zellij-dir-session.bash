@@ -5,7 +5,7 @@ function main
     mkdir -p "$dir"
     cd "$dir"
 
-    if [ -z "$ZELLIJ" ]
+    if [ -z "${ZELLIJ-:}" ]
     then
         zellij attach --create "$session"
     else
