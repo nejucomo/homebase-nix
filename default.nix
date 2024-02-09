@@ -152,7 +152,7 @@ let
         in
           homebase.nixpkgs.writeScriptBin "homebase-startx" ''
             source "${upstream-pkgs.bashrc-dir}/share/bashrc-dir/without-startx.sh"
-            exec "${systemStartx}" "${upstream-pkgs.leftwm}/bin/leftwm" "$@" > ~/.cache/startx.log 2>&1
+            exec "${systemStartx}" "${upstream-pkgs.leftwm}/bin/leftwm" "$@"
           '';
     })
   ];
