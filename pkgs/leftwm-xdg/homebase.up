@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
-set -efuxo pipefail
+set -fuxo pipefail
+
+exec > ~/.cache/leftwm-homebase.up.log 2>&1
 
 xss-lock --transfer-sleep-lock \
 	i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}" &
