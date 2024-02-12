@@ -241,17 +241,17 @@
         "rust-overlay": "rust-overlay_4"
       },
       "locked": {
-        "lastModified": 1707768405,
-        "narHash": "sha256-zXKOGVLCsbyWBm5f9QeEMcKbSU85S6aYYMe1K2o+71w=",
-        "ref": "refs/heads/log-config-errors",
-        "rev": "9f72875fba1d46e7754f4b6b432a353ebd9ec0e4",
-        "revCount": 815,
-        "type": "git",
-        "url": "file:///home/knack/hack/leftwm/.git"
+        "lastModified": 1707467485,
+        "narHash": "sha256-JF1Q0q6cEUl/5TjWhwvmmWuEwtS4lzOTqoIaePE16K0=",
+        "owner": "leftwm",
+        "repo": "leftwm",
+        "rev": "e2e35412f113358d9be35e57683d51f5b7008535",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/knack/hack/leftwm/.git"
+        "owner": "leftwm",
+        "repo": "leftwm",
+        "type": "github"
       }
     },
     "mk-naked-shell": {
@@ -407,11 +407,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1707588924,
-        "narHash": "sha256-0e1ce6X5ghapv6cAF9rxLZKeNyFHHXsLbGxN2cQQE8U=",
+        "lastModified": 1707743206,
+        "narHash": "sha256-AehgH64b28yKobC/DAWYZWkJBxL/vP83vkY+ag2Hhy4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "10b813040df67c4039086db0f6eaf65c536886c6",
+        "rev": "2d627a2a704708673e56346fcb13d25344b8eaf3",
         "type": "github"
       },
       "original": {

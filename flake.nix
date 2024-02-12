@@ -4,8 +4,7 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.git-clone-canonical.url = "github:nejucomo/flake-git-clone-canonical";
   inputs.cargo-checkmate.url = "github:cargo-checkmate/cargo-checkmate";
-  # inputs.leftwm.url = "github:leftwm/leftwm";
-  inputs.leftwm.url = "git+file:///home/knack/hack/leftwm/.git";
+  inputs.leftwm.url = "github:leftwm/leftwm";
 
   outputs = { self, nixpkgs, git-clone-canonical, cargo-checkmate, leftwm }:
     let
