@@ -1,8 +1,6 @@
-blorp
-
 #![enable(implicit_some)]
 #![enable(unwrap_newtypes)]
-(
+Config (
     modkey: "Mod4",
     mousekey: "Mod4",
     workspaces: [],
@@ -19,19 +17,10 @@ blorp
     ],
     max_window_width: None,
     layouts: [
-        "EvenHorizontal",
-        "EvenVertical",
         "Monocle",
         "Grid",
-        "MainAndVertStack",
-        "MainAndHorizontalStack",
-        "RightMainAndVertStack",
-        "Fibonacci",
-        "Dwindle",
         "MainAndDeck",
-        "CenterMain",
-        "CenterMainBalanced",
-        "CenterMainFluid",
+        "MainAndVertStack",
     ],
     layout_definitions: [
         (name: "EvenHorizontal", flip: None, rotate: North, reserve: None, columns: (flip: None, rotate: North, main: None, stack: (flip: None, rotate: North, split: Vertical), second_stack: None)),
@@ -66,10 +55,9 @@ blorp
     disable_cursor_reposition_on_resize: false,
     keybind: [
         (command: Execute, value: "dmenu_run", modifier: ["modkey"], key: "p"),
-        (command: Execute, value: "alacritty", modifier: ["modkey"], key: "Return"),
-        (command: Execute, value: "alacritty zellij-dir-session", modifier: ["modkey", "Shift"], key: "Return"),
-        (command: Execute, value: "firefox --private-window", modifier: ["modkey"], key: "Return"),
-        (command: Execute, value: "firefox -S authenticated", modifier: ["modkey", "Shift"], key: "Return"),
+        (command: Execute, value: "alacritty", modifier: ["modkey", "Shift"], key: "Return"),
+        (command: Execute, value: "firefox --private-window", modifier: ["modkey"], key: "b"),
+        (command: Execute, value: "firefox -S authenticated", modifier: ["modkey", "Shift"], key: "b"),
         (command: CloseWindow, value: "", modifier: ["modkey", "Shift"], key: "q"),
         (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
         (command: Execute, value: "loginctl kill-session $XDG_SESSION_ID", modifier: ["modkey", "Shift"], key: "x"),
