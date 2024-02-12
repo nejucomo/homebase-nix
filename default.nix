@@ -154,7 +154,6 @@ let
         in
           homebase.nixpkgs.writeScriptBin "homebase-startx" ''
             source "${upstream-pkgs.bashrc-dir}/share/bashrc-dir/without-startx.sh"
-            export RUST_LOG='debug'
             exec "${systemStartx}" "${upstream-pkgs.leftwm}/bin/leftwm" "$@"
           '';
     })
