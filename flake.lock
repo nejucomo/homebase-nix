@@ -204,11 +204,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1707716016,
-        "narHash": "sha256-VIZZhvHDs4PkyS4UQAL/H8NhnhM2xSa7fldX680GIGI=",
+        "lastModified": 1707746199,
+        "narHash": "sha256-q+vDwQjuZKp8CweBCfte/8oRAc3ZJMrfltKTO1e2tUY=",
         "ref": "refs/heads/debug-startup",
-        "rev": "e10ce9448a94dcb0a43eea92c9cd804ef55c8bab",
-        "revCount": 811,
+        "rev": "17e9c8a5260f813b9e78460f4ec573103a3d7f4a",
+        "revCount": 812,
         "type": "git",
         "url": "file:///home/knack/hack/leftwm/.git"
       },
