@@ -1,9 +1,9 @@
 #![enable(implicit_some)]
 ThemeConfig (
     border_width: 1,
-    margin: 2,
+    margin: 5,
     workspace_margin: 2,
     idefault_border_color: "#8888aa",
     floating_border_color: "#aa88aa",
-    focused_border_color: "#aaaacc",
+    focused_border_color: "#9999bb",
 )
