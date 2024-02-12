@@ -20,6 +20,6 @@ launch xss-lock --transfer-sleep-lock \
 	-- i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}"
 
 launch unclutter -idle 1
-xsetroot -solid '#550088'
+xsetroot -solid '#220033'
 launch polybar
 launch dunst

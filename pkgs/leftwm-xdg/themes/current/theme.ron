@@ -3,7 +3,7 @@ ThemeConfig (
     border_width: 1,
     margin: 5,
     workspace_margin: 2,
-    idefault_border_color: "#8888aa",
+    default_border_color: "#774488",
     floating_border_color: "#aa88aa",
-    focused_border_color: "#9999bb",
+    focused_border_color: "#aa88dd",
 )
