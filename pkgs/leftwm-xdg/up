@@ -3,11 +3,17 @@ set -fuxo pipefail
 
 exec > ~/.cache/leftwm-homebase.up.log 2>&1
 
-xss-lock --transfer-sleep-lock \
-	i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}" &
+function launch
+{
+  cmd="$1"
+  eval "$@" 2>&1 | sed "s/^/${cmd}: /" &
+}
 
-unclutter -idle 1 &
-xsetroot -solid '#555588'
-polybar &
-dunst &
-alacritty --command zellij-dir-session "$HOME" &
+launch xss-lock --transfer-sleep-lock \
+	i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}"
+
+launch unclutter -idle 1
+xsetroot -solid '#550088'
+launch polybar
+launch dunst
+launch alacritty --command zellij-dir-session "$HOME"
