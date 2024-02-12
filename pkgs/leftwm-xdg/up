@@ -17,4 +17,3 @@ xsetroot -solid '#550088'
 launch polybar
 launch dunst
 launch alacritty --command zellij-dir-session "$HOME"
-wait
