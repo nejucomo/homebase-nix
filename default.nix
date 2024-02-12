@@ -75,6 +75,7 @@ let
         scrot
         unclutter
         which
+        xclip
         xss-lock
       ;
 
