@@ -54,6 +54,7 @@ Config (
         (command: Execute, value: "firefox --private-window", modifier: ["modkey"], key: "b"),
         (command: Execute, value: "firefox -S authenticated", modifier: ["modkey", "Shift"], key: "b"),
         (command: CloseWindow, value: "", modifier: ["modkey", "Shift"], key: "q"),
+        (command: ToggleScratchPad, value: "Alacritty", modifier: ["modkey", "Shift"], key: "s"),
         (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
         (command: Execute, value: "loginctl kill-session $XDG_SESSION_ID", modifier: ["modkey", "Shift"], key: "x"),
         (command: Execute, value: "i3lock -c ${HOMEBASE_USER_COLOR:-00FF00} --show-failed-attempts", modifier: ["modkey", "Control"], key: "l"),
