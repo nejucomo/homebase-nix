@@ -6,14 +6,15 @@ exec > ~/.cache/leftwm-homebase.up.log 2>&1
 function launch
 {
   cmd="$1"
-  eval "$@" 2>&1 | sed "s/^/${cmd}: /"
+  "$@" 2>&1 | sed "s/^/${cmd}: /" &
 }
 
 launch xss-lock --transfer-sleep-lock \
-	i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}" &
+	-- i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}"
 
-launch unclutter -idle 1 &
-launch xsetroot -solid '#550088'
-launch polybar &
-launch dunst &
+launch unclutter -idle 1
+xsetroot -solid '#550088'
+launch polybar
+launch dunst
 launch alacritty --command zellij-dir-session "$HOME"
+wait
