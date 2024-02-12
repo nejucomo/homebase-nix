@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+set -fuxo pipefail
+
+exec > ~/.cache/leftwm-theme-homebase.down.log 2>&1
+
+leftwm command 'UnloadTheme'
+pkill unclutter
+pkill polybar
+pkill dunst
