@@ -49,6 +49,7 @@ let
         acpi
         cargo-udeps
         coreutils
+        dmenu
         file
         findutils
         firefox
