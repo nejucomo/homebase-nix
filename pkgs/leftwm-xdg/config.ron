@@ -17,10 +17,11 @@ Config (
     ],
     max_window_width: None,
     layouts: [
-        "MainAndDeck",
+        "MainAndVertStack",
         "Monocle",
         "Grid",
-        "MainAndVertStack",
+        "Fibonacci",
+        "Dwindle",
     ],
     layout_definitions: [
         (name: "EvenHorizontal", flip: None, rotate: North, reserve: None, columns: (flip: None, rotate: North, main: None, stack: (flip: None, rotate: North, split: Vertical), second_stack: None)),
