@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 set -fuxo pipefail
 
-exec > ~/.cache/leftwm-homebase.up.log 2>&1
+exec > ~/.cache/leftwm-theme-homebase.up.log 2>&1
 
 function launch
 {
@@ -11,6 +11,10 @@ function launch
 		|| notify-send --app-name 'leftwm-theme-up' "$cmd" 'failed' \
 		&
 }
+
+export SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+leftwm command "LoadTheme $SCRIPTPATH/theme.ron"
 
 launch xss-lock --transfer-sleep-lock \
 	-- i3lock --nofork -c "${HOMEBASE_USER_COLOR:-554466}"

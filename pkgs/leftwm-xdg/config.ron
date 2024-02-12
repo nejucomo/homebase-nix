@@ -17,9 +17,9 @@ Config (
     ],
     max_window_width: None,
     layouts: [
+        "MainAndDeck",
         "Monocle",
         "Grid",
-        "MainAndDeck",
         "MainAndVertStack",
     ],
     layout_definitions: [
