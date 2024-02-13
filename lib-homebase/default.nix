@@ -74,6 +74,8 @@ let
             set +x
           '';
         };
+
+    resolve-dependencies = imp ./resolve-dependencies.nix;
   };
 in
   homebase
