@@ -82,6 +82,18 @@ in homebase.define-user-environment base-pkgs {
   xsetroot = { xorg }: xorg.xsetroot;
   adwaita-icon-theme = { gnome3 }: gnome3.adwaita-icon-theme;
 
+  my-bash-postlude = { export-dir }:
+    export-dir ./pkgs/bash-postlude "share/bash/";
+
+  my-bash-scripts = deps@{
+    lib,
+    my-bash-postlude,
+    writeShellScriptBin,
+    symlinkJoin,
+    stdenvNoCC
+  }:
+    import ./pkgs/bash-scripts deps;
+
   my-git-clone-canonical = { override-bin, git-clone-canonical }: (
     override-bin "${git-clone-canonical}/bin/git-clone-canonical" (up: ''
       if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
@@ -189,7 +201,7 @@ in homebase.define-user-environment base-pkgs {
           "''${args[@]}"
       }
 
-      source '${./pkgs/bash-scripts}/postlude.bash'
+      source '${./pkgs/bash-scripts}/share/bash/postlude.bash'
     ''
   );
 
@@ -201,7 +213,6 @@ in homebase.define-user-environment base-pkgs {
   );
 
   # FIXME BELOW:
-  my-bash-scripts = {}: homebase.imp ./pkgs/bash-scripts;
   my-cargo-depgraph-svg = {}: homebase.imp ./pkgs/cargo-depgraph-svg;
   my-bashrc-dir = {}: homebase.imp ./pkgs/bashrc-dir;
 }

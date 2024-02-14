@@ -1,9 +1,10 @@
-homebase:
+{ lib, my-bash-postlude, writeShellScriptBin, symlinkJoin, stdenvNoCC }:
 let
   inherit (builtins) readDir attrNames;
-  inherit (homebase.nixpkgs) bash symlinkJoin writeScriptBin stdenvNoCC;
-  inherit (homebase.nixpkgs.lib.attrsets) filterAttrs;
-  inherit (homebase.nixpkgs.lib.strings) hasSuffix;
+  inherit (lib.attrsets) filterAttrs;
+  inherit (lib.strings) hasSuffix;
+
+  shell-suffix = ".bash";
 
   remove-suffix =
     let
@@ -13,18 +14,15 @@ let
         assert hasSuffix suffix s;
         substring 0 ((stringLength s) - (stringLength suffix)) s;
 
-  shell-suffix = ".bash";
-
   script-names =
     let
       is-script = n: v: v == "regular" && hasSuffix shell-suffix n;
     in
       attrNames (filterAttrs is-script (readDir ./scripts));
 
-  mk-wrapper = name: writeScriptBin (remove-suffix shell-suffix name) ''
-    #! ${bash}/bin/bash
+  mk-wrapper = name: writeShellScriptBin (remove-suffix shell-suffix name) ''
     source '${./scripts}/${name}'
-    source '${./postlude.bash}'
+    source '${my-bash-postlude}/share/bash/postlude.bash'
   '';
 
   wrapped-pkg = symlinkJoin {
