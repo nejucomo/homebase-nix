@@ -6,12 +6,46 @@ let
     version = "0.1";
   };
 
+  inherit (builtins)
+    attrValues
+  ;
+
+  input-pkgs = {
+    inherit (flake-inputs)
+      git-clone-canonical
+    ;
+  };
+
+  pkgs = homebase.resolve-dependencies input-pkgs {
+    my-git-clone-canonical = { git-clone-canonical }: (
+      homebase.wrap-bins git-clone-canonical {
+        git-clone-canonical = { upstream-bin, ... }:
+          ''
+          #! /usr/bin/env bash
+          if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
+          then
+            # update links after execution:
+            '${upstream-bin}' "$@" && update-hack-links
+          elif [ "$#" -eq 2 ] && [ "$1" = '--show-path' ]
+          then
+            # Modify path:
+            echo "$HOME/hack/$(basename "$('${upstream-bin}' "$@")")"
+          else
+            # passthru:
+            exec '${upstream-bin}' "$@"
+          fi
+          ''
+        ;
+      }
+    );
+  };
+
   # We use foldl' to build up successively larger attrsets of packages
   # in a way that they can depend on earlier results. This can be done
   # without a fold using explicit names, eg 'pkgs4 = pkgs3 // { ... }`
   # This approach seems easier to read/maintain:
 
-  pkgs = builtins.foldl' (pkgs: mk-pkgs: pkgs // (mk-pkgs pkgs)) {} [
+  legacy-pkgs = builtins.foldl' (pkgs: mk-pkgs: pkgs // (mk-pkgs pkgs)) {} [
     # Flake input packages:
     (_empty-upstream-pkgs: {
       inherit (flake-inputs)
@@ -19,28 +53,6 @@ let
         leftwm
       ;
 
-      git-clone-canonical = (
-        homebase.wrap-bins
-        flake-inputs.git-clone-canonical
-        {
-          git-clone-canonical = { upstream-bin, ... }:
-            ''
-            #! /usr/bin/env bash
-            if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
-            then
-              # update links after execution:
-              '${upstream-bin}' "$@" && update-hack-links
-            elif [ "$#" -eq 2 ] && [ "$1" = '--show-path' ]
-            then
-              # Modify path:
-              echo "$HOME/hack/$(basename "$('${upstream-bin}' "$@")")"
-            else
-              # passthru:
-              exec '${upstream-bin}' "$@"
-            fi
-            '';
-        }
-      );
     })
 
     # Off-the-shelf nixpkgs packages:
@@ -160,7 +172,9 @@ let
     })
   ];
 
-  all-pkgs = homebase.include-extras (builtins.attrValues pkgs);
+  legacy-all-pkgs = homebase.include-extras (attrValues legacy-pkgs);
+
+  all-pkgs = legacy-all-pkgs ++ (attrValues pkgs);
 in
   homebase.nixpkgs.symlinkJoin {
     name = "${homebase.pname}-${homebase.version}";
