@@ -16,7 +16,7 @@ let
     ;
   };
 
-  pkgs = homebase.resolve-dependencies input-pkgs {
+  all-new-pkgs = homebase.resolve-dependencies input-pkgs {
     my-git-clone-canonical = { git-clone-canonical }: (
       homebase.wrap-bins git-clone-canonical {
         git-clone-canonical = { upstream-bin, ... }:
@@ -38,6 +38,12 @@ let
         ;
       }
     );
+  };
+
+  selected-new-pkgs = {
+    inherit (all-new-pkgs)
+      my-git-clone-canonical
+    ;
   };
 
   # We use foldl' to build up successively larger attrsets of packages
@@ -174,7 +180,7 @@ let
 
   legacy-all-pkgs = homebase.include-extras (attrValues legacy-pkgs);
 
-  all-pkgs = legacy-all-pkgs ++ (attrValues pkgs);
+  all-pkgs = legacy-all-pkgs ++ (attrValues selected-new-pkgs);
 in
   homebase.nixpkgs.symlinkJoin {
     name = "${homebase.pname}-${homebase.version}";
