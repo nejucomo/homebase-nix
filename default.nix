@@ -4,23 +4,20 @@ let
   systemStartx = "/run/current-system/sw/bin/startx";
 
   inherit (flake-inputs) nixpkgs;
-
-  homebase = import ./lib-homebase {
-    inherit nixpkgs;
-    pname = "homebase";
-    version = "0.1";
-  };
+  inherit (import ./lib-homebase nixpkgs)
+    define-user-environment
+    override-bin
+  ;
 
   # Base packages are available for constructing the user environment,
   # but are not implicitly in the user environment:
-  base-pkgs = homebase // nixpkgs // flake-inputs;
+  base-pkgs = nixpkgs // flake-inputs;
 
-in homebase.define-user-environment base-pkgs {
+in define-user-environment base-pkgs {
   user-environment = pkgs@{
     # Customized packages:
     my-alacritty,
     my-bash,
-    my-bashrc-dir,
     my-bash-scripts,
     my-cargo-depgraph-svg,
     my-dunst,
@@ -114,7 +111,7 @@ in homebase.define-user-environment base-pkgs {
   }:
     import ./pkgs/bash-scripts deps;
 
-  my-git-clone-canonical = { override-bin, git-clone-canonical }: (
+  my-git-clone-canonical = { git-clone-canonical }: (
     override-bin "${git-clone-canonical}/bin/git-clone-canonical" (up: ''
       if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
       then
@@ -131,7 +128,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-bash = { override-bin, bashInteractive }: (
+  my-bash = { bashInteractive }: (
     override-bin "${bashInteractive}/bin/bash" (upstream: ''
       exec '${upstream}' \
         --rcfile '${./pkgs/bashrc-dir}/bashrc' \
@@ -139,7 +136,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-alacritty = { override-bin, alacritty }: (
+  my-alacritty = { alacritty }: (
     override-bin "${alacritty}/bin/alacritty" (upstream: ''
       exec '${upstream}' \
         --config-file '${./pkgs/alacritty/alacritty.toml}' \
@@ -147,7 +144,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-dunst = { override-bin, dunst }: (
+  my-dunst = { dunst }: (
     override-bin "${dunst}/bin/dunst" (upstream: ''
       exec '${upstream}' \
         --config-file '${./pkgs/dunst/dunst.conf}' \
@@ -155,7 +152,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-polybar = { override-bin, polybar }: (
+  my-polybar = { polybar }: (
     override-bin "${polybar}/bin/polybar" (upstream: ''
       exec '${upstream}' \
         --config='${./pkgs/polybar/config.ini}' \
@@ -163,7 +160,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-tmux = { override-bin, tmux }: (
+  my-tmux = { tmux }: (
     override-bin "${tmux}/bin/tmux" (upstream: ''
       exec '${upstream}' \
         -f '${./pkgs/tmux/tmux.conf}' \
@@ -171,7 +168,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-vim = { override-bin, vim }: (
+  my-vim = { vim }: (
     override-bin "${vim}/bin/vim" (upstream: ''
       exec '${upstream}' \
         -u '${./pkgs/vim/vimrc}' \
@@ -179,7 +176,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-zellij = { override-bin, zellij }: (
+  my-zellij = { zellij }: (
     override-bin "${zellij}/bin/zellij" (upstream: ''
       exec '${upstream}' \
         --config-dir '${./pkgs/zellij}/confdir' \
@@ -187,7 +184,7 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-helix = { override-bin, helix }: (
+  my-helix = { helix }: (
     override-bin "${helix}/bin/hx" (upstream: ''
       exec '${upstream}' \
         --config '${./pkgs/helix}/config.toml' \
@@ -195,14 +192,14 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-git = { override-bin, git }: (
+  my-git = { git }: (
     override-bin "${git}/bin/git" (upstream: ''
       export XDG_CONFIG_HOME='${./xdg-config}'
       exec '${upstream}' "$@"
     '')
   );
 
-  my-leftwm = { override-bin, leftwm }: (
+  my-leftwm = { leftwm }: (
     override-bin "${leftwm}/bin/leftwm" (upstream: ''
       export XDG_CONFIG_HOME='${./xdg-config}'
       exec '${upstream}' "$@"

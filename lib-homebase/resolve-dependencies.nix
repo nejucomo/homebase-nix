@@ -1,4 +1,4 @@
-homebase:
+nixpkgs:
 let
   inherit (builtins)
     attrNames
@@ -10,7 +10,7 @@ let
     isString
     listToAttrs
   ;
-  inherit (homebase.nixpkgs.lib.attrsets)
+  inherit (nixpkgs.lib.attrsets)
     foldlAttrs
   ;
 
