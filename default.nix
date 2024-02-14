@@ -82,8 +82,7 @@ in homebase.define-user-environment base-pkgs {
   xsetroot = { xorg }: xorg.xsetroot;
   adwaita-icon-theme = { gnome3 }: gnome3.adwaita-icon-theme;
 
-  my-bash-postlude = { export-dir }:
-    export-dir ./pkgs/bash-postlude "share/bash/";
+  my-bash-postlude = {}: "${./pkgs/bash-postlude}/postlude.bash";
 
   my-bash-scripts = deps@{
     lib,
@@ -189,19 +188,18 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  # This is super ugly. How can we expose `mk-wrapper` from bash-scripts package?
-  my-zellij-new-tab-wrapper = { writeShellScriptBin }: (
+  my-zellij-new-tab-wrapper = { my-bash-postlude, my-zellij, writeShellScriptBin }: (
     writeShellScriptBin "zellij-new-tab" ''
       function main
       {
         parse-args 'layout=default *args' "$@"
-        zellij action new-tab \
+        '${my-zellij}/bin/zellij' action new-tab \
           --layout-dir '${./pkgs/zellij/confdir}/layouts' \
           --layout "$layout" \
           "''${args[@]}"
       }
 
-      source '${./pkgs/bash-scripts}/share/bash/postlude.bash'
+      source '${my-bash-postlude}'
     ''
   );
 

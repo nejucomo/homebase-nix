@@ -36,19 +36,6 @@ let
         }
     );
 
-    export-dir = srcpath: dst:
-      nixpkgs.stdenvNoCC.mkDerivation {
-        name = "static-${baseNameOf srcpath}";
-        src = srcpath;
-        installPhase = ''
-          set -x
-          mkdir -p "$out"
-          dst="$out/${dst}"
-          mkdir -p "$dst"
-          cp -rv "$src"/* "$out/${dst}"
-        '';
-      };
-
     # Old API:
     # TODO: cleanup
     inherit nixpkgs pname version;

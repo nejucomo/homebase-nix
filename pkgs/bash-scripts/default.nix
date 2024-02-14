@@ -22,7 +22,7 @@ let
 
   mk-wrapper = name: writeShellScriptBin (remove-suffix shell-suffix name) ''
     source '${./scripts}/${name}'
-    source '${my-bash-postlude}/share/bash/postlude.bash'
+    source '${my-bash-postlude}'
   '';
 
   wrapped-pkg = symlinkJoin {
