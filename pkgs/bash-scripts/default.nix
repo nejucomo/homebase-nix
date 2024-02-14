@@ -23,7 +23,6 @@ let
 
   mk-wrapper = name: writeScriptBin (remove-suffix shell-suffix name) ''
     #! ${bash}/bin/bash
-    source '${./prelude.bash}'
     source '${./scripts}/${name}'
     source '${./postlude.bash}'
   '';
@@ -48,7 +47,7 @@ in
     # Checks:
     doCheck = true;
     checkPhase = ''
-      selftest='${wrapped-pkg}/bin/prelude-bash-test'
+      selftest='${wrapped-pkg}/bin/postlude-bash-test'
       ls -l "$selftest"
       exec "$selftest"
     '';

@@ -180,8 +180,6 @@ in homebase.define-user-environment base-pkgs {
   # This is super ugly. How can we expose `mk-wrapper` from bash-scripts package?
   my-zellij-new-tab-wrapper = { writeShellScriptBin }: (
     writeShellScriptBin "zellij-new-tab" ''
-      source '${./pkgs/bash-scripts}/prelude.bash'
-
       function main
       {
         parse-args 'layout=default *args' "$@"

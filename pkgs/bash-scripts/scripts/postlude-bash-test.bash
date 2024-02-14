@@ -41,10 +41,12 @@ function test-parse-args
     esac
 
     log -n "test-parse-args $1... "; shift
+    set +e
     (
         parse-args "$@"
     ) > /dev/null 2>&1
     local result="$?"
+    set -e
 
     [ "$posneg" = 'negative' ] && result=$(( ! $result ))
 
