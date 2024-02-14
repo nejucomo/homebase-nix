@@ -1,25 +1,19 @@
 { nixpkgs, pname, version }:
 let
   homebase = rec {
-    inherit nixpkgs pname version;
-
-    ## Name a sub-package
-    sub-pname = subname: "${pname}-${subname}";
-
-    ## Import the argument, passing in the closure of homebase:
-    imp = mod-path: import mod-path homebase;
-
-    ## Include extras for the given pacakges, such as man pages:
-    include-extras = pkgs:
+    # New API:
+    define-user-environment = specs:
       let
-        inherit (nixpkgs.lib.lists) flatten;
-
-        include-optional-man =  pkg:
-          if pkg ? man
-          then [pkg pkg.man]
-          else [pkg];
+        resolve-dependencies = imp ./resolve-dependencies.nix;
+        resolved = resolve-dependencies specs;
+        inherit (resolved) user-environment;
+        inherit (builtins) attrValues;
+        inherit (nixpkgs) symlinkJoin;
       in
-        flatten (map include-optional-man pkgs);
+        symlinkJoin {
+          name = "${homebase.pname}-${homebase.version}";
+          paths = attrValues user-environment;
+        };
 
     override-bin = upstream-bin: mk-script: (
       let
@@ -41,6 +35,27 @@ let
           paths = [ wrapped-bin linked-bin ];
         };
     );
+    # Old API:
+    # TODO: cleanup
+    inherit nixpkgs pname version;
+
+    ## Name a sub-package
+    sub-pname = subname: "${pname}-${subname}";
+
+    ## Import the argument, passing in the closure of homebase:
+    imp = mod-path: import mod-path homebase;
+
+    ## Include extras for the given pacakges, such as man pages:
+    include-extras = pkgs:
+      let
+        inherit (nixpkgs.lib.lists) flatten;
+
+        include-optional-man =  pkg:
+          if pkg ? man
+          then [pkg pkg.man]
+          else [pkg];
+      in
+        flatten (map include-optional-man pkgs);
 
     ## Wrap binaries from an underlying package:
     wrap-bins = imp ./wrap-bins.nix;
@@ -95,8 +110,6 @@ let
             set +x
           '';
         };
-
-    resolve-dependencies = imp ./resolve-dependencies.nix;
   };
 in
   homebase
