@@ -131,10 +131,10 @@ in homebase.define-user-environment base-pkgs {
     '')
   );
 
-  my-bash = { override-bin, bashInteractive, my-bashrc-dir }: (
+  my-bash = { override-bin, bashInteractive }: (
     override-bin "${bashInteractive}/bin/bash" (upstream: ''
       exec '${upstream}' \
-        --rcfile '${my-bashrc-dir}/share/bashrc-dir/bashrc' \
+        --rcfile '${./pkgs/bashrc-dir}/bashrc' \
         "$@"
     '')
   );
@@ -224,13 +224,10 @@ in homebase.define-user-environment base-pkgs {
     ''
   );
 
-  my-startx = { my-bashrc-dir, my-leftwm, writeShellScriptBin }: (
+  my-startx = { my-leftwm, writeShellScriptBin }: (
     writeShellScriptBin "homebase-startx" ''
-      source "${my-bashrc-dir}/share/bashrc-dir/without-startx.sh"
+      source "${./pkgs/bashrc-dir}/without-startx.sh"
       exec "${systemStartx}" "${my-leftwm}/bin/leftwm" "$@"
     ''
   );
-
-  # FIXME BELOW:
-  my-bashrc-dir = {}: homebase.imp ./pkgs/bashrc-dir;
 }
