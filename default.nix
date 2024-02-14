@@ -82,6 +82,27 @@ in homebase.define-user-environment base-pkgs {
   xsetroot = { xorg }: xorg.xsetroot;
   adwaita-icon-theme = { gnome3 }: gnome3.adwaita-icon-theme;
 
+  my-cargo-depgraph-svg = {
+    writeShellScriptBin,
+    cargo-depgraph,
+    graphviz,
+  }:
+    let
+      depgraph = "${cargo-depgraph}/bin/cargo-depgraph";
+      dot = "${graphviz}/bin/dot";
+    in
+      writeShellScriptBin "cargo-depgraph-svg" ''
+        if [ "$*" = '--help' ]
+        then
+          ${depgraph} --help
+        else
+          ${depgraph} "$@" \
+            | sed 's/^digraph {$/\0\nrankdir="LR"/' \
+            | ${dot} -Tsvg \
+            > target/depgraph.svg
+        fi
+      '';
+
   my-bash-postlude = {}: "${./pkgs/bash-postlude}/postlude.bash";
 
   my-bash-scripts = deps@{
@@ -211,6 +232,5 @@ in homebase.define-user-environment base-pkgs {
   );
 
   # FIXME BELOW:
-  my-cargo-depgraph-svg = {}: homebase.imp ./pkgs/cargo-depgraph-svg;
   my-bashrc-dir = {}: homebase.imp ./pkgs/bashrc-dir;
 }
