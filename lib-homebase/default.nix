@@ -21,6 +21,27 @@ let
       in
         flatten (map include-optional-man pkgs);
 
+    override-bin = upstream-bin: mk-script: (
+      let
+        inherit (builtins) baseNameOf;
+        inherit (nixpkgs) writeShellScriptBin;
+
+        script-name = baseNameOf upstream-bin;
+        pkg-name = "override-${script-name}";
+
+        wrapped-bin = writeShellScriptBin script-name (mk-script upstream-bin);
+
+        linked-bin = runCommand "${pkg-name}-override-link" {} ''
+          mkdir -vp "$out/bin"
+          ln -s '${upstream-bin}' "$out/bin/overridden-${script-name}"
+        '';
+      in
+        symlinkJoin {
+          name = pkg-name;
+          paths = [ wrapped-bin linked-bin ];
+        };
+    );
+
     ## Wrap binaries from an underlying package:
     wrap-bins = imp ./wrap-bins.nix;
 

@@ -10,126 +10,177 @@ let
     attrValues
   ;
 
-  input-pkgs = {
-    inherit (flake-inputs)
-      git-clone-canonical
-    ;
-  };
+  input-pkgs = nixpkgs // flake-inputs;
 
   all-new-pkgs = homebase.resolve-dependencies input-pkgs {
-    my-git-clone-canonical = { git-clone-canonical }: (
-      homebase.wrap-bins git-clone-canonical {
-        git-clone-canonical = { upstream-bin, ... }:
-          ''
-          #! /usr/bin/env bash
-          if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
-          then
-            # update links after execution:
-            '${upstream-bin}' "$@" && update-hack-links
-          elif [ "$#" -eq 2 ] && [ "$1" = '--show-path' ]
-          then
-            # Modify path:
-            echo "$HOME/hack/$(basename "$('${upstream-bin}' "$@")")"
-          else
-            # passthru:
-            exec '${upstream-bin}' "$@"
-          fi
-          ''
-        ;
-      }
-    );
-  };
-
-  selected-new-pkgs = {
-    inherit (all-new-pkgs)
+    user-environment = pkgs@{
+      # Customized packages:
+      my-alacritty
+      my-bash
+      my-bashrc-dir
+      my-bash-scripts
+      my-cargo-depgraph-svg
+      my-dunst
+      my-git
       my-git-clone-canonical
-    ;
-  };
+      my-helix
+      my-leftwm
+      my-polybar
+      my-startx
+      my-tmux
+      my-vim
+      my-zellij
+      my-zellij-new-tab-wrapper
 
-  # We use foldl' to build up successively larger attrsets of packages
-  # in a way that they can depend on earlier results. This can be done
-  # without a fold using explicit names, eg 'pkgs4 = pkgs3 // { ... }`
-  # This approach seems easier to read/maintain:
+      # Vanilla upstream packages:
+      acpi
+      cargo-checkmate
+      cargo-udeps
+      coreutils
+      dmenu
+      file
+      findutils
+      firefox
+      gawk
+      gcc
+      gnugrep
+      gnused
+      gzip
+      i3lock
+      killall
+      leftwm
+      less
+      libnotify
+      magic-wormhole
+      man
+      meld
+      nix
+      nix-index
+      ps
+      pstree
+      ripgrep
+      rustup
+      scrot
+      signal-desktop
+      unclutter
+      which
+      xclip
+      xss-lock
+    }: (
+      let
+        inherit (builtins) attrValues;
+        inherit (nixpkgs) symlinkJoin;
+      in
+        symlinkJoin {
+          name = "${homebase.pname}-${homebase.version}";
+          paths = attrValues pkgs;
+        }
+    );
 
-  legacy-pkgs = builtins.foldl' (pkgs: mk-pkgs: pkgs // (mk-pkgs pkgs)) {} [
-    # Flake input packages:
-    (_empty-upstream-pkgs: {
-      inherit (flake-inputs)
-        cargo-checkmate
-        leftwm
-      ;
+    # Pull some stuff out of deeper nested nixpkgs:
+    xhost = { xorg }: xorg.xhost;
+    xsetroot = { xorg }: xorg.xsetroot;
+    adwaita-icon-theme = { gnome3 }: gnome3.adwaita-icon-theme;
 
-    })
+    my-git-clone-canonical = { git-clone-canonical }: (
+      override-bin "${git-clone-canonical}/bin/git-clone-canonical" (up: ''
+        if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
+        then
+          # update links after execution:
+          '${up}' "$@" && update-hack-links
+        elif [ "$#" -eq 2 ] && [ "$1" = '--show-path' ]
+        then
+          # Modify path:
+          echo "$HOME/hack/$(basename "$('${up}' "$@")")"
+        else
+          # passthru:
+          exec '${up}' "$@"
+        fi
+      ''
+    );
 
-    # Off-the-shelf nixpkgs packages:
-    (_upstream-pkgs: {
-      inherit (homebase.nixpkgs)
-        acpi
-        cargo-udeps
-        coreutils
-        dmenu
-        file
-        findutils
-        firefox
-        gawk
-        gcc
-        gnugrep
-        gnused
-        gzip
-        i3lock
-        killall
-        less
-        magic-wormhole
-        man
-        meld
-        nix
-        nix-index
-        libnotify
-        ps
-        pstree
-        ripgrep
-        rustup
-        signal-desktop
-        scrot
-        unclutter
-        which
-        xclip
-        xss-lock
-      ;
+    my-bash = { bashInteractive, my-bashrc-dir }: (
+      override-bin "${bashInteractive}/bin/bash" (upstream: ''
+        exec '${upstream}' \
+          --rcfile '${my-bashrc-dir}/share/bashrc-dir/bashrc' \
+          "$@"
+      '')
+    );
 
-      inherit (homebase.nixpkgs.xorg)
-        xhost
-        xsetroot
-      ;
+    my-alacritty = { alacritty }: (
+      override-bin "${alacritty}/bin/alacritty" (upstream: ''
+        exec '${upstream}' \
+          --config-file '${./pkgs/alacritty/alacritty.toml}' \
+          "$@"
+      '')
+    );
 
-      # Necessary for meld:
-      inherit (homebase.nixpkgs.gnome3)
-        adwaita-icon-theme
-      ;
+    my-dunst = { dunst }: (
+      override-bin "${dunst}/bin/dunst" (upstream: ''
+        exec '${upstream}' \
+          --config-file '${./pkgs/dunst/dunst.conf}' \
+          "$@"
+      '')
+    );
 
-      dunst-man = homebase.nixpkgs.dunst.man;
-    })
+    my-polybar = { polybar }: (
+      override-bin "${polybar}/bin/polybar" (upstream: ''
+        exec '${upstream}' \
+          --config='${./pkgs/polybar/config.ini}' \
+          "$@"
+      '')
+    );
 
-    # Local packages defined in this repo:
-    (upstream-pkgs: {
-      bash-scripts = homebase.imp ./pkgs/bash-scripts;
-      cargo-depgraph-svg = homebase.imp ./pkgs/cargo-depgraph-svg;
-      bashrc-dir = homebase.imp ./pkgs/bashrc-dir;
-    })
+    my-tmux = { tmux }: (
+      override-bin "${tmux}/bin/tmux" (upstream: ''
+        exec '${upstream}' \
+          -f '${./pkgs/tmux/tmux.conf}' \
+          "$@"
+      '')
+    );
 
-    # bash:
-    (upstream-pkgs: {
-        bash = homebase.wrap-configs homebase.nixpkgs.bashInteractive {
-          bash = ''--rcfile '${upstream-pkgs.bashrc-dir}/share/bashrc-dir/bashrc' '';
-        };
-    })
+    my-vim = { vim }: (
+      override-bin "${vim}/bin/vim" (upstream: ''
+        exec '${upstream}' \
+          -u '${./pkgs/vim/vimrc}' \
+          "$@"
+      '')
+    );
 
-    # super hacky zellij tool:
-    (upstream-pkgs: {
-      # This is super ugly. How can we expose `mk-wrapper` from bash-scripts package?
-      zellij-new-tab-wrapper = homebase.nixpkgs.writeScriptBin "zellij-new-tab" ''
-        #! ${upstream-pkgs.bash}/bin/bash
-        source '${./pkgs/bash-scripts/prelude.bash}'
+    my-zellij = { zellij }: (
+      override-bin "${zellij}/bin/zellij" (upstream: ''
+        exec '${upstream}' \
+          --config-dir '${./pkgs/zellij}/confdir' \
+          "$@"
+      '')
+    );
+
+    my-helix = { helix }: (
+      override-bin "${helix}/bin/hx" (upstream: ''
+        exec '${upstream}' \
+          --config '${./pkgs/helix}/config.toml' \
+          "$@"
+      '')
+    );
+
+    my-git = { git }: (
+      override-bin "${git}/bin/git" (upstream: ''
+        export XDG_CONFIG_HOME='${xdg-config}'
+        exec '${upstream}' "$@"
+      '')
+    );
+
+    my-leftwm = { leftwm }: (
+      override-bin "${leftwm}/bin/leftwm" (upstream: ''
+        export XDG_CONFIG_HOME='${xdg-config}'
+        exec '${upstream}' "$@"
+      '')
+    );
+
+    # This is super ugly. How can we expose `mk-wrapper` from bash-scripts package?
+    my-zellij-new-tab-wrapper = { writeShellScriptBin }: (
+      writeShellScriptBin "zellij-new-tab" ''
+        source '${./pkgs/bash-scripts}/prelude.bash'
 
         function main
         {
@@ -140,47 +191,25 @@ let
             "''${args[@]}"
         }
 
-        source '${./pkgs/bash-scripts/postlude.bash}'
+        source '${./pkgs/bash-scripts}/postlude.bash'
+      ''
+    );
 
-      '';
-    })
+    my-startx = { my-bashrc-dir, my-leftwm, writeShellScriptBin }: (
+      let
+        # Hard-coded external dependency:
+        systemStartx = "/run/current-system/sw/bin/startx";
+      in
+        writeShellScriptBin "homebase-startx" ''
+          source "${my-bashrc-dir}/share/bashrc-dir/without-startx.sh"
+          exec "${systemStartx}" "${my-leftwm}/bin/leftwm" "$@"
+        '';
+    );
 
-    # These are packages which we supply custom config args to in wrappers:
-    (upstream-pkgs:
-      homebase.wrap-config-pkgs homebase.nixpkgs {
-        alacritty = ''--config-file '${./pkgs/alacritty/alacritty.toml}' '';
-        dunst = ''-config '${./pkgs/dunst/dunst.conf}' '';
-        polybar = ''--config='${./pkgs/polybar/config.ini}' '';
-        tmux = ''-f '${./pkgs/tmux/tmux.conf}' '';
-        vim = ''-u '${./pkgs/vim/vimrc}' '';
-        zellij = ''--config-dir '${./pkgs/zellij/confdir}' '';
-      } // {
-        helix = homebase.wrap-configs homebase.nixpkgs.helix {
-          hx = ''--config '${./pkgs/helix/config.toml}' '';
-        };
-
-        git = homebase.wrap-xdg-config homebase.nixpkgs.git ./pkgs/git-xdg [ "git" ];
-        leftwm = homebase.wrap-xdg-config upstream-pkgs.leftwm ./pkgs/leftwm-xdg [ "leftwm" ];
-      }
-    )
-
-    # Customized packages with intra-package dependencies:
-    (upstream-pkgs: {
-      startx =
-        let
-          # Hard-coded external dependency:
-          systemStartx = "/run/current-system/sw/bin/startx";
-        in
-          homebase.nixpkgs.writeScriptBin "homebase-startx" ''
-            source "${upstream-pkgs.bashrc-dir}/share/bashrc-dir/without-startx.sh"
-            exec "${systemStartx}" "${upstream-pkgs.leftwm}/bin/leftwm" "$@"
-          '';
-    })
-  ];
-
-  legacy-all-pkgs = homebase.include-extras (attrValues legacy-pkgs);
+    # FIXME BELOW:
+    my-bash-scripts = {}: homebase.imp ./pkgs/bash-scripts;
+    my-cargo-depgraph-svg = {}: homebase.imp ./pkgs/cargo-depgraph-svg;
+    my-bashrc-dir = {}: homebase.imp ./pkgs/bashrc-dir;
+  };
 in
-  homebase.nixpkgs.symlinkJoin {
-    name = "${homebase.pname}-${homebase.version}";
-    paths = attrValues selected-new-pkgs;
-  }
+  all-new-pkgs.user-environment
