@@ -2,10 +2,10 @@
 let
   homebase = rec {
     # New API:
-    define-user-environment = specs:
+    define-user-environment = base-pkgs: specs:
       let
         resolve-dependencies = imp ./resolve-dependencies.nix;
-        resolved = resolve-dependencies specs;
+        resolved = resolve-dependencies base-pkgs specs;
         inherit (resolved) user-environment;
         inherit (builtins) attrValues;
         inherit (nixpkgs) symlinkJoin;
@@ -18,7 +18,7 @@ let
     override-bin = upstream-bin: mk-script: (
       let
         inherit (builtins) baseNameOf;
-        inherit (nixpkgs) writeShellScriptBin;
+        inherit (nixpkgs) runCommand symlinkJoin writeShellScriptBin;
 
         script-name = baseNameOf upstream-bin;
         pkg-name = "override-${script-name}";
@@ -33,8 +33,9 @@ let
         symlinkJoin {
           name = pkg-name;
           paths = [ wrapped-bin linked-bin ];
-        };
+        }
     );
+
     # Old API:
     # TODO: cleanup
     inherit nixpkgs pname version;

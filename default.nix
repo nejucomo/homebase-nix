@@ -1,5 +1,8 @@
 flake-inputs:
 let
+  # We have one hard-coded external dependency:
+  systemStartx = "/run/current-system/sw/bin/startx";
+
   inherit (flake-inputs) nixpkgs;
 
   homebase = import ./lib-homebase {
@@ -8,14 +11,11 @@ let
     version = "0.1";
   };
 
-  # We have one hard-coded external dependency:
-  systemStartx = "/run/current-system/sw/bin/startx";
-
   # Base packages are available for constructing the user environment,
   # but are not implicitly in the user environment:
   base-pkgs = homebase // nixpkgs // flake-inputs;
 
-in homebase.define-user-environment {
+in homebase.define-user-environment base-pkgs {
   user-environment = pkgs@{
     # Customized packages:
     my-alacritty,
