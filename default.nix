@@ -179,10 +179,8 @@ let
   ];
 
   legacy-all-pkgs = homebase.include-extras (attrValues legacy-pkgs);
-
-  all-pkgs = legacy-all-pkgs ++ (attrValues selected-new-pkgs);
 in
   homebase.nixpkgs.symlinkJoin {
     name = "${homebase.pname}-${homebase.version}";
-    paths = all-pkgs;
+    paths = attrValues selected-new-pkgs;
   }
