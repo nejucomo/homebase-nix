@@ -20,7 +20,7 @@ keybinds {
             Run "hx"
         }
         bind "Alt g" {
-            Run "watch" "git" "info"
+            Run "watch" "--no-wrap" "git" "info"
         }
         bind "Alt s" {
             NewPane
