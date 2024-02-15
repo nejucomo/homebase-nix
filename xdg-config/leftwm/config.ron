@@ -52,7 +52,7 @@ Config (
         (command: Execute, value: "dmenu_run", modifier: ["modkey"], key: "p"),
         (command: Execute, value: "alacritty", modifier: ["modkey", "Shift"], key: "Return"),
         (command: Execute, value: "firefox --private-window", modifier: ["modkey"], key: "b"),
-        (command: Execute, value: "firefox -S authenticated", modifier: ["modkey", "Shift"], key: "b"),
+        (command: Execute, value: "firefox -P authenticated", modifier: ["modkey", "Shift"], key: "b"),
         (command: CloseWindow, value: "", modifier: ["modkey", "Shift"], key: "q"),
         (command: ToggleScratchPad, value: "Alacritty", modifier: ["modkey", "Shift"], key: "s"),
         (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
