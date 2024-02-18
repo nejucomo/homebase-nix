@@ -1,5 +1,4 @@
 default_layout "compact"
-pane_frames false
 mouse_mode false
 session_serialization false
 
