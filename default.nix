@@ -53,6 +53,8 @@ in define-user-environment base-pkgs {
     libnotify,
     magic-wormhole,
     man,
+    man-pages,
+    man-pages-posix,
     meld,
     nix,
     nix-index,
