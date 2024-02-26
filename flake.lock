@@ -241,11 +241,11 @@
         "rust-overlay": "rust-overlay_4"
       },
       "locked": {
-        "lastModified": 1707467485,
-        "narHash": "sha256-JF1Q0q6cEUl/5TjWhwvmmWuEwtS4lzOTqoIaePE16K0=",
+        "lastModified": 1708147775,
+        "narHash": "sha256-xknz/MVCGiYrLvX/FRm4v9euCBF+lpNmOMfthWHLOvM=",
         "owner": "leftwm",
         "repo": "leftwm",
-        "rev": "e2e35412f113358d9be35e57683d51f5b7008535",
+        "rev": "aa2217572117a7bf7cdcdb6a1e5bbfe95a97707c",
         "type": "github"
       },
       "original": {
@@ -407,11 +407,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1707743206,
-        "narHash": "sha256-AehgH64b28yKobC/DAWYZWkJBxL/vP83vkY+ag2Hhy4=",
+        "lastModified": 1708847675,
+        "narHash": "sha256-RUZ7KEs/a4EzRELYDGnRB6i7M1Izii3JD/LyzH0c6Tg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2d627a2a704708673e56346fcb13d25344b8eaf3",
+        "rev": "2a34566b67bef34c551f204063faeecc444ae9da",
         "type": "github"
       },
       "original": {
