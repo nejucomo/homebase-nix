@@ -215,7 +215,7 @@ in define-user-environment base-pkgs {
     in
       symlinkJoin {
         inherit name;
-        paths = map wrap to-wrap;
+        paths = (map wrap to-wrap) ++ [leftwm];
       }
   );
 
