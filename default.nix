@@ -204,18 +204,27 @@ in define-user-environment base-pkgs {
   my-leftwm = { symlinkJoin, leftwm }: (
     let
       name = "leftwm-wrapper-scripts";
-      to-wrap = [
-        "leftwm"
-        "leftwm-worker"
-      ];
-      wrap = bin-name: override-bin "${leftwm}/bin/${bin-name}" (upstream: ''
-        export XDG_CONFIG_HOME='${./xdg-config}'
+      wrapped = (
+        let
+          to-wrap = [
+            "leftwm"
+            "leftwm-worker"
+          ];
+          wrap = bin-name: override-bin "${leftwm}/bin/${bin-name}" (upstream: ''
+            export XDG_CONFIG_HOME='${./xdg-config}'
+            exec '${upstream}' "$@"
+          '');
+        in
+          map wrap to-wrap
+      );
+      leftwm-log = override-bin "${leftwm}/bin/leftwm-log" (upstream: ''
+        export PATH="${leftwm}/bin:$PATH"
         exec '${upstream}' "$@"
       '');
     in
       symlinkJoin {
         inherit name;
-        paths = (map wrap to-wrap) ++ [leftwm];
+        paths = wrapped ++ [leftwm-log leftwm];
       }
   );
 
