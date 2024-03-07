@@ -50,6 +50,8 @@ Config (
     disable_cursor_reposition_on_resize: false,
     keybind: [
         (command: CloseWindow, value: "", modifier: ["modkey", "Shift"], key: "q"),
+        (command: Execute, value: "backlight brighter", modifier: ["modkey"], key: "XF86MonBrightnessUp"),
+        (command: Execute, value: "backlight dimmer", modifier: ["modkey"], key: "XF86MonBrightnessDown"),
         (command: Execute, value: "alacritty", modifier: ["modkey", "Shift"], key: "Return"),
         (command: Execute, value: "dmenu_run", modifier: ["modkey"], key: "p"),
         (command: Execute, value: "firefox -P authenticated", modifier: ["modkey", "Shift"], key: "b"),
