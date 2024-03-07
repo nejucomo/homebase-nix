@@ -48,7 +48,6 @@ in define-user-environment base-pkgs {
     gzip,
     i3lock,
     killall,
-    leftwm,
     less,
     libnotify,
     magic-wormhole,
