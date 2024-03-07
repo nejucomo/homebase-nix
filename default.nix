@@ -200,11 +200,27 @@ in define-user-environment base-pkgs {
     '')
   );
 
-  my-leftwm = { leftwm }: (
-    override-bin "${leftwm}/bin/leftwm" (upstream: ''
-      export XDG_CONFIG_HOME='${./xdg-config}'
-      exec '${upstream}' "$@"
-    '')
+  my-leftwm = { symlinkJoin, leftwm }: (
+    let
+      name = "leftwm-wrapper-scripts";
+      to-wrap = [
+        "lefthk-worker"
+        "leftwm"
+        "leftwm-check"
+        "leftwm-command"
+        "leftwm-log"
+        "leftwm-state"
+        "leftwm-worker"
+      ];
+      wrap = bin-name: override-bin "${leftwm}/bin/${bin-name}" (upstream: ''
+        export XDG_CONFIG_HOME='${./xdg-config}'
+        exec '${upstream}' "$@"
+      '');
+    in
+      symlinkJoin {
+        inherit name;
+        paths = map wrap to-wrap;
+      }
   );
 
   my-zellij-new-tab-wrapper = { my-bash-postlude, my-zellij, writeShellScriptBin }: (
