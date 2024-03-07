@@ -47,6 +47,7 @@ in define-user-environment base-pkgs {
     gnused,
     gzip,
     i3lock,
+    jq,
     killall,
     less,
     libnotify,
