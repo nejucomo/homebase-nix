@@ -204,12 +204,7 @@ in define-user-environment base-pkgs {
     let
       name = "leftwm-wrapper-scripts";
       to-wrap = [
-        "lefthk-worker"
         "leftwm"
-        "leftwm-check"
-        "leftwm-command"
-        "leftwm-log"
-        "leftwm-state"
         "leftwm-worker"
       ];
       wrap = bin-name: override-bin "${leftwm}/bin/${bin-name}" (upstream: ''
