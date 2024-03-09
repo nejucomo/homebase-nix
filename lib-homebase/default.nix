@@ -1,5 +1,14 @@
 nixpkgs:
-{
+let
+  # Combine all of the outputs of a package into a single output pkg. For
+  # example, many nixpkgs pkgs have a separate output for manpages. This
+  # ensures if we select the base package (example: `nixpkgs.jq`) we also
+  # get the manpages.
+  all-outputs = pkg: nixpkgs.symlinkJoin {
+    name = "all-outputs-${pkg.name}";
+    paths = map (attr: pkg."${attr}") pkg.outputs;
+  };
+in {
   # New API:
   define-user-environment = base-pkgs: specs:
     let
@@ -11,7 +20,7 @@ nixpkgs:
     in
       symlinkJoin {
         name = "homebase-user-environment";
-        paths = attrValues user-environment;
+        paths = map all-outputs (attrValues user-environment);
       };
 
   override-bin = upstream-bin: mk-script: (
