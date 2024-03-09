@@ -247,8 +247,8 @@ in define-user-environment base-pkgs {
 
   my-startx = { my-leftwm, writeShellScriptBin }: (
     writeShellScriptBin "homebase-startx" ''
-      source "${./pkgs/bashrc-dir}/without-startx.sh"
-      exec "${systemStartx}" "${my-leftwm}/bin/leftwm" "$@"
+      source '${./pkgs/bashrc-dir}/without-startx.sh'
+      exec '${systemStartx}' '${my-leftwm}/bin/leftwm' "$@"
     ''
   );
 }
