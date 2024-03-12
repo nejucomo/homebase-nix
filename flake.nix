@@ -5,6 +5,7 @@
   inputs.git-clone-canonical.url = "github:nejucomo/flake-git-clone-canonical";
   inputs.cargo-checkmate.url = "github:cargo-checkmate/cargo-checkmate";
   inputs.leftwm.url = "github:leftwm/leftwm";
+  inputs.radicle.url = "git+https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
 
   outputs = inputs:
     let
