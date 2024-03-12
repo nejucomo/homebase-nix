@@ -6,15 +6,30 @@
   inputs.cargo-checkmate.url = "github:cargo-checkmate/cargo-checkmate";
   inputs.leftwm.url = "github:leftwm/leftwm";
 
-  outputs = { self, nixpkgs, git-clone-canonical, cargo-checkmate, leftwm }:
+  outputs = inputs:
     let
       system = "x86_64-linux";
-    in {
-      packages."${system}".default = import ./default.nix {
-        nixpkgs = nixpkgs.legacyPackages."${system}";
-        git-clone-canonical = git-clone-canonical.packages."${system}".default;
-        cargo-checkmate = cargo-checkmate.packages."${system}".unwrapped;
-        leftwm = leftwm.packages."${system}".default;
+
+      # Flakes where we install something different than "the default package" for out platform:
+      nonstd-flake-pkgs = {
+        nixpkgs = inputs.nixpkgs.legacyPackages."${system}";
+        cargo-checkmate = inputs.cargo-checkmate.packages."${system}".unwrapped;
       };
+
+      # Flakes where we just install the default package for our platform:
+      std-flake-pkgs = (
+        let
+          inherit (builtins) attrNames removeAttrs mapAttrs;
+
+          std-flakes = removeAttrs inputs (attrNames nonstd-flake-pkgs);
+
+          select-default = _name: flake: flake.packages."${system}".default;
+        in
+          mapAttrs select-default std-flakes
+      );
+
+      flake-pkgs = std-flake-pkgs // nonstd-flake-pkgs;
+    in {
+      packages."${system}".default = import ./default.nix flake-pkgs;
     };
 }
