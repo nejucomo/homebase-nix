@@ -53,6 +53,7 @@ Config (
         (command: Execute, value: "backlight brighter", modifier: ["modkey"], key: "XF86MonBrightnessUp"),
         (command: Execute, value: "backlight dimmer", modifier: ["modkey"], key: "XF86MonBrightnessDown"),
         (command: Execute, value: "alacritty", modifier: ["modkey", "Shift"], key: "Return"),
+        (command: Execute, value: "journal-viewer", modifier: ["modkey", "Shift"], key: "l"),
         (command: Execute, value: "dmenu_run", modifier: ["modkey"], key: "p"),
         (command: Execute, value: "firefox -P authenticated", modifier: ["modkey", "Shift"], key: "b"),
         (command: Execute, value: "firefox --private-window", modifier: ["modkey"], key: "b"),
