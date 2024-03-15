@@ -24,13 +24,13 @@ in define-user-environment base-pkgs {
     my-git,
     my-git-clone-canonical,
     my-helix,
+    my-journal-viewer,
     my-leftwm,
     my-polybar,
     my-startx,
     my-tmux,
     my-vim,
     my-zellij,
-    my-zellij-new-tab-wrapper,
 
     # Vanilla upstream packages:
     acpi,
@@ -230,18 +230,9 @@ in define-user-environment base-pkgs {
       }
   );
 
-  my-zellij-new-tab-wrapper = { my-bash-postlude, my-zellij, writeShellScriptBin }: (
-    writeShellScriptBin "zellij-new-tab" ''
-      function main
-      {
-        parse-args 'layout=default *args' "$@"
-        '${my-zellij}/bin/zellij' action new-tab \
-          --layout-dir '${./pkgs/zellij/confdir}/layouts' \
-          --layout "$layout" \
-          "''${args[@]}"
-      }
-
-      source '${my-bash-postlude}'
+  my-journal-viewer = { my-alacritty, my-zellij, writeShellScriptBin }: (
+    writeShellScriptBin "journal-viewer" ''
+      exec '${my-alacritty}/bin/alacritty' --command '${my-zellij}/bin/zellij' --layout '${./pkgs/zellij/homebase-layouts}/logs.kdl'
     ''
   );
 
