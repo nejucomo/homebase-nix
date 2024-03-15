@@ -232,7 +232,7 @@ in define-user-environment base-pkgs {
 
   my-journal-viewer = { my-alacritty, my-zellij, writeShellScriptBin }: (
     writeShellScriptBin "journal-viewer" ''
-      exec '${my-alacritty}/bin/alacritty' --command '${my-zellij}/bin/zellij' --layout '${./pkgs/zellij/homebase-layouts}/logs.kdl'
+      exec '${my-alacritty}/bin/alacritty' --command '${my-zellij}/bin/zellij' --session 'journal-viewer' --layout '${./pkgs/zellij/homebase-layouts}/logs.kdl'
     ''
   );
 
