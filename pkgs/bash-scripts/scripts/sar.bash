@@ -11,7 +11,7 @@ function main
   then
     cargo fmt
   fi
-  msg="$(mktemp --tempdir 'sar-commit-msg.XXX')"
+  msg="$(mktemp --tmpdir 'sar-commit-msg.XXX')"
   git-action echo "Search-and-Replace \"$pat\" with \"$repl\" in \"$glob\"." \> "$msg"
   git-action git commit --all --edit -F "$msg"
   rm -f "$msg"
