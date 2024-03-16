@@ -11,7 +11,7 @@ function main
   then
     cargo fmt
   fi
-  git-action echo "Search-and-Replace \`$pat\` with \`$repl\` in \`$glob\`." \> sar-git-commit-msg
+  git-action echo "Search-and-Replace \"$pat\" with \"$repl\" in \"$glob\"." \> sar-git-commit-msg
   git-action git commit --all --edit -F sar-git-commit-msg
   rm -f sar-git-commit-msg
 }
