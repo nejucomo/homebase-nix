@@ -1,0 +1,21 @@
+function main
+{
+  parse-args 'path=.' "$@"
+
+  metadata="$(query-project)"
+
+  rad init "$path" \
+    --name "$(get-metadata 'name')" \
+    --description "$(get-metadata 'description')" \
+    --default-branch "$(get-metadata 'git_main_branch')" \
+    --private \
+    --no-confirm \
+    --verbose
+}
+
+function get-metadata
+{
+  parse-args 'field' "$@"
+
+  echo "$metadata" | jq -r ".${field}"
+}
