@@ -35,6 +35,7 @@ in define-user-environment base-pkgs {
     # Vanilla upstream packages:
     acpi,
     cargo-checkmate,
+    cargo-expand,
     cargo-udeps,
     coreutils,
     dmenu,
