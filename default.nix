@@ -69,6 +69,7 @@ in define-user-environment base-pkgs {
     rustup,
     scrot,
     signal-desktop,
+    tokei,
     toml2json,
     unclutter,
     which,
