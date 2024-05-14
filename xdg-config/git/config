@@ -13,6 +13,6 @@
 
 [alias]
 	info = !echo "= branch: $(git current-branch)" && echo && git glog -5 && echo -e '\n' && git status --porcelain
-	current-branch = rev-parse --abbrev-ref HEAD
+	current-branch = !git rev-parse --abbrev-ref 2> /dev/null | sed "s/^HEAD$/$(git config init.defaultBranch)/"
 	glog = log --graph --pretty=format:'%h %Cblue%as%Creset %s %Cblue%ce %Creset%d'
 	meld = difftool --dir-diff
