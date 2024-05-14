@@ -1,12 +1,10 @@
 function main
 {
-  git rev-parse --is-inside-work-tree
+  git rev-parse --is-inside-work-tree > /dev/null 
   
-	echo -e "= branch: $(git current-branch)\n"
+	echo ">  branch: $(git current-branch)"
 
-	git glog -5 || true
-
-  echo -e '\n'
+	git glog -5 | sed 's/^/ /' || true
 
   git status --porcelain
 }
