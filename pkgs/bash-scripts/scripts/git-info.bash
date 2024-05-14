@@ -5,7 +5,7 @@ function main
   echo "-> branch: $(git current-branch)"
   echo
 
-  git glog -5 2>&1 | sed 's/^fatal:/!!/; s/^/ /; s/ *$//' || true
+  git glog -5 2>&1 | sed 's/^/ /; s/^ fatal:/!!/' | grep -v '^$' || true
 
   echo -e '\n'
   git status --porcelain
