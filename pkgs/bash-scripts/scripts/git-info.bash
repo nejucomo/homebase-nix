@@ -2,9 +2,10 @@ function main
 {
   git rev-parse --is-inside-work-tree > /dev/null 
   
-	echo "-> branch: $(git current-branch)"
+  echo "-> branch: $(git current-branch)"
 
-	git glog -5 | sed 's/^/ /' || true
+  git glog -5 | sed 's/^/ /; s/^fatal:/!!/' || true
 
-  git status --porcelain 2>&1 | sed 's/^fatal:/!!/'
+  echo
+  git status --porcelain
 }
