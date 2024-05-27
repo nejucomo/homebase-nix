@@ -11,7 +11,7 @@ function main
 {
   parse-args '' "$@"
 
-  set -s
+  set +f
 
   while sleep "$INTERVAL"
   do
