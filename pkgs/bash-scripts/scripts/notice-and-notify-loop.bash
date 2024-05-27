@@ -30,7 +30,7 @@ function notice-and-notify
     then
       notify-send \
         --urgency='critical' \
-        --expire-time="$(expr "$INTERVAL" \* 1000)" \
+        --expire-time="$(expr "$INTERVAL" \* 900)" \
         "${supply_name} low capacity"        
     fi
   done
