@@ -23,7 +23,7 @@ function notice-and-notify
 {
   for supply in $(power-supplies-discharging)
   do
-    capacity="$(< "$supply" | grep '^POWER_SUPPLY_CAPACITY=' | sed 's/^.*=//')"
+    capacity="$(cat "$supply" | grep '^POWER_SUPPLY_CAPACITY=' | sed 's/^.*=//')"
     supply_name="$(echo "$supply" | sed "s|^$POWER_SUPPLY_BASE/||; s|/uevent||")"
 
     if $(( $capacity <= $POWER_SUPPLY_THRESHOLD ))
