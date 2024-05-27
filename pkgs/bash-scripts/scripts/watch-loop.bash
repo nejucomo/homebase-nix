@@ -1,7 +1,7 @@
 function main {
   parse-args 'period cmd' "$@"
 
-  while run-cmd "$cmd"
+  while run-cmd "$cmd" || true
   do
     sleep "$period"
     echo
