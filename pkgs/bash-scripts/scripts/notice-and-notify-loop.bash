@@ -26,7 +26,7 @@ function notice-and-notify
     capacity="$(cat "$supply" | grep '^POWER_SUPPLY_CAPACITY=' | sed 's/^.*=//')"
     supply_name="$(echo "$supply" | sed "s|^$POWER_SUPPLY_BASE/||; s|/uevent||")"
 
-    if $(( $capacity <= $POWER_SUPPLY_THRESHOLD ))
+    if [ "$capacity" -le "$POWER_SUPPLY_THRESHOLD" ]
     then
       notify-send \
         --urgency='critical' \
