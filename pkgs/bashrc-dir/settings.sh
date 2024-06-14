@@ -8,3 +8,7 @@ export NIX_SHELL_PRESERVE_PROMPT='1'
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUSTFLAGS='-D warnings'
 export RUSTDOCFLAGS="$RUSTFLAGS"
+
+# Disable incremental builds and rely solely on `sccache`:
+export CARGO_INCREMENTAL='false'
+export RUSTC_WRAPPER="$(which sccache)"

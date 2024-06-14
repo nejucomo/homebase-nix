@@ -67,6 +67,7 @@ in define-user-environment base-pkgs {
     #radicle,
     ripgrep,
     rustup,
+    sccache,
     scrot,
     signal-desktop,
     tokei,
