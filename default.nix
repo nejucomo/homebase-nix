@@ -35,6 +35,7 @@ in define-user-environment base-pkgs {
 
     # Vanilla upstream packages:
     acpi,
+    cargo-autoinherit,
     cargo-checkmate,
     cargo-expand,
     cargo-udeps,
