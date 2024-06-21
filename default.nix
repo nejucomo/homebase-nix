@@ -54,7 +54,7 @@ in define-user-environment base-pkgs {
     killall,
     less,
     libnotify,
-    logseq,
+    # logseq,
     magic-wormhole,
     man,
     man-pages,
