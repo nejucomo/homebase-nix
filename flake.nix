@@ -7,6 +7,7 @@
   inputs.leftwm.url = "github:leftwm/leftwm";
   #inputs.radicle.url = "git+https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
   # inputs.niri.url = "github:YaLTeR/niri";
+  inputs.penumbra.url = "github:penumbra-zone/penumbra/v0.78.0";
 
   outputs = inputs:
     let
