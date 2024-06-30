@@ -17,6 +17,7 @@
       nonstd-flake-pkgs = {
         nixpkgs = inputs.nixpkgs.legacyPackages."${system}";
         cargo-checkmate = inputs.cargo-checkmate.packages."${system}".unwrapped;
+        penumbra = inputs.penumbra.packages."${system}".penumbra;
       };
 
       # Flakes where we just install the default package for our platform:

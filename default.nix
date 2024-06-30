@@ -63,6 +63,7 @@ in define-user-environment base-pkgs {
     # niri,
     nix-index,
     openssh,
+    penumbra,
     ps,
     pstree,
     #radicle,
