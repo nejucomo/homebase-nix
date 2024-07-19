@@ -64,7 +64,7 @@ in define-user-environment base-pkgs {
     openssh,
     ps,
     pstree,
-    radicle,
+    #radicle,
     ripgrep,
     rustup,
     scrot,
