@@ -100,10 +100,9 @@ in define-user-environment base-pkgs {
       writeShellScriptBin "cargo-depgraph-svg" ''
         if [ "$*" = '--help' ]
         then
-          ${depgraph} --help
+          ${depgraph} depgraph --help
         else
-          ${depgraph} "$@" \
-            | sed 's/^digraph {$/\0\nrankdir="LR"/' \
+          ${depgraph} depgraph "$@" \
             | ${dot} -Tsvg \
             > target/depgraph.svg
         fi
