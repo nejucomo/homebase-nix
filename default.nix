@@ -137,6 +137,7 @@ in define-user-environment base-pkgs {
 
   my-bash = { bashInteractive }: (
     override-bin "${bashInteractive}/bin/bash" (upstream: ''
+      export XDG_CONFIG_HOME='${./xdg-config}'
       exec '${upstream}' \
         --rcfile '${./pkgs/bashrc-dir}/bashrc' \
         "$@"
@@ -201,7 +202,6 @@ in define-user-environment base-pkgs {
 
   my-git = { git }: (
     override-bin "${git}/bin/git" (upstream: ''
-      export XDG_CONFIG_HOME='${./xdg-config}'
       exec '${upstream}' "$@"
     '')
   );
@@ -216,7 +216,6 @@ in define-user-environment base-pkgs {
             "leftwm-worker"
           ];
           wrap = bin-name: override-bin "${leftwm}/bin/${bin-name}" (upstream: ''
-            export XDG_CONFIG_HOME='${./xdg-config}'
             exec '${upstream}' "$@"
           '');
         in
