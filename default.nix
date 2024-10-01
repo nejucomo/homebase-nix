@@ -59,7 +59,7 @@ in define-user-environment base-pkgs {
     man-pages,
     man-pages-posix,
     meld,
-    niri,
+    # niri,
     nix-index,
     openssh,
     ps,

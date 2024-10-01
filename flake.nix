@@ -6,7 +6,7 @@
   inputs.cargo-checkmate.url = "github:cargo-checkmate/cargo-checkmate";
   inputs.leftwm.url = "github:leftwm/leftwm";
   #inputs.radicle.url = "git+https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
-  inputs.niri.url = "github:YaLTeR/niri";
+  # inputs.niri.url = "github:YaLTeR/niri";
 
   outputs = inputs:
     let
