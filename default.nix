@@ -27,6 +27,7 @@ in define-user-environment base-pkgs {
     my-journal-viewer,
     my-leftwm,
     my-polybar,
+    my-signal-desktop,
     my-startx,
     my-tmux,
     my-vim,
@@ -236,6 +237,13 @@ in define-user-environment base-pkgs {
     writeShellScriptBin "journal-viewer" ''
       exec '${my-alacritty}/bin/alacritty' --command '${my-zellij}/bin/zellij' --session 'journal-viewer' --layout '${./pkgs/zellij/homebase-layouts}/logs.kdl'
     ''
+  );
+
+  my-signal-desktop = { signal-desktop }: (
+    override-bin "${signal-desktop}/bin/signal-desktop" (up: ''
+      export XDG_CONFIG_HOME="$HOME/.config"
+      exec '${up}' "$@"
+    '')
   );
 
   my-startx = { my-leftwm, openssh, writeShellScriptBin }: (
