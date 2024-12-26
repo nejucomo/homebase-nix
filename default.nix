@@ -21,9 +21,7 @@ in define-user-environment base-pkgs {
     my-bash-scripts,
     my-cargo-depgraph-svg,
     my-dunst,
-    my-git,
     my-git-clone-canonical,
-    my-helix,
     my-journal-viewer,
     my-leftwm,
     my-polybar,
@@ -46,9 +44,11 @@ in define-user-environment base-pkgs {
     firefox,
     gawk,
     gcc,
+    git,
     gnugrep,
     gnused,
     gzip,
+    helix,
     i3lock,
     jq,
     killall,
@@ -193,20 +193,6 @@ in define-user-environment base-pkgs {
       exec '${upstream}' \
         --config-dir '${./pkgs/zellij}/confdir' \
         "$@"
-    '')
-  );
-
-  my-helix = { helix }: (
-    override-bin "${helix}/bin/hx" (upstream: ''
-      exec '${upstream}' \
-        --config '${./pkgs/helix}/config.toml' \
-        "$@"
-    '')
-  );
-
-  my-git = { git }: (
-    override-bin "${git}/bin/git" (upstream: ''
-      exec '${upstream}' "$@"
     '')
   );
 

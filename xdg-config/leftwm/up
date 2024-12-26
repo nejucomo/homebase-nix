@@ -1,4 +1,5 @@
 #! /usr/bin/env bash
 set -fuxo pipefail
-alacritty \
-	|| notify-send --app-name 'leftwm-up' 'alacritty' 'failed' 
+alacritty
+	--command zellij-dir-session $HOME \
+	|| notify-send --app-name 'leftwm-up' 'alacritty' 'failed'
