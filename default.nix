@@ -74,7 +74,7 @@ in define-user-environment base-pkgs {
     signal-desktop,
     tokei,
     toml2json,
-    unclutter,
+    # unclutter,
     which,
     xclip,
     xss-lock,
