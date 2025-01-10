@@ -4,7 +4,7 @@ end-of-line-diagnostics = "hint"
 
 [editor.inline-diagnostics]
 cursor-line = "hint"
-other-lines = "error"
+other-lines = "disable"
 
 [editor.soft-wrap]
 enable = true
