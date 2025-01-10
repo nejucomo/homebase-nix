@@ -3,7 +3,7 @@ auto-pairs = false
 end-of-line-diagnostics = "hint"
 
 [editor.inline-diagnostics]
-cursor-line = "warn"
+cursor-line = "hint"
 other-lines = "error"
 
 [editor.soft-wrap]
