@@ -1,6 +1,6 @@
 [editor]
 auto-pairs = false
-end-of-line-diagnostics = "hint"
+end-of-line-diagnostics = "disable"
 
 [editor.inline-diagnostics]
 cursor-line = "hint"
