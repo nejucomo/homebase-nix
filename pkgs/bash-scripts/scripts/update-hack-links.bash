@@ -7,12 +7,9 @@ function main
   for repo in $(find ~/src -type d -name .git | xargs dirname)
   do
     reponame="$(basename "$repo")"
-    if ! set-symlink "$repo" "$./${reponame}/"
-    then
-      # See if we can add a disambiguation slug:
-      slug="$(basename "$(dirname "$repo")")"
-      set-symlink "${repo}" "./${reponame}.${slug}/" || failures=$(( "$failures" + 1 ))
-    fi
+    slug="$(basename "$(dirname "$repo")")"
+    set-symlink "${repo}" "./${reponame}.${slug}" || failures=$(( "$failures" + 1 ))
+    set-symlink "./${reponame}.${slug}" "./${reponame}"
   done
 
   exit "$failures"
