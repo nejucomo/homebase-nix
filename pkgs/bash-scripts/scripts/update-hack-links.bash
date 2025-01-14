@@ -6,7 +6,7 @@ function main
 
   for repo in $(find ~/src -type d -name .git | xargs dirname)
   do
-    if !set-symlink "$repo" .
+    if ! set-symlink "$repo" .
     then
       # See if we can add a disambiguation slug:
       slug="$(basename "$(dirname "$repo")")"
