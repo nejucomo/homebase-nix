@@ -9,7 +9,8 @@ function main
     reponame="$(basename "$repo")"
     slug="$(basename "$(dirname "$repo")")"
     set-symlink "${repo}" "./${reponame}.${slug}" || failures=$(( "$failures" + 1 ))
-    set-symlink "./${reponame}.${slug}" "./${reponame}"
+    # Make a shorthand link if one does not exist:
+    [ -l "./${reponame}" ] || set-symlink "./${reponame}.${slug}" "./${reponame}"
   done
 
   exit "$failures"
