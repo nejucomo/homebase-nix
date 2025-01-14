@@ -10,7 +10,7 @@ function main
     then
       # See if we can add a disambiguation slug:
       slug="$(basename "$(dirname "$repo")")"
-      set-symlink "${repo}.${slug}" || failures=$(( "$failures" + 1 ))
+      set-symlink "${repo}.${slug}" . || failures=$(( "$failures" + 1 ))
     fi
   done
 
