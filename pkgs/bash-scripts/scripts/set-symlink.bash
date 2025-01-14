@@ -1,27 +1,22 @@
 function main
 {
-  parse-args 'src dst' "$@"
+  parse-args 'target link_name' "$@"
 
-  if [ -d "$dst" ]
+  if [ -L "$link_name" ]
   then
-    dst="${dst}/$(basename "$src")"
-  fi
+    actual="$(readlink "$link_name")"
 
-  if [ -L "$dst" ]
-  then
-    actual="$(readlink "$dst")"
-
-    if [ "$actual" = "$src" ]
+    if [ "$actual" = "$target" ]
     then
-      log "$(vt100-disp "Already set: ${dst} -> ${src}" dim)"
+      log "$(vt100-disp "Already set: ${link_name} -> ${target}" dim)"
     else
-      fail "Cannot set ${dst} -> ${src}; it points elsewhere: ${dst} -> ${actual}"
+      fail "Cannot set ${link_name} -> ${target}; it points elsewhere: ${link_name} -> ${actual}"
     fi
-  elif ! [ -e "$dst" ]
+  elif ! [ -e "$link_name" ]
   then
-    log "Setting: ${dst} -> ${src}"
-    ln -s "$src" "$dst"
+    log "Setting: ${link_name} -> ${target}"
+    ln --no-target-directory -s "$target" "$link_name"
   else
-    fail "Cannot set ${dst} -> ${src}; it already exists: $(ls -ld "$dst")"
+    fail "Cannot set ${link_name} -> ${target}; it already exists: $(ls -ld "$link_name")"
   fi
 }
