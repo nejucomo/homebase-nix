@@ -1,11 +1,6 @@
 function main
 {
-  parse-args 'branch=.' "$@"
+  parse-args 'remote=upstream' "$@"
 
-  if [ "$branch" = '.' ]
-  then
-    branch="$(git remote | head -1)"
-  fi
-
-  exec git push "$branch" "$(git current-branch)"
+  exec git push "$remote" "$(git current-branch)"
 }
