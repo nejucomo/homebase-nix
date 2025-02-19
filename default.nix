@@ -37,6 +37,7 @@ in define-user-environment base-pkgs {
     cargo-checkmate,
     cargo-expand,
     cargo-udeps,
+    clang,
     coreutils,
     dmenu,
     file,
@@ -87,6 +88,7 @@ in define-user-environment base-pkgs {
   # dependencies thereof:
   
   # Pull some stuff out of deeper nested nixpkgs:
+  bintools = { llvmPackages }: llvmPackages.bintools;
   xhost = { xorg }: xorg.xhost;
   xsetroot = { xorg }: xorg.xsetroot;
   adwaita-icon-theme = { gnome3 }: gnome3.adwaita-icon-theme;
