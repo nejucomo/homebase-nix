@@ -1,6 +1,6 @@
 function main
 {
   parse-args 'dest' "$@"
-  git branch-append jump
+  git branch-append pre-hop
   git reset --hard "$dest"
 }
