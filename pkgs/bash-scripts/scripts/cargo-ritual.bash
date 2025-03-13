@@ -7,7 +7,7 @@ function main {
 
 function ritual {
   parse-args 'path' "$@"
-  local crate="$(echo "$path" | sed 's|^\./||; s|/$||; s|/|-|g')"
+  local crate="${RITUAL_PREFIX:-}$(echo "$path" | sed 's|^\./||; s|/$||; s|/|-|g')"
 
   set -x
   cargo check -p "$crate"
