@@ -1,6 +1,7 @@
 function main {
   while [ $# -gt 0 ]
   do
+    cratepath="$1"; shift
     ritual "$1"
   done
 }
