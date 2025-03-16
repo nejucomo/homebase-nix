@@ -12,6 +12,7 @@ function ritual {
 
   set -x
   cargo check -p "$crate"
+  cargo clippy -p "$crate"
   cargo doc -p "$crate" --open
   cargo test -p "$crate"
   cargo fmt -p "$crate" -- --check
