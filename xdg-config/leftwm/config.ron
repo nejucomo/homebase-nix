@@ -97,7 +97,7 @@ Config (
         (command: PreviousLayout, value: "", modifier: ["modkey", "Control"], key: "j"),
         (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
         (command: SwapTags, value: "", modifier: ["modkey"], key: "w"),
-        (command: ToggleScratchPad, value: "Alacritty", modifier: ["modkey", "Shift"], key: "s"),
+        (command: ToggleFullScreen, value: "", modifier: ["modkey", "Shift"], key: "f"),
     ],
     state_path: None,
 )
