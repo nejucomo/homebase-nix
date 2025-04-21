@@ -3,27 +3,19 @@ mouse_mode false
 session_serialization false
 
 keybinds {
+    // Disable normal quit:
+    shared_except "locked" {
+        unbind "Ctrl q"
+    }
+
+    // Enable quit in lock-mode:
+    locked {
+        bind "Ctrl q" { Quit; }
+    }
+
     // Unbind tmux mode:
     shared_except "tmux" "locked" {
         unbind "Ctrl b"
-    }
-
-    normal {
-        bind "Alt b" {
-            Run "autobuild"
-        }
-        bind "Alt c" {
-            Run "sh" "-c" "zellij setup --dump-config | less"
-        }
-        bind "Alt e" {
-            Run "hx"
-        }
-        bind "Alt g" {
-            Run "watch" "--no-wrap" "git" "info"
-        }
-        bind "Alt s" {
-            NewPane
-        }
     }
 }
 
