@@ -3,6 +3,7 @@ simplified_ui true
 pane_frames false
 mouse_mode false
 session_serialization false
+show_startup_tips false
 
 keybinds {
     // Unbind tmux mode:
