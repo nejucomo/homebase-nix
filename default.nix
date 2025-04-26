@@ -57,6 +57,7 @@ in define-user-environment base-pkgs {
     jq,
     #killall,
     less,
+    libiconv, # support rust clap build on macos
     #libnotify,
     # logseq,
     magic-wormhole,
