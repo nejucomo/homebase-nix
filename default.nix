@@ -86,7 +86,7 @@ in define-user-environment base-pkgs {
 
   # Define packages which are either in the user environment or
   # dependencies thereof:
-  
+
   # Pull some stuff out of deeper nested nixpkgs:
   bintools = { llvmPackages }: llvmPackages.bintools;
   xhost = { xorg }: xorg.xhost;
