@@ -1,10 +1,13 @@
+system:
 flake-inputs:
+
 let
   # We have one hard-coded external dependency:
   systemStartx = "/run/current-system/sw/bin/startx";
 
   inherit (flake-inputs) nixpkgs;
   inherit (import ./lib-homebase nixpkgs)
+    synlink-join-v
     define-user-environment
     override-bin
   ;
@@ -16,33 +19,33 @@ let
 in define-user-environment base-pkgs {
   user-environment = pkgs@{
     # Customized packages:
-    my-alacritty,
+    #my-alacritty,
     my-bash,
     my-bash-scripts,
     my-cargo-depgraph-svg,
-    my-dunst,
+    #my-dunst,
     my-git-clone-canonical,
     my-journal-viewer,
-    my-leftwm,
-    my-polybar,
-    my-signal-desktop,
-    my-startx,
-    my-tmux,
+    #my-leftwm,
+    #my-polybar,
+    #my-signal-desktop,
+    #my-startx,
+    #my-tmux,
     my-vim,
     my-zellij,
 
     # Vanilla upstream packages:
-    acpi,
+    #acpi,
     cargo-autoinherit,
-    cargo-checkmate,
+    #cargo-checkmate,
     cargo-expand,
     cargo-udeps,
     clang,
     coreutils,
-    dmenu,
+    #dmenu,
     file,
     findutils,
-    firefox,
+    #firefox,
     gawk,
     gcc,
     git,
@@ -50,16 +53,16 @@ in define-user-environment base-pkgs {
     gnused,
     gzip,
     helix,
-    i3lock,
+    #i3lock,
     jq,
-    killall,
+    #killall,
     less,
-    libnotify,
+    #libnotify,
     # logseq,
     magic-wormhole,
     man,
-    man-pages,
-    man-pages-posix,
+    #man-pages,
+    #man-pages-posix,
     meld,
     # niri,
     nix-index,
@@ -71,14 +74,14 @@ in define-user-environment base-pkgs {
     ripgrep,
     rustup,
     # sccache,
-    scrot,
-    signal-desktop,
+    #scrot,
+    #signal-desktop,
     tokei,
     toml2json,
     # unclutter,
     which,
-    xclip,
-    xss-lock,
+    #xclip,
+    #xss-lock,
   }: (
     # The user environment is all of the above packages:
     pkgs
@@ -230,12 +233,12 @@ in define-user-environment base-pkgs {
     ''
   );
 
-  my-signal-desktop = { signal-desktop }: (
-    override-bin "${signal-desktop}/bin/signal-desktop" (up: ''
-      export XDG_CONFIG_HOME="$HOME/.config"
-      exec '${up}' "$@"
-    '')
-  );
+  #my-signal-desktop = { signal-desktop }: (
+  #  override-bin "${signal-desktop}/bin/signal-desktop" (up: ''
+  #    export XDG_CONFIG_HOME="$HOME/.config"
+  #    exec '${up}' "$@"
+  #  '')
+  #);
 
   my-startx = { my-leftwm, openssh, writeShellScriptBin }: (
     writeShellScriptBin "homebase-startx" ''

@@ -9,6 +9,10 @@ let
     paths = map (attr: pkg."${attr}") pkg.outputs;
   };
 in {
+  symlink-join = name: paths: nixpkgs.symlinkJoin {
+    inherit name paths;
+  };
+  
   # New API:
   define-user-environment = base-pkgs: specs:
     let
