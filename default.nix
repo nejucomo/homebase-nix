@@ -7,9 +7,9 @@ let
 
   inherit (flake-inputs) nixpkgs;
   inherit (import ./lib-homebase nixpkgs)
-    synlink-join-v
     define-user-environment
     override-bin
+    package-bash-scripts
   ;
 
   # Base packages are available for constructing the user environment,
@@ -117,16 +117,14 @@ in define-user-environment base-pkgs {
         fi
       '';
 
-  my-bash-postlude = {}: "${./pkgs/bash-postlude}/postlude.bash";
-
   my-bash-scripts = deps@{
-    lib,
-    my-bash-postlude,
-    writeShellScriptBin,
-    symlinkJoin,
     stdenvNoCC
-  }:
-    import ./pkgs/bash-scripts deps;
+  }: (
+    let
+      fulldeps = deps // { inherit package-bash-scripts; };
+    in
+      import ./pkgs/bash-scripts fulldeps
+  );
 
   my-git-clone-canonical = { git-clone-canonical }: (
     override-bin "${git-clone-canonical}/bin/git-clone-canonical" (up: ''
