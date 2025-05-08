@@ -15,5 +15,5 @@
 	tool = meld
 
 [alias]
-	glog = log --graph --pretty=format:'%h %Cblue%as%Creset %s %Cblue%ce %Creset%d'
+	glog = log --graph --pretty=format:'%Cwhite%h %Cblue%as%Creset %s %Cgreen%ce %Creset%d'
 	meld = difftool --dir-diff
