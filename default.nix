@@ -25,6 +25,7 @@ in define-user-environment base-pkgs {
     my-cargo-depgraph-svg,
     #my-dunst,
     my-git-clone-canonical,
+    my-gituserhooks,
     my-journal-viewer,
     #my-leftwm,
     #my-polybar,
@@ -144,8 +145,10 @@ in define-user-environment base-pkgs {
   my-gituserhooks = { runCommand }: (
     let gituserhooks = package-bash-scripts ./pkgs/gituserhooks;
     in runCommand "my-wrapper" { inherit gituserhooks; } ''
+      set -x
       mkdir -p $out/share
       ln -s ${gituserhooks} $out/share/gituserhooks
+      set +x
     ''
   );
 
