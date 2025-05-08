@@ -2,7 +2,7 @@
 #
 # Usage:
 #
-# Bash scripts should source this file at the beginning. Note that aside
+# Bash scripts should source this file at the end. Note that aside
 # from defining `SCRIPT_*` environment variables and defining functions,
 # it also sets evaluation modes to be strict/safer.
 #

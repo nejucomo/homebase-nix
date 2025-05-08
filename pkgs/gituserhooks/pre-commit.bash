@@ -1,0 +1,16 @@
+function main
+{
+  source "${SCRIPT_DIR}/githooklib.sh"
+
+  if [ -x "$REPO_HOOK" ]
+  then
+    run-repo-hook "$@"
+  else
+    auto-pre-commit
+  fi
+}
+
+function auto-pre-commit
+{
+  log "NOT YET IMPLEMENTED: auto-pre-commit"
+}
