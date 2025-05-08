@@ -2,6 +2,9 @@
 	email = nobody@nowhere.net
 	name = nobody
 
+[core]
+	hooksPath = ~/.nix-profile/share/gituserhooks
+
 [init]
 	defaultBranch = main
 

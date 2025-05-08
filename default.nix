@@ -117,9 +117,7 @@ in define-user-environment base-pkgs {
         fi
       '';
 
-  my-bash-scripts = deps@{
-    stdenvNoCC
-  }: (
+  my-bash-scripts = deps@{ stdenvNoCC }: (
     let
       fulldeps = deps // { inherit package-bash-scripts; };
     in
@@ -141,6 +139,14 @@ in define-user-environment base-pkgs {
         exec '${up}' "$@"
       fi
     '')
+  );
+
+  my-gituserhooks = { runCommand }: (
+    let gituserhooks = package-bash-scripts ./pkgs/gituserhooks;
+    in runCommand "my-wrapper" { inherit gituserhooks; } ''
+      mkdir -p $out/share
+      ln -s ${gituserhooks} $out/share/gituserhooks
+    ''
   );
 
   my-bash = { bashInteractive }: (
