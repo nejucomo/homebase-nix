@@ -21,16 +21,16 @@ let
     # Note: A lot of these are also desktop defining (ie nixos or bare startx):
     "x86_64-linux" = {
       inherit (nixpkgs)
-        acpi,
-        dmenu,
-        i3lock,
-        killall,
-        libnotify,
-        scrot,
-        signal-desktop,
-        # unclutter,
-        xclip,
-        xss-lock,
+        acpi
+        dmenu
+        i3lock
+        killall
+        libnotify
+        scrot
+        signal-desktop
+        # unclutter
+        xclip
+        xss-lock
       ;
 
       inherit (nixpkgs.xorg)
@@ -46,50 +46,50 @@ let
     "aarch64-darwin" = {
       inherit (nixpkgs)
         # Needed for some rust crates to build on macos:
-        libiconv,
+        libiconv
       ;
     };
   };
 
   pkgs-common = {
     inherit (nixpkgs)
-      cargo-autoinherit,
-      #cargo-checkmate,
-      cargo-expand,
-      cargo-udeps,
-      clang,
-      coreutils,
-      file,
-      findutils,
-      #firefox,
-      gawk,
-      gcc,
-      git,
-      gnugrep,
-      gnused,
-      gzip,
-      helix,
-      jq,
-      less,
-      # logseq,
-      magic-wormhole, # TODO: adjust install paths
-      man,
-      #man-pages,
-      #man-pages-posix,
-      meld,
-      # niri,
-      nix-index,
-      openssh,
-      # penumbra,
-      ps,
-      pstree,
-      # radicle,
-      ripgrep,
-      rustup,
-      # sccache,
-      tokei,
-      toml2json,
-      which,
+      cargo-autoinherit
+      #cargo-checkmate
+      cargo-expand
+      cargo-udeps
+      clang
+      coreutils
+      file
+      findutils
+      #firefox
+      gawk
+      gcc
+      git
+      gnugrep
+      gnused
+      gzip
+      helix
+      jq
+      less
+      # logseq
+      magic-wormhole # TODO: adjust install paths
+      man
+      #man-pages
+      #man-pages-posix
+      meld
+      # niri
+      nix-index
+      openssh
+      # penumbra
+      ps
+      pstree
+      # radicle
+      ripgrep
+      rustup
+      # sccache
+      tokei
+      toml2json
+      which
     ;
 
     inherit (nixpkgs.llvmPackages)

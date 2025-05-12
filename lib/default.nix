@@ -4,23 +4,30 @@ let
     symlinkJoin
   ;
 
-  # Combine all of the outputs of a package into a single output pkg. For
-  # example, many nixpkgs pkgs have a separate output for manpages. This
-  # ensures if we select the base package (example: `nixpkgs.jq`) we also
-  # get the manpages.
-  allOutputs = pkg: symlinkJoin {
-    name = "allOutputs-${pkg.name}";
-    paths = map (attr: pkg."${attr}") pkg.outputs;
-  };
-
   recursion = rec {
-    inherit flakeInputs, nixpkgs;
+    inherit flakeInputs nixpkgs;
 
     # defineHomebase :: { Name: Deriv } -> Deriv
-    defineHomebase = pkgs: symlinkJoin {
-      name = "homebase-nix";
-      paths = map allOutputs (attrVals pkgs);
-    }
+    defineHomebase = (
+      let
+        inherit (builtins)
+          attrValues
+        ;
+
+        # Combine all of the outputs of a package into a single output pkg. For
+        # example, many nixpkgs pkgs have a separate output for manpages. This
+        # ensures if we select the base package (example: `nixpkgs.jq`) we also
+        # get the manpages.
+        allOutputs = pkg: symlinkJoin {
+          name = "allOutputs-${pkg.name}";
+          paths = map (attr: pkg."${attr}") pkg.outputs;
+        };
+
+      in pkgs: symlinkJoin {
+        name = "homebase-nix";
+        paths = map allOutputs (attrValues pkgs);
+      }
+    );
 
     # imp :: Path -> Any
     #
@@ -29,14 +36,19 @@ let
       let
         inherit (builtins)
           readDir
+          readFile
         ;
 
-        inherit (nixpkgs.strings)
+        inherit (nixpkgs.lib.strings)
           hasSuffix
           removeSuffix
         ;
 
-        inherit (nixpkgs.sources)
+        inherit (nixpkgs.lib.attrsets)
+          mapAttrs'
+        ;
+
+        inherit (nixpkgs.lib.filesystem)
           pathIsDirectory
           pathIsRegularFile
         ;
