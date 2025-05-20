@@ -1,19 +1,16 @@
 flakeInputs @ { nixpkgs, ... }:
 let
-  inherit (nixpkgs)
-    symlinkJoin
-  ;
+  nixlib = nixpkgs.lib;
 
-  recursion = {
-    inherit flakeInputs nixpkgs;
+  self = nixlib // rec {
+    inherit flakeInputs;
 
-    # defineHomebase :: { Name: Deriv } -> Deriv
-    defineHomebase = import ./defineHomebase.nix flakeInputs;
+    imp = path: import path self;
 
-    # imp :: Path -> Any
-    #
-    # Import a path passing this lib:
-    imp = import ./imp.nix recursion flakeInputs;
+    defineHomebase = imp ./defineHomebase.nix;
+    mergeStrict = imp ./mergeStrict.nix;
+    basePackagesForSystem = imp ./basePackagesForSystem.nix;
+    templatePackage = imp ./templatePackage;
   };
 
-in recursion
+in self

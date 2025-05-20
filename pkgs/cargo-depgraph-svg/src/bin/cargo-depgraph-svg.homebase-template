@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+set -efuxo pipefail
+
+depgraph='{{cargo-depgraph}}/bin/cargo-depgraph'
+dot='{{graphviz}}/bin/dot'
+
+if [ "$*" = '--help' ]
+then
+  eval "$depgraph" depgraph --help
+else
+  eval "$depgraph" depgraph "$@" \
+    | $dot -Tsvg \
+    > target/depgraph.svg
+fi
+
