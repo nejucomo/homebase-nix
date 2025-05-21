@@ -1,5 +1,6 @@
-{ templatePackage, nixpkgs, ... }: templatePackage ./src {
-  inherit (nixpkgs)
+syslib:
+syslib.templatePackage ./src {
+  inherit (syslib.basePkgs.nix)
     cargo-depgraph
     graphviz
   ;

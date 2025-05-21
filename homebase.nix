@@ -9,10 +9,10 @@ flakeInputs:
 let lib = import ./lib flakeInputs;
 in lib.defineHomebase supportedSystems (system:
   let
-    base = lib.basePackagesForSystem system;
-  
-    commonPkgs = base.flakes // {
-      inherit (base.nix)
+    inherit (lib.forSystem system) imp basePkgs;
+
+    commonPkgs = basePkgs.flakes // {
+      inherit (basePkgs.nix)
         cargo-autoinherit
         #cargo-checkmate
         cargo-expand
@@ -52,14 +52,16 @@ in lib.defineHomebase supportedSystems (system:
         which
       ;
 
-      inherit (base.nix.llvmPackages)
+      inherit (basePkgs.nix.llvmPackages)
         bintools
       ;
+
+      cargo-depgraph-svg = imp ./pkgs/cargo-depgraph-svg;
     };
 
     sysPkgs = {
       "x86_64-linux" = {
-        inherit (base.nix)
+        inherit (basePkgs.nix)
           acpi
           dmenu
           i3lock
@@ -72,18 +74,18 @@ in lib.defineHomebase supportedSystems (system:
           xss-lock
         ;
 
-        inherit (base.nix.xorg)
+        inherit (basePkgs.nix.xorg)
           xhost
           xsetroot
         ;
 
-        inherit (base.nix.gnome3)
+        inherit (basePkgs.nix.gnome3)
           adwaita-icon-theme
         ;
       };
 
       "aarch64-darwin" = {
-        inherit (base.nix)
+        inherit (basePkgs.nix)
           # Needed for some rust crates to build on macos:
           libiconv
         ;

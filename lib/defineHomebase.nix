@@ -7,7 +7,10 @@ let
   defaultForSystem = system: (
     let
       inherit (builtins) attrValues;
-      inherit ((lib.basePackagesForSystem system).nix) symlinkJoin;
+      inherit (lib.attrsets) mapAttrs;
+
+      inherit (lib.forSystem system) basePkgs;
+      inherit (basePkgs.nix) symlinkJoin;
 
       pkgs = p4s system;
       
@@ -15,15 +18,21 @@ let
       # example, many nixpkgs pkgs have a separate output for manpages. This
       # ensures if we select the base package (example: `nixpkgs.jq`) we also
       # get the manpages.
-      allOutputs = pkg: symlinkJoin {
-        name = "allOutputs-${pkg.name}";
-        paths = map (attr: pkg."${attr}") pkg.outputs;
-      };
+      allOutputs = name: pkg: (
+        let
+          inherit (builtins) trace toJSON;
+          msg =  "selecting ${name} - outputs: ${toJSON pkg.outputs}";
+
+        in trace msg symlinkJoin {
+          name = "allOutputs-${pkg.name}";
+          paths = map (attr: pkg."${attr}") pkg.outputs;
+        }
+      );
 
     in {
       ${system}.default = symlinkJoin {
         name = "homebase-nix_${system}";
-        paths = map allOutputs (attrValues pkgs);
+        paths = attrValues (mapAttrs allOutputs pkgs);
       };
     }
   );

@@ -2,6 +2,8 @@ source "$stdenv/setup"
 
 set -efuo pipefail
 
+PARAMSFILE='./homebase-template.json'
+
 function log-run
 {
   echo "Running: $*"
@@ -9,33 +11,38 @@ function log-run
 }
 
 mkdir "$out"
-for p in $(find "$src")
+
+echo 'Template params:'
+
+echo "$HOMEBASE_TEMPLATE_JSON" | tee $PARAMSFILE | jq
+
+for p in $(find "$src" -mindepth 1)
 do
-  relp="$(echo "$p" | sed "s|^$src||")"
+  relp="$(echo "$p" | sed "s|^${src}/||")"
   outp="$out/$relp"
   if [ -f "$p" ]
   then
-    stem="$(echo "$outp" | sed 's|\.homebase-template||')"
+    stem="$(echo "$outp" | sed 's|\.homebase-template$||')"
     if [ "$stem" = "$outp" ]
     then
       # Normal file:
       cp "$p" "$outp"
     else
       # Template:
-      log-run minijinja \
+      log-run minijinja-cli \
         --format json \
         --autoescape none \
         --strict \
         --no-include \
-        --output "$outp" \
+        --output "$stem" \
         "$p" \
-        "$envFile"
+        "$PARAMSFILE"
     fi
-  elif [ -d "$src" ]
+  elif [ -d "$p" ]
   then
     mkdir "$outp"
   else
-    echo 'not a file or dir:' "$src"
+    echo 'not a file or dir:' "$p"
     exit 1
   fi
 done

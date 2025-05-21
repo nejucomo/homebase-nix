@@ -5,11 +5,18 @@ let
   self = nixlib // rec {
     inherit flakeInputs;
 
+    extend = ext: (
+      let subself = self // ext // {
+        imp = path: import path subself;
+      };
+      in subself
+    );
+
     imp = path: import path self;
 
     defineHomebase = imp ./defineHomebase.nix;
     mergeStrict = imp ./mergeStrict.nix;
-    basePackagesForSystem = imp ./basePackagesForSystem.nix;
+    forSystem = imp ./forSystem;
     templatePackage = imp ./templatePackage;
   };
 

@@ -13,7 +13,13 @@ let
     flake.packages."${system}".default
   );
 
-in {
-  nix = nixpkgs.legacyPackages."${system}";
-  flakes = mapAttrs selectDefaultPkg otherFlakes;
-}
+  syslib = lib.extend {
+    basePkgs = {
+      nix = nixpkgs.legacyPackages."${system}";
+      flakes = mapAttrs selectDefaultPkg otherFlakes;
+    };
+
+    templatePackage = syslib.imp ./templatePackage; 
+  };
+
+in syslib
