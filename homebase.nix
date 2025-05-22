@@ -9,7 +9,11 @@ flakeInputs:
 let lib = import ./lib flakeInputs;
 in lib.defineHomebase supportedSystems (system:
   let
-    inherit (lib.forSystem system) imp basePkgs;
+    inherit (lib.forSystem system)
+      imp
+      basePkgs
+      templatePackage
+    ;
 
     commonPkgs = basePkgs.flakes // {
       inherit (basePkgs.nix)
@@ -56,7 +60,12 @@ in lib.defineHomebase supportedSystems (system:
         bintools
       ;
 
-      cargo-depgraph-svg = imp ./pkgs/cargo-depgraph-svg;
+      cargo-depgraph-svg = imp ./pkgs/cargo-depgraph-svg {
+        inherit (basePkgs.nix)
+          cargo-depgraph
+          graphviz
+        ;
+      };
     };
 
     sysPkgs = {
@@ -96,26 +105,6 @@ in lib.defineHomebase supportedSystems (system:
 )
 
   # in define-user-environment base-pkgs {
-  #   my-cargo-depgraph-svg = {
-  #     writeShellScriptBin,
-  #     cargo-depgraph,
-  #     graphviz,
-  #   }:
-  #     let
-  #       depgraph = "${cargo-depgraph}/bin/cargo-depgraph";
-  #       dot = "${graphviz}/bin/dot";
-  #     in
-  #       writeShellScriptBin "cargo-depgraph-svg" ''
-  #         if [ "$*" = '--help' ]
-  #         then
-  #           ${depgraph} depgraph --help
-  #         else
-  #           ${depgraph} depgraph "$@" \
-  #             | ${dot} -Tsvg \
-  #             > target/depgraph.svg
-  #         fi
-  #       '';
-  #
   #   my-bash-scripts = deps@{ stdenvNoCC }: (
   #     let
   #       fulldeps = deps // { inherit package-bash-scripts; };

@@ -1,7 +1,6 @@
-syslib:
-syslib.templatePackage ./src {
-  inherit (syslib.basePkgs.nix)
-    cargo-depgraph
-    graphviz
-  ;
-}
+syslib: deps@{
+  cargo-depgraph,
+  graphviz
+}:
+
+syslib.templatePackage ./src deps
