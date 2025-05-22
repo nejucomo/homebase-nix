@@ -1,0 +1,8 @@
+function main
+{
+  parse-args 'remote=upstream' "$@"
+
+  exec git push "$remote" "$(git current-branch)"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

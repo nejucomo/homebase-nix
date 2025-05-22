@@ -15,7 +15,7 @@ in lib.defineHomebase supportedSystems (system:
       templatePackage
     ;
 
-    commonPkgs = basePkgs.flakes // {
+    commonPkgs = basePkgs.flakes // rec {
       inherit (basePkgs.nix)
         cargo-autoinherit
         #cargo-checkmate
@@ -60,10 +60,19 @@ in lib.defineHomebase supportedSystems (system:
         bintools
       ;
 
+      # Packages defined in this repo:
       cargo-depgraph-svg = imp ./pkgs/cargo-depgraph-svg {
         inherit (basePkgs.nix)
           cargo-depgraph
           graphviz
+        ;
+      };
+
+      bash-postlude = imp ./pkgs/bash-postlude {};
+
+      bash-scripts = imp ./pkgs/bash-scripts {
+        inherit
+          bash-postlude
         ;
       };
     };

@@ -1,0 +1,64 @@
+function main
+{
+  parse-args 'cmd' "$@"
+  case "$cmd" in
+    is-enabled|toggle-enabled|get-name|show-enabled) set-touchpad-device-name ;;
+    *) fail "unknown command: $cmd"
+  esac
+
+  if eval "$cmd"
+  then
+    return 0
+  else
+    return $?
+  fi
+}
+
+function set-touchpad-device-name
+{
+  TOUCHPAD="$(xinput list --name-only | grep Touchpad)"
+
+  if [ "$(echo "$TOUCHPAD)" | wc -l)" -ne 1 ]
+  then
+    fail "Failed to find a single touchpad. Found: $TOUCHPAD"
+  fi
+}
+
+function get-name
+{
+  echo "$TOUCHPAD"
+}
+
+function is-enabled
+{
+  local enabled="$(xinput list-props "$TOUCHPAD" | grep 'Device Enabled' | sed 's/^.*:\t//')"
+
+  if [ "$enabled" -eq 1 ]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function toggle-enabled
+{
+  if is-enabled
+  then
+    log-run xinput disable "\"$TOUCHPAD\""
+  else
+    log-run xinput enable "\"$TOUCHPAD\""
+  fi
+}
+
+function show-enabled
+{
+  if is-enabled
+  then
+    echo ' T'
+  else
+    echo '!T'
+  fi
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

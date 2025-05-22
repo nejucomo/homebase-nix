@@ -1,0 +1,8 @@
+function main
+{
+  parse-args 'dest' "$@"
+  git branch-append pre-hop
+  git reset --hard "$dest"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

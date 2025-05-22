@@ -1,0 +1,6 @@
+function main
+{
+  xclip -selection clipboard "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'
