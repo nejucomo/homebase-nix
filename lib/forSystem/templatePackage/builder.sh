@@ -37,6 +37,10 @@ do
         --output "$stem" \
         "$p" \
         "$PARAMSFILE"
+
+      chmod \
+        --reference="$(readlink -f "$p")" \
+        "$stem"
     fi
   elif [ -d "$p" ]
   then
