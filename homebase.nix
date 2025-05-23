@@ -7,7 +7,8 @@ supportedSystems:
 flakeInputs:
 
 let lib = import ./lib flakeInputs;
-in lib.defineHomebase supportedSystems (system:
+in lib.defineHomebase supportedSystems (
+  system:
   let
     inherit (lib.forSystem system)
       imp
@@ -15,56 +16,31 @@ in lib.defineHomebase supportedSystems (system:
       templatePackage
     ;
 
-    commonPkgs = basePkgs.flakes // rec {
-      inherit (basePkgs.nix)
-        cargo-autoinherit
-        #cargo-checkmate
-        cargo-expand
-        cargo-udeps
-        clang
-        coreutils
-        file
-        findutils
-        #firefox
-        gawk
-        gcc
-        git
-        gnugrep
-        gnused
-        gzip
-        helix
-        jq
-        less
-        # logseq
-        man
-        #man-pages
-        #man-pages-posix
-        meld
-        # niri
-        nix-index
-        openssh
-        # penumbra
-        ps
-        pstree
-        # radicle
-        ripgrep
-        rustup
-        # sccache
-        tokei
-        toml2json
-        which
-      ;
+    # Packages defined in this repo:
+    bashrc-dir = templatePackage ./pkg/bashrc-dir {};
 
-      inherit (basePkgs.nix.llvmPackages)
-        bintools
-      ;
+    xdg-config = templatePackage ./pkg/xdg-config {};
 
-      # Packages defined in this repo:
-      bashrc-dir = templatePackage ./pkg/bashrc-dir {};
+    bash-postlude = templatePackage ./pkg/bash-postlude {};
 
-      xdg-config = templatePackage ./pkg/xdg-config {};
+    set-symlink = templatePackage ./pkg/set-symlink {
+      inherit bash-postlude;
+    };
 
-      bash = templatePackage ./pkg/bash {
+    # Not yet working:
+    # git-user-hooks = templatePackage ./pkg/git-user-hooks {
+    #   inherit bash-postlude set-symlink;
+    #   inherit (basePkgs.flakes) git-clone-canonical;
+    # };
+
+  # Here we collate all packages directly available in the userspace:
+  in lib.lists.flatten [
+    # First is our top-level custom packages:
+    [
+      # Pull in this dependency to direct usage:
+      set-symlink
+
+      (templatePackage ./pkg/bash {
         inherit
           bashrc-dir
           xdg-config
@@ -73,45 +49,76 @@ in lib.defineHomebase supportedSystems (system:
         inherit (basePkgs.nix)
           bashInteractive
         ;
-      };
-
-      bash-postlude = templatePackage ./pkg/bash-postlude {};
+      })
 
       # TODO: re-implement self-testing during build:
-      bash-scripts = templatePackage ./pkg/bash-scripts {
+      (templatePackage ./pkg/bash-scripts {
         inherit bash-postlude;
-      };
-
-      cargo-depgraph-svg = templatePackage ./pkg/cargo-depgraph-svg {
+      })
+      (templatePackage ./pkg/cargo-depgraph-svg {
         inherit (basePkgs.nix)
           cargo-depgraph
           graphviz
         ;
-      };
-
-      set-symlink = templatePackage ./pkg/set-symlink {
-        inherit bash-postlude;
-      };
-
-      git-clone-canonical = templatePackage ./pkg/git-clone-canonical {
+      })
+      (templatePackage ./pkg/wormhole {
+        inherit (basePkgs.nix) magic-wormhole;
+      })
+      (templatePackage ./pkg/git-clone-canonical {
         inherit bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
-      };
+      })
+    ]
 
-      wormhole = templatePackage ./pkg/wormhole {
-        inherit (basePkgs.nix) magic-wormhole;
-      };
+    # flake packages:
+    (builtins.attrValues basePkgs.flakes)
 
-      # Not yet working:
-      # git-user-hooks = templatePackage ./pkg/git-user-hooks {
-      #   inherit bash-postlude set-symlink;
-      #   inherit (basePkgs.flakes) git-clone-canonical;
-      # };
-    };
+    # the subset of nixpkgs we want:
+    (with basePkgs.nix; [
+      cargo-autoinherit
+      #cargo-checkmate
+      cargo-expand
+      cargo-udeps
+      clang
+      coreutils
+      file
+      findutils
+      #firefox
+      gawk
+      gcc
+      git
+      gnugrep
+      gnused
+      gzip
+      helix
+      jq
+      less
+      # logseq
+      man
+      #man-pages
+      #man-pages-posix
+      meld
+      # niri
+      nix-index
+      openssh
+      # penumbra
+      ps
+      pstree
+      # radicle
+      ripgrep
+      rustup
+      # sccache
+      tokei
+      toml2json
+      which
+      llvmPackages.bintools
+    ])
 
-    sysPkgs = {
-      "x86_64-linux" = {
-        inherit (basePkgs.nix)
+    # Define package-specific packages:
+    (
+      with basePkgs.nix;
+      {
+        "x86_64-linux" = [
           acpi
           dmenu
           i3lock
@@ -122,27 +129,21 @@ in lib.defineHomebase supportedSystems (system:
           # unclutter
           xclip
           xss-lock
-        ;
+          xorg.xhost
+          xorg.xsetroot
+          gnome3.adwaita-icon-theme
+        ];
 
-        inherit (basePkgs.nix.xorg)
-          xhost
-          xsetroot
-        ;
-
-        inherit (basePkgs.nix.gnome3)
-          adwaita-icon-theme
-        ;
-      };
-
-      "aarch64-darwin" = {
-        inherit (basePkgs.nix)
+        "aarch64-darwin" = [
           # Needed for some rust crates to build on macos:
           libiconv
-        ;
-      };
-    };
+        ];
+      }
 
-  in commonPkgs // sysPkgs."${system}"
+      # Select the system-specifc packages:
+      ."${system}"
+    )
+  ]
 )
 
   # in define-user-environment base-pkgs {
