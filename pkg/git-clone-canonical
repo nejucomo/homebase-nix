@@ -15,7 +15,7 @@ function main
 
 function delegate-upstream
 {
-  '${UPSTREAM}' "$@" && eval "$0" --update-hack-links
+  eval "${UPSTREAM}" "$@" && eval "$0" --update-hack-links
 }
 
 function update-hack-links
