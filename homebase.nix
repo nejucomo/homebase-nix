@@ -36,7 +36,6 @@ in lib.defineHomebase supportedSystems (system:
         jq
         less
         # logseq
-        magic-wormhole # TODO: adjust install paths
         man
         #man-pages
         #man-pages-posix
@@ -97,6 +96,10 @@ in lib.defineHomebase supportedSystems (system:
       git-clone-canonical = templatePackage ./pkg/git-clone-canonical {
         inherit bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
+      };
+
+      wormhole = templatePackage ./pkg/wormhole {
+        inherit (basePkgs.nix) magic-wormhole;
       };
 
       # Not yet working:
