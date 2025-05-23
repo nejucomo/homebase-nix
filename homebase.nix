@@ -19,19 +19,20 @@ in lib.defineHomebase supportedSystems (
     # Packages defined in this repo:
     bashrc-dir = templatePackage ./pkg/bashrc-dir {};
 
-    xdg-config = templatePackage ./pkg/xdg-config {};
+    git-user-hooks = templatePackage ./pkg/git-user-hooks {
+      inherit bash-postlude set-symlink;
+      inherit (basePkgs.flakes) git-clone-canonical;
+    };
+
+    xdg-config = templatePackage ./pkg/xdg-config {
+      inherit git-user-hooks;
+    };
 
     bash-postlude = templatePackage ./pkg/bash-postlude {};
 
     set-symlink = templatePackage ./pkg/set-symlink {
       inherit bash-postlude;
     };
-
-    # Not yet working:
-    # git-user-hooks = templatePackage ./pkg/git-user-hooks {
-    #   inherit bash-postlude set-symlink;
-    #   inherit (basePkgs.flakes) git-clone-canonical;
-    # };
 
   # Here we collate all packages directly available in the userspace:
   in lib.lists.flatten [

@@ -3,7 +3,7 @@
 	name = nobody
 
 [core]
-	hooksPath = ~/.nix-profile/share/gituserhooks
+	hooksPath = {{git_user_hooks}}/lib/git-user-hooks
 
 [init]
 	defaultBranch = main
