@@ -61,6 +61,21 @@ in lib.defineHomebase supportedSystems (system:
       ;
 
       # Packages defined in this repo:
+      bashrc-dir = templatePackage ./pkg/bashrc-dir {};
+
+      xdg-config = templatePackage ./pkg/xdg-config {};
+
+      bash = templatePackage ./pkg/bash {
+        inherit
+          bashrc-dir
+          xdg-config
+        ;
+
+        inherit (basePkgs.nix)
+          bashInteractive
+        ;
+      };
+
       bash-postlude = templatePackage ./pkg/bash-postlude {};
 
       # TODO: re-implement self-testing during build:
@@ -128,15 +143,6 @@ in lib.defineHomebase supportedSystems (system:
 )
 
   # in define-user-environment base-pkgs {
-  #
-  #   my-bash = { bashInteractive }: (
-  #     override-bin "${bashInteractive}/bin/bash" (upstream: ''
-  #       export XDG_CONFIG_HOME='${./xdg-config}'
-  #       exec '${upstream}' \
-  #         --rcfile '${./pkgs/bashrc-dir}/bashrc' \
-  #         "$@"
-  #     '')
-  #   );
   #
   #   my-alacritty = { alacritty }: (
   #     override-bin "${alacritty}/bin/alacritty" (upstream: ''

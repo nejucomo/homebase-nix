@@ -9,8 +9,7 @@ function main
 {
   mkdir "$out"
 
-  echo 'Template params:'
-  echo "$HOMEBASE_TEMPLATE_JSON" | tee "$PARAMSFILE" | jq
+  echo "$HOMEBASE_TEMPLATE_JSON" > "$PARAMSFILE"
 
   if [ -f "$src" ]
   then
@@ -36,7 +35,7 @@ function expand-file
   local newbin="${newsrc}/bin/${name}.${TMPL_EXT}"
 
   mkdir -p "$(dirname "$newbin")"
-  cp -v "$src" "$newbin"
+  cp "$src" "$newbin"
   chmod u+x "$newbin"
 
   expand-dir "$newsrc" "$out"
@@ -104,7 +103,9 @@ function minijinjify
   local input="$1"
   local output="$2"
 
-  log-run minijinja-cli \
+  echo "Expanding template into: $output"
+
+  minijinja-cli \
     --format json \
     --autoescape none \
     --strict \
@@ -116,12 +117,6 @@ function minijinjify
   chmod \
     --reference="$(readlink -f "$input")" \
     "$output"
-}
-
-function log-run
-{
-  echo "Running: $*"
-  eval "$@"
 }
 
 main "$@"
