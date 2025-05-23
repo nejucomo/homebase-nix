@@ -1,0 +1,6 @@
+#!/bin/sh
+
+exec '{{zellij}}/bin/zellij' \
+	--config-dir '{{xdg_config}}/etc/xdg/hb-zellij' \
+	"$@"
+

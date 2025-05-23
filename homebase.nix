@@ -69,6 +69,10 @@ in lib.defineHomebase supportedSystems (
         inherit bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
       })
+      (templatePackage ./pkg/zellij {
+        inherit xdg-config;
+        inherit (basePkgs.nix) zellij;
+      })
     ]
 
     # flake packages:
@@ -185,14 +189,6 @@ in lib.defineHomebase supportedSystems (
   #     override-bin "${vim}/bin/vim" (upstream: ''
   #       exec '${upstream}' \
   #         -u '${./pkgs/vim/vimrc}' \
-  #         "$@"
-  #     '')
-  #   );
-  #
-  #   my-zellij = { zellij }: (
-  #     override-bin "${zellij}/bin/zellij" (upstream: ''
-  #       exec '${upstream}' \
-  #         --config-dir '${./pkgs/zellij}/confdir' \
   #         "$@"
   #     '')
   #   );
