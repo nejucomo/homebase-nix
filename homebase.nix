@@ -65,9 +65,7 @@ in lib.defineHomebase supportedSystems (system:
 
       # TODO: re-implement self-testing during build:
       bash-scripts = templatePackage ./pkg/bash-scripts {
-        inherit
-          bash-postlude
-        ;
+        inherit bash-postlude;
       };
 
       cargo-depgraph-svg = templatePackage ./pkg/cargo-depgraph-svg {
@@ -75,6 +73,11 @@ in lib.defineHomebase supportedSystems (system:
           cargo-depgraph
           graphviz
         ;
+      };
+
+      git-clone-canonical = templatePackage ./pkg/git-clone-canonical {
+        inherit bash-postlude;
+        inherit (basePkgs.flakes) git-clone-canonical;
       };
     };
 

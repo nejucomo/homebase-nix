@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+upstream='{{git_clone_canonical}}/bin/git-clone-canonical'
+
+'${upstream}' "$@" && git-clone-canonical-update-hack-links
