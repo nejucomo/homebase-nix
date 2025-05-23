@@ -61,18 +61,19 @@ in lib.defineHomebase supportedSystems (system:
       ;
 
       # Packages defined in this repo:
-      cargo-depgraph-svg = imp ./pkgs/cargo-depgraph-svg {
-        inherit (basePkgs.nix)
-          cargo-depgraph
-          graphviz
+      bash-postlude = templatePackage ./pkg/bash-postlude {};
+
+      # TODO: re-implement self-testing during build:
+      bash-scripts = templatePackage ./pkg/bash-scripts {
+        inherit
+          bash-postlude
         ;
       };
 
-      bash-postlude = imp ./pkgs/bash-postlude {};
-
-      bash-scripts = imp ./pkgs/bash-scripts {
-        inherit
-          bash-postlude
+      cargo-depgraph-svg = templatePackage ./pkg/cargo-depgraph-svg {
+        inherit (basePkgs.nix)
+          cargo-depgraph
+          graphviz
         ;
       };
     };
@@ -114,12 +115,6 @@ in lib.defineHomebase supportedSystems (system:
 )
 
   # in define-user-environment base-pkgs {
-  #   my-bash-scripts = deps@{ stdenvNoCC }: (
-  #     let
-  #       fulldeps = deps // { inherit package-bash-scripts; };
-  #     in
-  #       import ./pkgs/bash-scripts fulldeps
-  #   );
   #
   #   my-git-clone-canonical = { git-clone-canonical }: (
   #     override-bin "${git-clone-canonical}/bin/git-clone-canonical" (up: ''

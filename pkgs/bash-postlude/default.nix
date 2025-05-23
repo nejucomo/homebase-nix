@@ -1,2 +1,0 @@
-syslib: {}:
-syslib.templatePackage ./src {}
