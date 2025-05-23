@@ -84,10 +84,11 @@ in lib.defineHomebase supportedSystems (system:
         inherit (basePkgs.flakes) git-clone-canonical;
       };
 
-      git-user-hooks = templatePackage ./pkg/git-user-hooks {
-        inherit bash-postlude set-symlink;
-        inherit (basePkgs.flakes) git-clone-canonical;
-      };
+      # Not yet working:
+      # git-user-hooks = templatePackage ./pkg/git-user-hooks {
+      #   inherit bash-postlude set-symlink;
+      #   inherit (basePkgs.flakes) git-clone-canonical;
+      # };
     };
 
     sysPkgs = {
