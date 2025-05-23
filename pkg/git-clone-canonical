@@ -1,6 +1,24 @@
 #! /usr/bin/env bash
 
+UPSTREAM='{{git_clone_canonical}}/bin/git-clone-canonical'
+SET_SYMLINK='{{set_symlink}}/bin/set-symlink'
+
 function main
+{
+  if [ $# -eq 1 ] && [ "$1" = '--update-hack-links' ]
+  then
+    update-hack-links
+  else
+    delegate-upstream "$@"
+  fi
+}
+
+function delegate-upstream
+{
+  '${UPSTREAM}' "$@" && eval "$0" --update-hack-links
+}
+
+function update-hack-links
 {
   failures=0
 
@@ -16,6 +34,11 @@ function main
   done
 
   exit "$failures"
+}
+
+function set-symlink
+{
+  eval "$SET_SYMLINK" "$@"
 }
 
 source '{{bash_postlude}}/lib/postlude.bash'

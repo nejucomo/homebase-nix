@@ -75,8 +75,12 @@ in lib.defineHomebase supportedSystems (system:
         ;
       };
 
-      git-clone-canonical = templatePackage ./pkg/git-clone-canonical {
+      set-symlink = templatePackage ./pkg/set-symlink {
         inherit bash-postlude;
+      };
+
+      git-clone-canonical = templatePackage ./pkg/git-clone-canonical {
+        inherit bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
       };
     };

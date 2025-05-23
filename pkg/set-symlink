@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 function main
 {
   parse-args 'target link_name' "$@"
