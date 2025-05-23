@@ -1,9 +1,14 @@
-export REPO_HOOK="${GIT_DIR}/hooks/${SCRIPT_NAME}"
+function repo-hook
+{
+  echo "$(git rev-parse --git-dir)/hooks/${SCRIPT_NAME}"
+}
 
 function run-repo-hook
 {
-  [ -x "$REPO_HOOK" ] || return 0
+  local hook="$(repo-hook)"
 
-  log-run "$REPO_HOOK" "$@"
+  [ -x "$hook" ] || return 0
+
+  log-run "$hook" "$@"
   return $?
 }
