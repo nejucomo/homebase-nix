@@ -83,6 +83,11 @@ in lib.defineHomebase supportedSystems (system:
         inherit bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
       };
+
+      git-user-hooks = templatePackage ./pkg/git-user-hooks {
+        inherit bash-postlude set-symlink;
+        inherit (basePkgs.flakes) git-clone-canonical;
+      };
     };
 
     sysPkgs = {
@@ -122,33 +127,6 @@ in lib.defineHomebase supportedSystems (system:
 )
 
   # in define-user-environment base-pkgs {
-  #
-  #   my-git-clone-canonical = { git-clone-canonical }: (
-  #     override-bin "${git-clone-canonical}/bin/git-clone-canonical" (up: ''
-  #       if [ "$#" -eq 1 ] && ! [[ "$1" =~ ^- ]]
-  #       then
-  #         # update links after execution:
-  #         '${up}' "$@" && update-hack-links
-  #       elif [ "$#" -eq 2 ] && [ "$1" = '--show-path' ]
-  #       then
-  #         # Modify path:
-  #         echo "$HOME/hack/$(basename "$('${up}' "$@")")"
-  #       else
-  #         # passthru:
-  #         exec '${up}' "$@"
-  #       fi
-  #     '')
-  #   );
-  #
-  #   my-gituserhooks = { runCommand }: (
-  #     let gituserhooks = package-bash-scripts ./pkgs/gituserhooks;
-  #     in runCommand "my-wrapper" { inherit gituserhooks; } ''
-  #       set -x
-  #       mkdir -p $out/share
-  #       ln -s ${gituserhooks} $out/share/gituserhooks
-  #       set +x
-  #     ''
-  #   );
   #
   #   my-bash = { bashInteractive }: (
   #     override-bin "${bashInteractive}/bin/bash" (upstream: ''

@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+
+function main
+{
+  source "${SCRIPT_DIR}/hooklib.sh"
+
+  run-repo-hook "$@"
+  local status=$?
+  
+  log-run git info
+  return "$status"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

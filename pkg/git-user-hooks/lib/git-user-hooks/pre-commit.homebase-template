@@ -1,6 +1,8 @@
+#! /usr/bin/env bash
+
 function main
 {
-  source "${SCRIPT_DIR}/githooklib.sh"
+  source "${SCRIPT_DIR}/hooklib.sh"
 
   if [ -x "$REPO_HOOK" ]
   then
@@ -14,3 +16,5 @@ function auto-pre-commit
 {
   log "NOT YET IMPLEMENTED: auto-pre-commit"
 }
+
+source '{{bash_postlude}}/lib/postlude.bash'
