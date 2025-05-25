@@ -17,8 +17,10 @@
 
 set -efuo pipefail
 
+# The name of the script:
+SCRIPT_PATH_RAW="$0"
 # The absolute path of the script
-SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_PATH="$(readlink -f "$SCRIPT_PATH_RAW")"
 # The name of the script
 SCRIPT_NAME="$(basename "$SCRIPT_PATH")"
 # The dir containing the script; may be useful for sourcing/invoking

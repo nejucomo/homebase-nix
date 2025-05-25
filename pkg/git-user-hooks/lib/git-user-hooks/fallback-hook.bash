@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+#
+# Symlink a hook name to this script in order to delegate to `$GIT_DIR/hooks/<hook>`.
+
+function main
+{
+  source "${SCRIPT_DIR}/hooklib.sh"
+
+  run-repo-hook "$@"
+  return $?
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'
