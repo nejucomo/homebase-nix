@@ -8,11 +8,11 @@ p4s:
 let
   defaultForSystem = system: (
     let
-      inherit (lib.forSystem system) basePkgs;
+      inherit (lib.forSystem system) basePkgs symlinkSplice;
       inherit (basePkgs.nix) symlinkJoin;
 
       pkgs = p4s system;
-      
+
       # Combine all of the outputs of a package into a single output pkg. For
       # example, many nixpkgs pkgs have a separate output for manpages. This
       # ensures if we select the base package (example: `nixpkgs.jq`) we also
@@ -29,9 +29,9 @@ let
       );
 
     in {
-      ${system}.default = symlinkJoin {
+      ${system}.default = symlinkSplice {
         name = "homebase-nix_${system}";
-        paths = map allOutputs pkgs;
+        roots = map allOutputs pkgs;
       };
     }
   );

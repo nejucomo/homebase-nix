@@ -19,7 +19,8 @@ let
       flakes = mapAttrs selectDefaultPkg otherFlakes;
     };
 
-    templatePackage = syslib.imp ./templatePackage; 
+    templatePackage = syslib.imp ./templatePackage;
+    symlinkSplice = syslib.imp ./symlinkSplice;
   };
 
 in syslib
