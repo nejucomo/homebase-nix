@@ -17,60 +17,54 @@ in lib.defineHomebase supportedSystems (
     ;
 
     # Packages defined in this repo:
-    bashrc-dir = templatePackage ./pkg/bashrc-dir {};
+    hbdeps = {
+      bashrc-dir = templatePackage ./pkg/bashrc-dir "." {};
 
-    git-user-hooks = templatePackage ./pkg/git-user-hooks {
-      inherit bash-postlude set-symlink;
-      inherit (basePkgs.flakes) git-clone-canonical;
-    };
+      git-user-hooks = templatePackage ./pkg/git-user-hooks "." {
+        inherit (hbdeps) bash-postlude set-symlink;
+        inherit (basePkgs.flakes) git-clone-canonical;
+      };
 
-    xdg-config = templatePackage ./pkg/xdg-config {
-      inherit git-user-hooks;
-    };
+      xdg-config = templatePackage ./pkg/xdg-config "." {
+        inherit (hbdeps) git-user-hooks;
+      };
 
-    bash-postlude = templatePackage ./pkg/bash-postlude {};
+      bash-postlude = templatePackage ./pkg/bash-postlude "." {};
 
-    set-symlink = templatePackage ./pkg/set-symlink {
-      inherit bash-postlude;
+      set-symlink = templatePackage ./pkg/set-symlink "." {
+        inherit (hbdeps) bash-postlude;
+      };
     };
 
   # Here we collate all packages directly available in the userspace:
   in lib.lists.flatten [
-    # First is our top-level custom packages:
+    # All custom homebase dependencies:
+    (builtins.attrValues hbdeps)
+    
+    # Next is our top-level custom (non-dependency) packages:
     [
-      # Pull in this dependency to direct usage:
-      set-symlink
-
-      (templatePackage ./pkg/bash {
-        inherit
-          bashrc-dir
-          xdg-config
-        ;
-
-        inherit (basePkgs.nix)
-          bashInteractive
-        ;
+      (templatePackage ./pkg/bash "." {
+        inherit (hbdeps) bashrc-dir xdg-config;
+        inherit (basePkgs.nix) bashInteractive;
       })
 
       # TODO: re-implement self-testing during build:
-      (templatePackage ./pkg/bash-scripts {
-        inherit bash-postlude;
+      (templatePackage ./pkg/bash-scripts "." {
+        inherit (hbdeps) bash-postlude;
       })
-      (templatePackage ./pkg/cargo-depgraph-svg {
-        inherit (basePkgs.nix)
-          cargo-depgraph
-          graphviz
+      (templatePackage ./pkg/cargo-depgraph-svg "." {
+        inherit (basePkgs.nix) cargo-depgraph graphviz
         ;
       })
-      (templatePackage ./pkg/wormhole {
+      (templatePackage ./pkg/wormhole "." {
         inherit (basePkgs.nix) magic-wormhole;
       })
-      (templatePackage ./pkg/git-clone-canonical {
-        inherit bash-postlude set-symlink;
+      (templatePackage ./pkg/git-clone-canonical "." {
+        inherit (hbdeps) bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
       })
-      (templatePackage ./pkg/zellij {
-        inherit xdg-config;
+      (templatePackage ./pkg/zellij "." {
+        inherit (hbdeps) xdg-config;
         inherit (basePkgs.nix) zellij;
       })
     ]

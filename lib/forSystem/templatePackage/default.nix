@@ -15,7 +15,7 @@ let
     mkDerivation
   ;
 
-in src: env: (
+in src: reldst: env: (
   let
     inherit (builtins) trace replaceStrings;
     inherit (syslib.attrsets) mapAttrs' nameValuePair;
@@ -31,6 +31,7 @@ in src: env: (
       minijinja
     ];
     env = env // {
+      inherit reldst;
       "HOMEBASE_TEMPLATE_JSON" = toJSON templateParams;
     };
   }

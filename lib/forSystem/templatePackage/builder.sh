@@ -7,16 +7,30 @@ PARAMSFILE='./homebase-template.json'
 
 function main
 {
-  mkdir "$out"
+  local outpkg="$out/hbpkg/$name"
+  local outinst="$out/$reldst"
+
+  mkdir -p "$(dirname "$outpkg")"
+  mkdir -p "$(dirname "$outinst")"
 
   echo "$HOMEBASE_TEMPLATE_JSON" > "$PARAMSFILE"
 
+  expand-package "$src" "$outpkg"
+  link-package "$outpkg" "$outinst"
+}
+
+function expand-package
+{
+  check-arg-count 2 $#
+  local src="$1"
+  local out="$2"
+
   if [ -f "$src" ]
   then
-    expand-file "$src" "$out"
+    expand-file "$src" "$outpkg"
   elif [ -d "$src" ]
   then
-    expand-dir "$src" "$out"
+    expand-dir "$src" "$outpkg"
   else
     fail-fs-type "$src" "$out"
   fi
@@ -69,6 +83,23 @@ function expand-dir
       fail-fs-type "$p"
     fi
   done
+}
+
+function link-package
+{
+  check-arg-count 2 $#
+  local outpkg="$1"
+  local outinst="$2"
+
+  if [ -d "$outinst" ]
+  then
+    for p in $(find "$outpkg" -mindepth 1 -maxdepth 1)
+    do
+      ln -sv "$p" "$outinst"
+    done
+  else
+    ln -sv "$outpkg" "$outinst"
+  fi
 }
 
 function fail
