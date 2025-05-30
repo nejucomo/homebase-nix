@@ -18,7 +18,7 @@ in lib.defineHomebase supportedSystems (
 
     # Packages defined in this repo:
     hbdeps = {
-      bashrc-dir = templatePackage ./pkg/bashrc-dir "." {};
+      bashrc-dir = templatePackage ./pkg/bashrc-dir "etc/bashrc-dir" {};
 
       git-user-hooks = templatePackage ./pkg/git-user-hooks "." {
         inherit (hbdeps) bash-postlude set-symlink;

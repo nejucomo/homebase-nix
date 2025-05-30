@@ -10,8 +10,8 @@ function main
   local outpkg="$out/hbpkg/$name"
   local outinst="$out/$reldst"
 
-  mkdir -p "$(dirname "$outpkg")"
-  mkdir -p "$(dirname "$outinst")"
+  mkdir -p "$outpkg"
+  mkdir -p "$outinst"
 
   echo "$HOMEBASE_TEMPLATE_JSON" > "$PARAMSFILE"
 
