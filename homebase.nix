@@ -84,7 +84,6 @@ in lib.defineHomebase supportedSystems (
       findutils
       #firefox
       gawk
-      gcc
       git
       gnugrep
       gnused
