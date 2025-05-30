@@ -1,0 +1,16 @@
+function repo-hook
+{
+  echo "$(git rev-parse --git-dir)/hooks/$(basename "$SCRIPT_PATH_RAW")"
+}
+
+function run-repo-hook
+{
+  local hook="$(repo-hook)"
+
+  [ -x "$hook" ] || return 0
+
+  log-run "$hook" "$@"
+  return $?
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

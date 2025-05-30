@@ -1,0 +1,7 @@
+function main
+{
+  parse-args 'msg *opts' "$@"
+  exec git commit --no-verify "${opts[@]}" -m "[no-verify] $msg"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

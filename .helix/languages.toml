@@ -1,0 +1,8 @@
+[[language]]
+name = "bash"
+file-types = [
+  "sh",
+  "bash",
+  { glob = "include/bash-postlude" }
+]
+

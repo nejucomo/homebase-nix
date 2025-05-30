@@ -1,0 +1,56 @@
+default_layout "compact"
+simplified_ui true
+pane_frames false
+mouse_mode false
+session_serialization false
+show_startup_tips false
+
+keybinds {
+    // Unbind tmux mode:
+    shared_except "tmux" "locked" {
+        unbind "Ctrl b"
+    }
+
+    normal {
+        bind "Alt b" {
+            Run "autobuild"
+        }
+        bind "Alt c" {
+            Run "sh" "-c" "zellij setup --dump-config | less"
+        }
+        bind "Alt e" {
+            Run "hx"
+        }
+        bind "Alt g" {
+            Run "watch" "--no-wrap" "git" "info"
+        }
+        bind "Alt s" {
+            NewPane
+        }
+    }
+}
+
+plugins {
+    tab-bar { path "tab-bar"; }
+    status-bar { path "status-bar"; }
+    strider { path "strider"; }
+    compact-bar { path "compact-bar"; }
+    session-manager { path "session-manager"; }
+}
+
+theme "dracula"
+themes {
+    dracula {
+        fg 248 248 242
+        bg 40 42 54
+        red 255 85 85
+        green 80 250 123
+        yellow 241 250 140
+        blue 98 114 164
+        magenta 255 121 198
+        orange 255 184 108
+        cyan 139 233 253
+        black 0 0 0
+        white 255 255 255
+    }
+}

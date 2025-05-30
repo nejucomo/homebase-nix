@@ -1,0 +1,7 @@
+function main
+{
+  git branch-append 'prebase'
+  git rebase "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'
