@@ -20,16 +20,16 @@ in lib.defineHomebase supportedSystems (
     hbdeps = {
       bashrc-dir = templatePackage ./pkg/bashrc-dir "etc/bashrc-dir" {};
 
-      git-user-hooks = templatePackage ./pkg/git-user-hooks "." {
+      git-user-hooks = templatePackage ./pkg/git-user-hooks "lib/git-user-hooks" {
         inherit (hbdeps) bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
       };
 
-      xdg-config = templatePackage ./pkg/xdg-config "." {
+      xdg-config = templatePackage ./pkg/xdg-config "etc/xdg" {
         inherit (hbdeps) git-user-hooks;
       };
 
-      bash-postlude = templatePackage ./pkg/bash-postlude "." {};
+      bash-postlude = templatePackage ./pkg/bash-postlude "lib" {};
 
       set-symlink = templatePackage ./pkg/set-symlink "." {
         inherit (hbdeps) bash-postlude;
@@ -49,7 +49,7 @@ in lib.defineHomebase supportedSystems (
       })
 
       # TODO: re-implement self-testing during build:
-      (templatePackage ./pkg/bash-scripts "." {
+      (templatePackage ./pkg/bash-scripts "bin" {
         inherit (hbdeps) bash-postlude;
       })
       (templatePackage ./pkg/cargo-depgraph-svg "." {
