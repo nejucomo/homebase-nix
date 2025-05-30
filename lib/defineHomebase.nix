@@ -19,10 +19,12 @@ let
       # get the manpages.
       allOutputs = pkg: (
         let
-          inherit (builtins) trace toJSON;
+          inherit (builtins) length trace toJSON;
           msg =  "selecting ${pkg.name} - outputs: ${toJSON pkg.outputs}";
 
-        in trace msg symlinkJoin {
+        in if length pkg.outputs == 1
+        then pkg
+        else trace msg symlinkJoin {
           name = "allOutputs-${pkg.name}";
           paths = map (attr: pkg."${attr}") pkg.outputs;
         }
