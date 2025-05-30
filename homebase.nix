@@ -31,7 +31,7 @@ in lib.defineHomebase supportedSystems (
 
       bash-postlude = templatePackage ./pkg/bash-postlude "lib" {};
 
-      set-symlink = templatePackage ./pkg/set-symlink "." {
+      set-symlink = templatePackage ./pkg/set-symlink "bin" {
         inherit (hbdeps) bash-postlude;
       };
     };
@@ -43,7 +43,7 @@ in lib.defineHomebase supportedSystems (
     
     # Next is our top-level custom (non-dependency) packages:
     [
-      (templatePackage ./pkg/bash "." {
+      (templatePackage ./pkg/bash "bin" {
         inherit (hbdeps) bashrc-dir xdg-config;
         inherit (basePkgs.nix) bashInteractive;
       })
@@ -52,18 +52,18 @@ in lib.defineHomebase supportedSystems (
       (templatePackage ./pkg/bash-scripts "bin" {
         inherit (hbdeps) bash-postlude;
       })
-      (templatePackage ./pkg/cargo-depgraph-svg "." {
+      (templatePackage ./pkg/cargo-depgraph-svg "bin" {
         inherit (basePkgs.nix) cargo-depgraph graphviz
         ;
       })
-      (templatePackage ./pkg/wormhole "." {
+      (templatePackage ./pkg/wormhole "bin" {
         inherit (basePkgs.nix) magic-wormhole;
       })
-      (templatePackage ./pkg/git-clone-canonical "." {
+      (templatePackage ./pkg/git-clone-canonical "bin" {
         inherit (hbdeps) bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
       })
-      (templatePackage ./pkg/zellij "." {
+      (templatePackage ./pkg/zellij "bin" {
         inherit (hbdeps) xdg-config;
         inherit (basePkgs.nix) zellij;
       })

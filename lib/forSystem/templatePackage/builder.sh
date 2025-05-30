@@ -10,12 +10,11 @@ function main
   local outpkg="$out/hbpkg/$name"
   local outinst="$out/$reldst"
 
-  mkdir -p "$outpkg"
-  mkdir -p "$outinst"
-
   echo "$HOMEBASE_TEMPLATE_JSON" > "$PARAMSFILE"
 
   expand-package "$src" "$outpkg"
+
+  mkdir -p "$outinst"
   link-package "$outpkg" "$outinst"
 }
 
@@ -23,36 +22,28 @@ function expand-package
 {
   check-arg-count 2 $#
   local src="$1"
-  local out="$2"
+  local outpkg="$2"
 
   if [ -f "$src" ]
   then
-    expand-file "$src" "$outpkg"
+    expand-file-package "$src" "$outpkg"
   elif [ -d "$src" ]
   then
     expand-dir "$src" "$outpkg"
   else
-    fail-fs-type "$src" "$out"
+    fail-fs-type "$src" "$outpkg"
   fi
 }
 
 # Note: This assumes all single-file packages are scripts:
-function expand-file
+function expand-file-package
 {
   check-arg-count 2 $#
   local src="$1"
-  local out="$2"
+  local outpkg="$2"
 
-  local name="$(echo "$src" | sed 's|^/nix/store/[^-]*-||')"
-
-  local newsrc='./newsrc'
-  local newbin="${newsrc}/bin/${name}.${TMPL_EXT}"
-
-  mkdir -p "$(dirname "$newbin")"
-  cp "$src" "$newbin"
-  chmod u+x "$newbin"
-
-  expand-dir "$newsrc" "$out"
+  mkdir -p "$(dirname "$outpkg")"
+  minijinjify "$src" "$outpkg"
 }
 
 function expand-dir
@@ -60,6 +51,8 @@ function expand-dir
   check-arg-count 2 $#
   local src="$1"
   local out="$2"
+
+  mkdir -p "$out"
 
   for p in $(find "$src" -mindepth 1)
   do
@@ -91,14 +84,14 @@ function link-package
   local outpkg="$1"
   local outinst="$2"
 
-  if [ -d "$outinst" ]
+  if [ -f "$outpkg" ]
   then
+    ln -sv "$outpkg" "$outinst"
+  else
     for p in $(find "$outpkg" -mindepth 1 -maxdepth 1)
     do
-      ln -sv "$p" "$outinst"
+      ln -sv "$p" "${outinst}/"
     done
-  else
-    ln -sv "$outpkg" "$outinst"
   fi
 }
 
@@ -145,9 +138,10 @@ function minijinjify
     "$input" \
     "$PARAMSFILE"
 
-  chmod \
-    --reference="$(readlink -f "$input")" \
-    "$output"
+  if [[ "$output" =~ ^.*/bin/ ]]
+  then
+    chmod u+x "$output"
+  fi
 }
 
 main "$@"
