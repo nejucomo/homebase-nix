@@ -1,3 +1,0 @@
-#! /usr/bin/env bash
-
-source "$(dirname "$(readlink -f "$0")")/fallback-hook.bash"

@@ -26,7 +26,7 @@ function main
     test-parse-args positive star-args-captures-four 'x *y' '42 a b c d'
 
     test-parsed-default-args
-    test-doc-examples "${PRELUDE_PATH}"
+    test-doc-examples "${POSTLUDE_PATH}"
 
     exit-with-results
 }

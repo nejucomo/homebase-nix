@@ -17,17 +17,15 @@
 
 set -efuo pipefail
 
-# The name of the script:
-SCRIPT_PATH_RAW="$0"
-# The absolute path of the script
-SCRIPT_PATH="$(readlink -f "$SCRIPT_PATH_RAW")"
+# The name of the script
+SCRIPT_PATH="$0"
 # The name of the script
 SCRIPT_NAME="$(basename "$SCRIPT_PATH")"
 # The dir containing the script; may be useful for sourcing/invoking
 # peer scripts, etc...
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
-PRELUDE_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+POSTLUDE_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
 
 # function: log [FLAGS] MESSAGE+
 #

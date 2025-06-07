@@ -4,8 +4,10 @@
 
 function main
 {
+  source "${SCRIPT_DIR}/hooklib.bash"
+
   run-repo-hook "$@"
-  return status=$?
+  return $?
 }
 
-source "${SCRIPT_DIR}/hooklib.bash"
+source '{{bash_postlude}}/lib/postlude.bash'
