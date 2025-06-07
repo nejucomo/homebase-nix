@@ -22,12 +22,16 @@ let
           inherit (builtins) length trace toJSON;
           msg =  "selecting ${pkg.name} - outputs: ${toJSON pkg.outputs}";
 
-        in if length pkg.outputs == 1
-        then pkg
-        else trace msg symlinkJoin {
-          name = "allOutputs-${pkg.name}";
-          paths = map (attr: pkg."${attr}") pkg.outputs;
-        }
+          outpkg = (
+            if length pkg.outputs == 1
+            then pkg
+            else symlinkJoin {
+              name = "allOutputs-${pkg.name}";
+              paths = map (attr: pkg."${attr}") pkg.outputs;
+            }
+          );
+
+        in trace msg outpkg
       );
 
     in {

@@ -17,7 +17,7 @@ function splice
   local dst="$1"
   local src="$2"
 
-  filter-update "$src" || return 0
+  # echo "splicing $dst <- $src"
 
   if [[ "$src" =~ ^.*/nix-support ]]
   then
@@ -34,24 +34,6 @@ function splice
     splice-from-dir-into-dir "$dst" "$src"
   else
     fail 'unhandled case for these path types' "$dst" "$src"
-  fi
-}
-
-function filter-update
-{
-  check-arg-count 1 $#
-  local path="$1"
-
-  local visited='./visited.list'
-
-  if [ -f "$visited" ] && grep -q --fixed-strings "$path" "$visited"
-  then
-    # We've already spliced this one:
-    return 1
-  else
-    # Record that we're visiting path:
-    echo "$path" >> "$visited"
-    return 0
   fi
 }
 
@@ -106,7 +88,7 @@ function splice-mangled
     newdst="$dst.$n"
   done
 
-  echo "Mangling colliding dest: $newdst -> $src"
+  echo "Mangling collision to: $newdst"
   ln -s "$src" "$newdst"
 }
 
@@ -116,6 +98,8 @@ function resplice-dir
   local dst="$1"
   local srca="$2"
   local srcb="$3"
+
+  echo "resplicing dir $dst"
 
   # echo "resplice $dst"
   rm "$dst"

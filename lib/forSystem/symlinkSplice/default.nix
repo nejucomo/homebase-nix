@@ -10,10 +10,14 @@ let
   ;
     
   inherit (syslib.basePkgs.nix)
+    ripgrep
     runCommand
   ;
 
   env = {
+    buildInputs = [
+      ripgrep
+    ];
     roots = concatStringsSep ":" roots;
   };
 

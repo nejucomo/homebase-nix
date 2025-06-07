@@ -64,7 +64,7 @@ function expand-dir
       if [ "$stem" = "$outp" ]
       then
         # Normal file:
-        cp "$p" "$outp"
+        ln -s "$p" "$outp"
       else
         # Template:
         minijinjify "$p" "$stem"
@@ -138,7 +138,7 @@ function minijinjify
     "$input" \
     "$PARAMSFILE"
 
-  if [[ "$output" =~ ^.*/bin/ ]]
+  if [ -x "$input" ]
   then
     chmod u+x "$output"
   fi
