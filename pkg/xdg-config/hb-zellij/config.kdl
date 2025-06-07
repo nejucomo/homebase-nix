@@ -9,6 +9,10 @@ keybinds {
     // Unbind tmux mode:
     shared_except "tmux" "locked" {
         unbind "Ctrl b"
+
+        bind "Alt s" {
+            NewPane
+        }
     }
 }
 
