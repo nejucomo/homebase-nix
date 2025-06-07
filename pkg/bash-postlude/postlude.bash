@@ -29,7 +29,7 @@ POSTLUDE_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
 
 # function: log [FLAGS] MESSAGE+
 #
-# Log the argument to stdout with a `$SCRIPT_NAME:` prefix.
+# Log the argument to stderr with a `$SCRIPT_NAME:` prefix.
 # 
 # - flags: if the first arg begins with `-` those flags are passed to
 #          `echo`.
@@ -42,7 +42,7 @@ function log
         shift
     done
 
-    echo $flags "${SCRIPT_NAME}: $*"
+    echo $flags "${SCRIPT_NAME}: $*" >&2
 }
 
 # function: log-run CMD ARG*
