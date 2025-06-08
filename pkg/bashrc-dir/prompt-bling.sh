@@ -1,53 +1,21 @@
-export PS1='\n\n  '
-
-function prompt_append
+function homebase-prompt-bling
 {
-  local control="$1"
-  local frag="$2"
+  local status="$1"
 
-  PS1+='\033['
-  case "$control" in
-    bg) PS1+='35' ;; # magenta
-    norm) PS1+='33' ;; # yellow
-    green) PS1+='1;32' ;; # bright green
-    off) PS1+='0' ;; # off
-    *) PS1+='1;31' ;; # bright red
-  esac
-    
-  PS1+='m'
-  PS1+="$frag"
-  ps1+='\033[0m'
+  local esc_bright_cyan='\033[1;36m'
+  local esc_bright_yellow='\033[1;33m'
+  local esc_bright_magenta='\033[1;35m'
+  local esc_dim_grey='\033[2;40m'
+  local esc_off='\033[0m'
+
+  local s_box="$esc_bright_magenta"
+  local s_bg="$esc_dim_grey"
+  local s_fg="$esc_bright_cyan"
+
+  echo -e "${s_box}┎────┄┄┄┄┄┈┈┈${esc_off}"
+  echo -e "${s_box}┃ ${s_bg}who: ${s_fg}${USER} ${s_bg}@${s_fg} $(hostname)"
+  echo -e "${s_box}┃ ${s_bg}pwd: ${s_fg}${PWD}"
+  echo -e "${s_box}┖────┄┄┄┄┄┈┈┈${esc_off}"
 }
 
-band_start=3
-band=''
-if (( $HOMEBASE_NEST_LEVEL >= "$band_start" ))
-then
-  band="$(printf '%0.s=' $(seq "$band_start" $HOMEBASE_NEST_LEVEL))"
-fi
-
-prompt_append bg '---'
-prompt_append green "$band"
-prompt_append bg '{ '
-prompt_append norm '\$?=$?'
-prompt_append bg ' ; '
-prompt_append norm '\u'
-prompt_append bg ' @ '
-prompt_append norm '\h'
-prompt_append bg ' : '
-prompt_append norm '\w'
-
-if [ -n "${IN_NIX_SHELL:-}" ]
-then
-  prompt_append bg ' ; '
-  prompt_append green "$IN_NIX_SHELL"
-fi
-
-prompt_append bg ' }'
-prompt_append green "$band"
-prompt_append bg '---'
-prompt_append off '\n\$ '
-
-unset prompt_append
-unset band
-unset band_start
+export PS1='\n\n$(homebase-prompt-bling $?)\n\$ '
