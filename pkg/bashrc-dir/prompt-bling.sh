@@ -1,53 +1,37 @@
-export PS1='\n\n  '
-
-function prompt_append
+function homebase-prompt-bling
 {
-  local control="$1"
-  local frag="$2"
+  local status="$1"
 
-  PS1+='\033['
-  case "$control" in
-    bg) PS1+='35' ;; # magenta
-    norm) PS1+='33' ;; # yellow
-    green) PS1+='1;32' ;; # bright green
-    off) PS1+='0' ;; # off
-    *) PS1+='1;31' ;; # bright red
-  esac
-    
-  PS1+='m'
-  PS1+="$frag"
-  ps1+='\033[0m'
+  local esc_off='\033[0m'
+  local esc_bright_cyan='\033[1;36m'
+  local esc_bright_green='\033[1;32m'
+  local esc_bright_yellow='\033[1;33m'
+  local esc_bright_magenta='\033[1;35m'
+  local esc_dim_grey='\033[2;40m'
+
+  local s_box="${esc_off}${esc_bright_magenta}"
+  local s_dg="${esc_off}${esc_dim_grey}"
+  local s_bc="${esc_off}${esc_bright_cyan}"
+  local s_bg="${esc_off}${esc_bright_green}"
+  local s_by="${esc_off}${esc_bright_yellow}"
+
+  local box_left="${s_box}┃"
+
+  echo -e "${s_box}┎─────┄┄┄┄┄┄┈┈┈┈"
+
+  [ "$status" -eq 0 ] || echo -e "${s_box}┃ ${s_by}\$? = ${status}"
+
+  echo -e "${s_box}┃ ${s_dg}who: ${s_bc}${USER} ${s_dg}@${s_bc} $(hostname)"
+  echo -e "${s_box}┃ ${s_dg}pwd: ${s_bc}${PWD}"
+
+  local gitdesc="$(git describe --all --dirty=" ${s_by}<dirty>" 2> /dev/null)"
+  if [ $? -eq 0 ]
+  then
+    echo -en "${s_box}┃ ${s_dg}git: ${s_bg}${gitdesc} ${s_dg}"
+    git rev-parse --short HEAD
+  fi
+
+  echo -e "${s_box}┖──┄┄┄┈┈${esc_off}"
 }
 
-band_start=3
-band=''
-if (( $HOMEBASE_NEST_LEVEL >= "$band_start" ))
-then
-  band="$(printf '%0.s=' $(seq "$band_start" $HOMEBASE_NEST_LEVEL))"
-fi
-
-prompt_append bg '---'
-prompt_append green "$band"
-prompt_append bg '{ '
-prompt_append norm '\$?=$?'
-prompt_append bg ' ; '
-prompt_append norm '\u'
-prompt_append bg ' @ '
-prompt_append norm '\h'
-prompt_append bg ' : '
-prompt_append norm '\w'
-
-if [ -n "${IN_NIX_SHELL:-}" ]
-then
-  prompt_append bg ' ; '
-  prompt_append green "$IN_NIX_SHELL"
-fi
-
-prompt_append bg ' }'
-prompt_append green "$band"
-prompt_append bg '---'
-prompt_append off '\n\$ '
-
-unset prompt_append
-unset band
-unset band_start
+export PS1='\n\n$(homebase-prompt-bling $?)\n\$ '
