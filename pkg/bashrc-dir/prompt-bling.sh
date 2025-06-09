@@ -25,7 +25,7 @@ function homebase-prompt-bling
   echo -e "${s_box}┃ ${s_dg}pwd: ${s_bc}${PWD}"
 
   local gitdesc="$(git describe --all --dirty=" ${s_by}<dirty>" 2> /dev/null)"
-  if [ $? -eq 0 ]
+  if [ -n "$gitdesc" ]
   then
     echo -en "${s_box}┃ ${s_dg}git: ${s_bg}${gitdesc} ${s_dg}"
     git rev-parse --short HEAD
