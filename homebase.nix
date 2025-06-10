@@ -18,7 +18,16 @@ in lib.defineHomebase supportedSystems (
 
     # Packages defined in this repo:
     hbdeps = {
-      bashrc-dir = templatePackage ./pkg/bashrc-dir "etc/bashrc-dir" {};
+      bash-postlude = templatePackage ./pkg/bash-postlude "lib" {};
+
+      git-summarize-dirt = templatePackage ./pkg/git-summarize-dirt "bin" {
+        inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) git sd;
+      };
+
+      bashrc-dir = templatePackage ./pkg/bashrc-dir "etc/bashrc-dir" {
+        inherit (hbdeps) git-summarize-dirt;
+      };
 
       git-user-hooks = templatePackage ./pkg/git-user-hooks "lib/git-user-hooks" {
         inherit (hbdeps) bash-postlude set-symlink;
@@ -28,8 +37,6 @@ in lib.defineHomebase supportedSystems (
       xdg-config = templatePackage ./pkg/xdg-config "etc/xdg" {
         inherit (hbdeps) git-user-hooks bashrc-dir;
       };
-
-      bash-postlude = templatePackage ./pkg/bash-postlude "lib" {};
 
       set-symlink = templatePackage ./pkg/set-symlink "bin" {
         inherit (hbdeps) bash-postlude;
@@ -80,6 +87,7 @@ in lib.defineHomebase supportedSystems (
       cargo-udeps
       clang
       coreutils
+      fd
       file
       findutils
       #firefox
@@ -106,6 +114,7 @@ in lib.defineHomebase supportedSystems (
       ripgrep
       rustup
       # sccache
+      sd
       tokei
       toml2json
       which

@@ -2,6 +2,8 @@ function homebase-prompt-bling
 {
   local status="$1"
 
+  local gsd='{{git_summarize_dirt}}/bin/git-summarize-dirt'
+
   local esc_off='\033[0m'
   local esc_bright_cyan='\033[1;36m'
   local esc_bright_green='\033[1;32m'
@@ -24,11 +26,10 @@ function homebase-prompt-bling
   echo -e "${s_box}┃ ${s_dg}who: ${s_bc}${USER} ${s_dg}@${s_bc} $(hostname)"
   echo -e "${s_box}┃ ${s_dg}pwd: ${s_bc}${PWD}"
 
-  local gitdesc="$(git describe --all --dirty=" ${s_by}<dirty>" 2> /dev/null)"
+  local gitdesc="$($gsd)"
   if [ -n "$gitdesc" ]
   then
-    echo -en "${s_box}┃ ${s_dg}git: ${s_bg}${gitdesc} ${s_dg}"
-    git rev-parse --short HEAD
+    echo -e "${s_box}┃ ${s_dg}git: ${gitdesc}"
   fi
 
   if [ -n "$IN_NIX_SHELL" ]
