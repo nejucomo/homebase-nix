@@ -25,7 +25,9 @@ in lib.defineHomebase supportedSystems (
         inherit (basePkgs.nix) git sd;
       };
 
-      bashrc-dir = templatePackage ./pkg/bashrc-dir "etc/bashrc-dir" {};
+      bashrc-dir = templatePackage ./pkg/bashrc-dir "etc/bashrc-dir" {
+        inherit (hbdeps) git-summarize-dirt;
+      };
 
       git-user-hooks = templatePackage ./pkg/git-user-hooks "lib/git-user-hooks" {
         inherit (hbdeps) bash-postlude set-symlink;
