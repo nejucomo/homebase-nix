@@ -9,13 +9,16 @@ function main
 
 function main-multiline
 {
+  local commit="$(git rev-parse --short HEAD 2> /dev/null)"
+  [ -n "$commit" ]
+
   # ref name
   vt100 bright green
   git describe --all 2> /dev/null
 
   # short revision hex
   vt100 dim grey
-  git rev-parse --short HEAD
+  echo "$commit"
 
   # index/working dir compact summary:
   vt100 bright yellow
