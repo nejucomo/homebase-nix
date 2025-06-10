@@ -31,6 +31,11 @@ function homebase-prompt-bling
     git rev-parse --short HEAD
   fi
 
+  if [ -n "$IN_NIX_SHELL" ]
+  then
+    echo -e "${s_box}┃ ${s_dg}nix: ${s_bc}${IN_NIX_SHELL}"
+  fi
+
   echo -e "${s_box}┖──┄┄┄┈┈${esc_off}"
 }
 

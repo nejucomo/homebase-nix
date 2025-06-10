@@ -26,7 +26,7 @@ in lib.defineHomebase supportedSystems (
       };
 
       xdg-config = templatePackage ./pkg/xdg-config "etc/xdg" {
-        inherit (hbdeps) git-user-hooks;
+        inherit (hbdeps) git-user-hooks bashrc-dir;
       };
 
       bash-postlude = templatePackage ./pkg/bash-postlude "lib" {};
