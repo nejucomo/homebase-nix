@@ -5,3 +5,8 @@ check.workspace = false
 [language-server.rust-analyzer.config.imports]
 prefix = "crate"
 granularity = { group = "module", enforce = true }
+
+[[language]]
+name = "nix"
+formatter = { command = "{{nixfmt_rfc_style}}/bin/nixfmt" }
+auto-format = true
