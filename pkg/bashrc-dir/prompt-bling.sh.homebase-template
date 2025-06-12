@@ -19,7 +19,7 @@ function homebase-prompt-bling
 
   local box_left="${s_box}┃"
 
-  echo -e "${s_box}┎─────┄┄┄┄┄┄┈┈┈┈"
+  echo -e "${s_box}┎─────────┄┄┄┄┄┄┄┄┄┄┈┈┈┈┈┈┈┈"
 
   [ "$status" -eq 0 ] || echo -e "${s_box}┃ ${s_by}\$? = ${status}"
 
