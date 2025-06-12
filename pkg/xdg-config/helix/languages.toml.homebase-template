@@ -8,5 +8,5 @@ granularity = { group = "module", enforce = true }
 
 [[language]]
 name = "nix"
-formatter = { command = "{{nixfmt_rfc_style}}/bin/nixfmt" }
+formatter = { command = "{{nixfmt}}/bin/nixfmt" }
 auto-format = true
