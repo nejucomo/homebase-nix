@@ -50,6 +50,11 @@ in lib.defineHomebase supportedSystems (
     
     # Next is our top-level custom (non-dependency) packages:
     [
+      (templatePackage ./pkg/nix "bin" {
+        inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) nix;
+      })
+
       (templatePackage ./pkg/bash "bin" {
         inherit (hbdeps) bashrc-dir xdg-config;
         inherit (basePkgs.nix) bashInteractive;
