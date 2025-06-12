@@ -1,26 +1,18 @@
 syslib:
 { name, roots }:
 let
-  inherit (builtins)
-    readFile
-  ;
+  inherit (builtins) readFile;
 
-  inherit (syslib.strings)
-    concatStringsSep
-  ;
-    
-  inherit (syslib.basePkgs.nix)
-    ripgrep
-    runCommand
-  ;
+  inherit (syslib.strings) concatStringsSep;
+
+  inherit (syslib.basePkgs.nix) ripgrep runCommand;
 
   env = {
-    buildInputs = [
-      ripgrep
-    ];
+    buildInputs = [ ripgrep ];
     roots = concatStringsSep ":" roots;
   };
 
   builder = readFile ./builder.sh;
 
-in runCommand name env builder
+in
+runCommand name env builder

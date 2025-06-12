@@ -3,27 +3,24 @@
 
 syslib:
 let
-  inherit (builtins)
-    baseNameOf
-    toJSON
-    toFile
-  ;
+  inherit (builtins) baseNameOf toJSON toFile;
 
   nixpkgs = syslib.basePkgs.nix;
 
-  inherit (nixpkgs.stdenv)
-    mkDerivation
-  ;
+  inherit (nixpkgs.stdenv) mkDerivation;
 
-in src: reldst: env: (
+in
+src: reldst: env:
+(
   let
     inherit (builtins) trace replaceStrings;
     inherit (syslib.attrsets) mapAttrs' nameValuePair;
     name = baseNameOf src;
-    escapeNameHyphens = n: nameValuePair (replaceStrings ["-"] ["_"] n);
+    escapeNameHyphens = n: nameValuePair (replaceStrings [ "-" ] [ "_" ] n);
     templateParams = mapAttrs' escapeNameHyphens env;
 
-  in trace "building template package: ${name}" mkDerivation {
+  in
+  trace "building template package: ${name}" mkDerivation {
     inherit name src;
     builder = ./builder.sh;
     buildInputs = with nixpkgs; [
@@ -36,4 +33,3 @@ in src: reldst: env: (
     };
   }
 )
-

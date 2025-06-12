@@ -9,21 +9,25 @@
   # inputs.niri.url = "github:YaLTeR/niri";
   # inputs.penumbra.url = "github:penumbra-zone/penumbra/v0.78.0";
 
-  outputs = inputs: (
-    let supportedSystems = [
-      "x86_64-linux"
-      "aarch64-darwin"
-    ];
+  outputs =
+    inputs:
+    (
+      let
+        supportedSystems = [
+          "x86_64-linux"
+          "aarch64-darwin"
+        ];
 
-    in import ./homebase.nix supportedSystems inputs
-  );
+      in
+      import ./homebase.nix supportedSystems inputs
+    );
 
   #   forEach = args: f: map f args;
 
   #   packages =
   #   let
   #     inherit (builtins) listToAttrs;
-      
+
   #     targetSystemKVs = forEach supportedSystems (
   #       system:
   #       let

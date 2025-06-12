@@ -1,17 +1,18 @@
-lib:
-system:
+lib: system:
 
 let
   inherit (builtins) mapAttrs trace;
   inherit (lib) flakeInputs;
   inherit (flakeInputs) nixpkgs;
 
-  otherFlakes = removeAttrs flakeInputs ["self" "nixpkgs"];
+  otherFlakes = removeAttrs flakeInputs [
+    "self"
+    "nixpkgs"
+  ];
 
-  selectDefaultPkg = name: flake: (
-    trace "selecting default package for flake input: ${name}"
-    flake.packages."${system}".default
-  );
+  selectDefaultPkg =
+    name: flake:
+    (trace "selecting default package for flake input: ${name}" flake.packages."${system}".default);
 
   syslib = lib.extend {
     basePkgs = {
@@ -23,4 +24,5 @@ let
     symlinkSplice = syslib.imp ./symlinkSplice;
   };
 
-in syslib
+in
+syslib
