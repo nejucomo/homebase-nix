@@ -1,4 +1,4 @@
-export PATH="{{git}}/bin/:{{sd}}/bin:$PATH"
+export PATH="{{git}}/bin/:{{sd}}/bin:{{git_current_branch}}/bin:$PATH"
 
 function main
 {
@@ -9,16 +9,15 @@ function main
 
 function main-multiline
 {
-  local commit="$(git rev-parse --short HEAD 2> /dev/null)"
-  [ -n "$commit" ]
+  git rev-parse --git-dir > /dev/null 2>&1 || return 1
 
   # ref name
   vt100 bright green
-  git describe --all 2> /dev/null
+  git-current-branch
 
   # short revision hex
   vt100 dim grey
-  echo "$commit"
+  git rev-parse --short HEAD 2> /dev/null || echo '<empty>'
 
   # index/working dir compact summary:
   vt100 bright yellow

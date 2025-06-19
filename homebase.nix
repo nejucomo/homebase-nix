@@ -11,14 +11,23 @@ in
 lib.defineHomebase supportedSystems (
   system:
   let
-    inherit (lib.forSystem system) imp basePkgs templatePackage;
+    inherit (lib.forSystem system)
+      imp
+      basePkgs
+      templatePackage
+      ;
 
     # Packages defined in this repo:
     hbdeps = {
       bash-postlude = templatePackage ./pkg/bash-postlude "lib" { };
 
-      git-summarize-dirt = templatePackage ./pkg/git-summarize-dirt "bin" {
+      git-current-branch = templatePackage ./pkg/git-current-branch "bin" {
         inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) git sd;
+      };
+
+      git-summarize-dirt = templatePackage ./pkg/git-summarize-dirt "bin" {
+        inherit (hbdeps) bash-postlude git-current-branch;
         inherit (basePkgs.nix) git sd;
       };
 
@@ -40,7 +49,9 @@ lib.defineHomebase supportedSystems (
         inherit (hbdeps) git-user-hooks bashrc-dir nixfmt;
       };
 
-      set-symlink = templatePackage ./pkg/set-symlink "bin" { inherit (hbdeps) bash-postlude; };
+      set-symlink = templatePackage ./pkg/set-symlink "bin" {
+        inherit (hbdeps) bash-postlude;
+      };
     };
 
     # Here we collate all packages directly available in the userspace:
@@ -62,9 +73,18 @@ lib.defineHomebase supportedSystems (
       })
 
       # TODO: re-implement self-testing during build:
-      (templatePackage ./pkg/bash-scripts "bin" { inherit (hbdeps) bash-postlude; })
-      (templatePackage ./pkg/cargo-depgraph-svg "bin" { inherit (basePkgs.nix) cargo-depgraph graphviz; })
-      (templatePackage ./pkg/wormhole "bin" { inherit (basePkgs.nix) magic-wormhole; })
+      (templatePackage ./pkg/bash-scripts "bin" {
+        inherit (hbdeps) bash-postlude;
+      })
+      (templatePackage ./pkg/cargo-depgraph-svg "bin" {
+        inherit (basePkgs.nix)
+          cargo-depgraph
+          graphviz
+          ;
+      })
+      (templatePackage ./pkg/wormhole "bin" {
+        inherit (basePkgs.nix) magic-wormhole;
+      })
       (templatePackage ./pkg/git-clone-canonical "bin" {
         inherit (hbdeps) bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
