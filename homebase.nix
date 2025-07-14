@@ -6,7 +6,7 @@
 supportedSystems: flakeInputs:
 
 let
-  lib = import ./lib flakeInputs;
+  lib = import ./lib flakeInputs { unfreePackages = [ "claude-code" ]; };
 in
 lib.defineHomebase supportedSystems (
   system:
@@ -90,6 +90,7 @@ lib.defineHomebase supportedSystems (
       cargo-expand
       cargo-udeps
       clang
+      claude-code
       coreutils
       fd
       file

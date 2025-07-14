@@ -1,4 +1,6 @@
-lib: system:
+lib:
+{ unfreePackages }:
+system:
 
 let
   inherit (builtins) mapAttrs trace;
@@ -16,7 +18,12 @@ let
 
   syslib = lib.extend {
     basePkgs = {
-      nix = nixpkgs.legacyPackages."${system}";
+      nix = import nixpkgs {
+        inherit system;
+
+        config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfreePackages;
+      };
+
       flakes = mapAttrs selectDefaultPkg otherFlakes;
     };
 

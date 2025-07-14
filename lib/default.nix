@@ -1,4 +1,5 @@
 flakeInputs@{ nixpkgs, ... }:
+{ unfreePackages }:
 let
   nixlib = nixpkgs.lib;
 
@@ -18,7 +19,7 @@ let
 
     defineHomebase = imp ./defineHomebase.nix;
     mergeStrict = imp ./mergeStrict.nix;
-    forSystem = imp ./forSystem;
+    forSystem = imp ./forSystem { inherit unfreePackages; };
     templatePackage = imp ./templatePackage;
   };
 
