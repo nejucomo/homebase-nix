@@ -98,7 +98,6 @@ lib.defineHomebase supportedSystems (
       #firefox
       gawk
       git
-      gitless
       gnugrep
       gnused
       gzip
@@ -119,6 +118,7 @@ lib.defineHomebase supportedSystems (
       # radicle
       ripgrep
       rustup
+      sapling
       # sccache
       sd
       tokei
