@@ -98,6 +98,7 @@ lib.defineHomebase supportedSystems (
       #firefox
       gawk
       git
+      gitless
       gnugrep
       gnused
       gzip
