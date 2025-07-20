@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export XDG_CONFIG_HOME='{{xdg_config}}/etc/xdg'
+
+exec '{{bashInteractive}}/bin/bash' \
+  --rcfile '{{bashrc_dir}}/etc/bashrc-dir/bashrc' \
+  "$@"

@@ -1,0 +1,58 @@
+export PATH="{{git}}/bin/:{{sd}}/bin:{{git_current_branch}}/bin:$PATH"
+
+function main
+{
+  set -e
+  main-multiline | sd -f m '\n' ' ' | sd ' +$' ''
+  vt100-reset
+}
+
+function main-multiline
+{
+  git rev-parse --git-dir > /dev/null 2>&1 || return 1
+
+  # ref name
+  vt100 bright green
+  git-current-branch
+
+  # short revision hex
+  vt100 dim grey
+  git rev-parse --short HEAD 2> /dev/null || echo '<empty>'
+
+  # index/working dir compact summary:
+  vt100 bright yellow
+  git status --porcelain \
+    | sd '^(..).*$' '$1' \
+    | sd ' ' '' \
+    | sd '^.?(.)$' '$1' \
+    | sort \
+    | uniq -c \
+    | sd '^ +(\d+) (.)$' '$2$1'
+}
+
+function vt100
+{
+  case $1 in
+    dim) local intensity=2 ;;
+    bright) local intensity=1 ;;
+    *) exit -1 ;;
+  esac
+
+  case $2 in
+    grey) local hue=40 ;;
+    green) local hue=32 ;;
+    yellow) local hue=33 ;;
+    *) exit -1 ;;
+  esac
+
+  vt100-reset
+  echo -en "\033[${intensity};${hue}m"
+}
+
+function vt100-reset
+{
+  echo -en '\033[0m'
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'
+

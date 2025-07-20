@@ -1,0 +1,12 @@
+#! /usr/bin/env bash
+
+function main
+{
+  exec '{{nixfmt_rfc_style}}/bin/nixfmt' \
+    --strict \
+    --verify \
+    "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'
+

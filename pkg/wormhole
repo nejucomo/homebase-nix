@@ -1,0 +1,2 @@
+#!/bin/sh
+exec '{{magic_wormhole}}/bin/wormhole' "$@"

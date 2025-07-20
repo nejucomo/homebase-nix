@@ -1,0 +1,7 @@
+function main
+{
+  set -x
+  exec nix profile upgrade --all "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

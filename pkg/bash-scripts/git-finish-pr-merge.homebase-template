@@ -1,0 +1,9 @@
+function main
+{
+  git checkout main
+  git pull
+  git delete-merged
+  git info
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

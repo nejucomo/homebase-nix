@@ -1,0 +1,19 @@
+[user]
+	email = nobody@nowhere.net
+	name = nobody
+
+[core]
+	hooksPath = {{git_user_hooks}}/lib/git-user-hooks
+
+[init]
+	defaultBranch = main
+
+[pull]
+	ff = only
+
+[diff]
+	tool = meld
+
+[alias]
+	glog = log --graph --pretty=format:'%h %Cblue%as%Creset %s %Cblue%ce %Cgreen%d%Creset'
+	meld = difftool --dir-diff

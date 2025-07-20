@@ -1,0 +1,10 @@
+export PATH="{{git}}/bin/:{{sd}}/bin:$PATH"
+
+function main
+{
+	set +o pipefail
+	git rev-parse --abbrev-ref HEAD 2> /dev/null \
+		| sd --fixed-strings 'HEAD' "$(git config init.defaultBranch)"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

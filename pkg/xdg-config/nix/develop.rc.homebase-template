@@ -1,0 +1,2 @@
+source '{{bashrc_dir}}/hbpkg/bashrc-dir/settings-develop.sh'
+source '{{bashrc_dir}}/hbpkg/bashrc-dir/prompt-bling.sh'

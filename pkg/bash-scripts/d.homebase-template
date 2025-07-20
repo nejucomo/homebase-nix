@@ -1,0 +1,6 @@
+function main
+{
+  exec ls --color=auto -F "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

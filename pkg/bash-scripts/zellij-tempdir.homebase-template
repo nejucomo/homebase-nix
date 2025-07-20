@@ -1,0 +1,6 @@
+function main
+{
+  SHELL='zellij-dir-session' tempdir-shell "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

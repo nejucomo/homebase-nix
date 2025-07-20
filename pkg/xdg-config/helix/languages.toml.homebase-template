@@ -1,0 +1,12 @@
+[language-server.rust-analyzer.config]
+check.command = "clippy"
+check.workspace = true
+
+[language-server.rust-analyzer.config.imports]
+prefix = "crate"
+granularity = { group = "module", enforce = true }
+
+[[language]]
+name = "nix"
+formatter = { command = "{{nixfmt}}/bin/nixfmt" }
+auto-format = true
