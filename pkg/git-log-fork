@@ -1,0 +1,10 @@
+#! {{bash}}/bin/bash
+
+function main
+{
+  parse-args 'a b=HEAD' "$@"
+
+  eval '{{git}}/bin/git' log --oneline --graph "$a" "$b" "^$(git merge-base "$a" "$b")^"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

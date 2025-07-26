@@ -74,6 +74,10 @@ lib.defineHomebase supportedSystems (
         inherit (hbdeps) bash-postlude set-symlink;
         inherit (basePkgs.flakes) git-clone-canonical;
       })
+      (templatePackage ./pkg/git-log-fork "bin" {
+        inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) bash git;
+      })
       (templatePackage ./pkg/zellij "bin" {
         inherit (hbdeps) xdg-config;
         inherit (basePkgs.nix) zellij;
