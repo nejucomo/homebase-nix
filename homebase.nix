@@ -28,6 +28,7 @@ lib.defineHomebase supportedSystems (
       };
 
       bashrc-dir = templatePackage ./pkg/bashrc-dir "etc/bashrc-dir" {
+        inherit (basePkgs.nix) sd;
         inherit (hbdeps) git-summarize-dirt;
       };
 

@@ -38,6 +38,25 @@ function homebase-prompt-bling
   fi
 
   echo -e "${s_box}┖──┄┄┄┈┈${esc_off}"
+
+  homebase-if-zellij-rename-tab '-'
+}
+
+function homebase-debug-hook
+{
+  local sd='{{sd}}/bin/sd'
+  homebase-if-zellij-rename-tab "$(echo "$BASH_COMMAND" | "$sd" '(.{20}).+$' '$1...')"
+}
+
+function homebase-if-zellij-rename-tab
+{
+  # BUG? `zellij` is an uncaptured dependency in a circular dependency graph:
+  # bashrc-dir -x-> zellij -> bashrc-dir
+  if [ -n "$ZELLIJ" ]
+  then
+    zellij action rename-tab "$*"
+  fi
 }
 
 export PS1='\n\n$(homebase-prompt-bling $?)\n\$ '
+trap 'homebase-debug-hook' DEBUG
