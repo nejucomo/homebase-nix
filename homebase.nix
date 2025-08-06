@@ -90,17 +90,23 @@ lib.defineHomebase supportedSystems (
 
     # the subset of nixpkgs we want:
     (with basePkgs.nix; [
-      cargo-autoinherit
+      # logseq
+      # niri
+      # penumbra
+      # radicle
+      # sccache
       #cargo-checkmate
+      #firefox
+      #man-pages
+      #man-pages-posix
+      cargo-autoinherit
       cargo-expand
       cargo-udeps
       clang
       claude-code
-      coreutils
       fd
       file
       findutils
-      #firefox
       gawk
       git
       gnugrep
@@ -109,27 +115,19 @@ lib.defineHomebase supportedSystems (
       helix
       jq
       less
-      # logseq
+      llvmPackages.bintools
       man
-      #man-pages
-      #man-pages-posix
       meld
-      # niri
       nix-index
-      openssh
-      # penumbra
       ps
       pstree
-      # radicle
       ripgrep
       rustup
       sapling
-      # sccache
       sd
       tokei
       toml2json
       which
-      llvmPackages.bintools
     ])
 
     # Define package-specific packages:
@@ -137,19 +135,21 @@ lib.defineHomebase supportedSystems (
       with basePkgs.nix;
       {
         "x86_64-linux" = [
+          # unclutter
           acpi
+          coreutils
           dmenu
+          gnome3.adwaita-icon-theme
           i3lock
           killall
           libnotify
+          openssh
           scrot
           signal-desktop
-          # unclutter
           xclip
-          xss-lock
           xorg.xhost
           xorg.xsetroot
-          gnome3.adwaita-icon-theme
+          xss-lock
         ];
 
         "aarch64-darwin" = [
