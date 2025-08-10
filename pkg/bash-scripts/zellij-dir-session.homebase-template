@@ -10,6 +10,7 @@ function main
         alacritty --command zellij attach --create "$session" &
     else
         zellij attach --create "$session"
+        clear
     fi
 }
 
