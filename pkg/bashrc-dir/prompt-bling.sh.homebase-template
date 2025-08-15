@@ -52,7 +52,7 @@ function homebase-if-zellij-rename-tab
 {
   # BUG? `zellij` is an uncaptured dependency in a circular dependency graph:
   # bashrc-dir -x-> zellij -> bashrc-dir
-  if [ -n "$ZELLIJ" ]
+  if [ -z "$IN_NIX_SHELL" ] && [ -n "$ZELLIJ" ]
   then
     zellij action rename-tab "$*"
   fi
