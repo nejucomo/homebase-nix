@@ -1,0 +1,20 @@
+#! {{bash}}/bin/bash
+
+function main
+{
+  parse-args 'src' "$@"
+
+  SRCGIT="${src}/.git"
+
+  for remote in $(src-git remote)
+  do
+    log-run git remote add "$remote" "$(src-git remote get-url "$remote")"
+  done
+}
+
+function src-git
+{
+  git --git-dir "$SRCGIT" "$@")
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'
