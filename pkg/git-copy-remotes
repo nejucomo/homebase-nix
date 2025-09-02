@@ -14,7 +14,7 @@ function main
 
 function src-git
 {
-  git --git-dir "$SRCGIT" "$@")
+  git --git-dir "$SRCGIT" "$@"
 }
 
 source '{{bash_postlude}}/lib/postlude.bash'
