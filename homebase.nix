@@ -79,6 +79,10 @@ lib.defineHomebase supportedSystems (
         inherit (hbdeps) bash-postlude;
         inherit (basePkgs.nix) bash git;
       })
+      (templatePackage ./pkg/git-copy-remotes "bin" {
+        inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) bash git;
+      })
       (templatePackage ./pkg/zellij "bin" {
         inherit (hbdeps) xdg-config;
         inherit (basePkgs.nix) zellij;
