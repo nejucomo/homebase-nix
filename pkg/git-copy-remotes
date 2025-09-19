@@ -6,10 +6,17 @@ function main
 
   SRCGIT="${src}/.git"
 
+  local retcode=0
+
   for remote in $(src-git remote)
   do
-    log-run git remote add "$remote" "$(src-git remote get-url "$remote")"
+    if ! log-run git remote add "$remote" "$(src-git remote get-url "$remote")"
+    then
+      retcode=1
+    fi
   done
+
+  return "$retcode"
 }
 
 function src-git
