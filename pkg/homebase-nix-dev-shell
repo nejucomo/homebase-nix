@@ -1,1 +1,0 @@
-exec '{{bashInteractive}}/bin/bash' --rcfile '{{bashrc_dir}}/nix-dev-shell-bashrc "$@"

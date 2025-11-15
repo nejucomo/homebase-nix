@@ -1,0 +1,6 @@
+#!/bin/sh
+
+exec '{{nix}}/bin/nix' develop \
+	--command '{{bashInteractive}}/bin/bash' \
+	--rcfile '{{bashrc_dir}}/nix-dev-shell-bashrc' \
+	"$@"

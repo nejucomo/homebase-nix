@@ -47,6 +47,12 @@ lib.defineHomebase supportedSystems (
       };
 
       set-symlink = templatePackage ./pkg/set-symlink "bin" { inherit (hbdeps) bash-postlude; };
+
+      nix = templatePackage ./pkg/nix "bin" {
+        inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) nix;
+      };
+
     };
 
     # Here we collate all packages directly available in the userspace:
@@ -57,11 +63,6 @@ lib.defineHomebase supportedSystems (
 
     # Next is our top-level custom (non-dependency) packages:
     [
-      (templatePackage ./pkg/nix "bin" {
-        inherit (hbdeps) bash-postlude;
-        inherit (basePkgs.nix) nix;
-      })
-
       (templatePackage ./pkg/bash "bin" {
         inherit (hbdeps) bashrc-dir xdg-config;
         inherit (basePkgs.nix) bashInteractive;
@@ -87,9 +88,9 @@ lib.defineHomebase supportedSystems (
         inherit (hbdeps) xdg-config;
         inherit (basePkgs.nix) zellij;
       })
-      (templatePackage ./pkg/homebase-nix-dev-shell "bin" {
-        inherit (hbdeps) bashrc-dir;
-        inherit (basePkgs.nix) zellij bashInteractive;
+      (templatePackage ./pkg/homebase-nix-develop "bin" {
+        inherit (hbdeps) bashrc-dir nix;
+        inherit (basePkgs.nix) bashInteractive;
       })
     ]
 
