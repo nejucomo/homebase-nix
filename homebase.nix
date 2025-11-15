@@ -87,6 +87,10 @@ lib.defineHomebase supportedSystems (
         inherit (hbdeps) xdg-config;
         inherit (basePkgs.nix) zellij;
       })
+      (templatePackage ./pkg/homebase-nix-dev-shell "bin" {
+        inherit (hbdeps) bashrc-dir;
+        inherit (basePkgs.nix) zellij bashInteractive;
+      })
     ]
 
     # flake packages:

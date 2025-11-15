@@ -1,0 +1,5 @@
+export HOMEBASE_BASHRC="${BASH_SOURCE[0]}"
+export HOMEBASE_BASHLIB="$(dirname "$HOMEBASE_BASHRC")"
+
+source "$HOMEBASE_BASHLIB/settings-develop.sh"
+source "$HOMEBASE_BASHLIB/prompt-bling.sh"
