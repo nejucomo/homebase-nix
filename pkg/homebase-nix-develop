@@ -1,6 +1,8 @@
 #!/bin/sh
+set -x
 
-exec '{{nix}}/bin/nix' develop \
+exec '{{nix}}/bin/nix' develop . \
 	--command '{{bashInteractive}}/bin/bash' \
-	--rcfile '{{bashrc_dir}}/nix-dev-shell-bashrc' \
+	--rcfile '{{bashrc_dir}}/etc/bashrc-dir/nix-dev-shell-bashrc' \
+	-i \
 	"$@"
