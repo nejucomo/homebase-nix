@@ -46,13 +46,15 @@ lib.defineHomebase supportedSystems (
         inherit (hbdeps) git-user-hooks bashrc-dir nixfmt;
       };
 
-      set-symlink = templatePackage ./pkg/set-symlink "bin" { inherit (hbdeps) bash-postlude; };
-
       nix = templatePackage ./pkg/nix "bin" {
         inherit (hbdeps) bash-postlude;
         inherit (basePkgs.nix) nix;
       };
 
+      set-symlink = templatePackage ./pkg/set-symlink "bin" {
+        inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) coreutils;
+      };
     };
 
     # Here we collate all packages directly available in the userspace:

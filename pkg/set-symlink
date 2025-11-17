@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+LN='{{coreutils}}/bin/ln'
+
 function main
 {
   parse-args 'target link_name' "$@"
@@ -17,7 +19,7 @@ function main
   elif ! [ -e "$link_name" ]
   then
     log "Setting: ${link_name} -> ${target}"
-    ln --no-target-directory -s "$target" "$link_name"
+    eval "$LN" --no-target-directory -s "$target" "$link_name"
   else
     fail "Cannot set ${link_name} -> ${target}; it already exists: $(ls -ld "$link_name")"
   fi
