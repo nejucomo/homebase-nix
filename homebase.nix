@@ -130,6 +130,7 @@ lib.defineHomebase supportedSystems (
       man
       meld
       nix-index
+      numbat
       ps
       pstree
       ripgrep
