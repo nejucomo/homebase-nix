@@ -1,8 +1,21 @@
 #!/bin/sh
-set -x
 
+if (($# == 0)); then
+	TITLE='nixdev'
+  SUBCMD=()
+else
+	TITLE="nixdev: $1"
+	SUBCMD=('-c' "$@")
+fi
+
+if [ -z "$IN_NIX_SHELL" ] && [ -n "$ZELLIJ" ]
+then
+  zellij action rename-tab "$TITLE"
+fi
+
+set -x
 exec '{{nix}}/bin/nix' develop . \
 	--command '{{bashInteractive}}/bin/bash' \
 	--rcfile '{{bashrc_dir}}/etc/bashrc-dir/nix-dev-shell-bashrc' \
 	-i \
-	"$@"
+	"${SUBCMD[@]}"
