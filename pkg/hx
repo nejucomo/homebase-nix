@@ -1,0 +1,10 @@
+function main
+{
+  local themes=({{ hx_themes }})
+  local n="${#themes[@]}"
+  local i="$(( RANDOM % n ))"
+  local theme="${themes[$i]}"
+  exec '{{helix}}/bin/hx' --theme "$theme" "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

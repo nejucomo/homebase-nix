@@ -94,6 +94,16 @@ lib.defineHomebase supportedSystems (
         inherit (hbdeps) bashrc-dir nix;
         inherit (basePkgs.nix) bashInteractive;
       })
+      (templatePackage ./pkg/hx "bin" {
+        inherit (hbdeps) bash-postlude;
+        inherit (basePkgs.nix) helix;
+        hx-themes = builtins.concatStringsSep " " [
+          "default"
+          "darcula"
+          "carbon"
+          "autumn"
+        ];
+      })
     ]
 
     # flake packages:
@@ -123,7 +133,6 @@ lib.defineHomebase supportedSystems (
       gnugrep
       gnused
       gzip
-      helix
       jq
       less
       llvmPackages.bintools
