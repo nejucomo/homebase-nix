@@ -19,4 +19,4 @@ hs.spaces.watcher.new(
         local spid = hs.spaces.focusedSpace()
         _G.SpaceLabel:setTitle(_G.SpaceNames[spid] or string.format("<space %s>", spid))
     end
-).start()
+):start()
