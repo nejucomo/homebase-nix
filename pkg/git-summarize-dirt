@@ -3,7 +3,7 @@ export PATH="{{git}}/bin/:{{sd}}/bin:{{git_current_branch}}/bin:$PATH"
 function main
 {
   set -e
-  main-multiline | sd -f m '\n' ' ' | sd ' +$' ''
+  main-multiline | sd -A '\n' ' ' | sd ' +$' ''
   vt100-reset
 }
 
