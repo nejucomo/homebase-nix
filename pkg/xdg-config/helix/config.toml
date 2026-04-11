@@ -1,3 +1,5 @@
+theme = "focus_nova"
+
 [editor]
 auto-pairs = false
 end-of-line-diagnostics = "disable"
