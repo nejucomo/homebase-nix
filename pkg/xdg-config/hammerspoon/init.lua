@@ -11,3 +11,12 @@ hs.hotkey.bind({"ctrl", "cmd"}, "s", function()
     -- end
 end)
 
+_G.SpaceNames = {}
+_G.SpaceLabel = hs.menubar.new();
+
+hs.spaces.watcher.new(
+    function (sp)
+        local spid = hs.spaces.focusedSpace()
+        _G.SpaceLabel:setTitle(_G.SpaceNames[spid] or string.format("<space %s>", spid))
+    end
+).start()
