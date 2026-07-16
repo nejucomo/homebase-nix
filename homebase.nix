@@ -37,11 +37,6 @@ lib.defineHomebase supportedSystems (
         inherit (basePkgs.flakes) git-clone-canonical;
       };
 
-      nixfmt = templatePackage ./pkg/nixfmt "bin" {
-        inherit (basePkgs.nix) nixfmt-rfc-style;
-        inherit (hbdeps) bash-postlude;
-      };
-
       xdg-config = templatePackage ./pkg/xdg-config "etc/xdg" {
         inherit (hbdeps) git-user-hooks bashrc-dir nixfmt;
       };
@@ -130,6 +125,7 @@ lib.defineHomebase supportedSystems (
       man
       meld
       nix-index
+      nixfmt
       numbat
       ps
       pstree
