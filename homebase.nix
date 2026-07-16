@@ -38,7 +38,8 @@ lib.defineHomebase supportedSystems (
       };
 
       xdg-config = templatePackage ./pkg/xdg-config "etc/xdg" {
-        inherit (hbdeps) git-user-hooks bashrc-dir nixfmt;
+        inherit (basePkgs.nix) nixfmt;
+        inherit (hbdeps) git-user-hooks bashrc-dir;
       };
 
       nix = templatePackage ./pkg/nix "bin" {
