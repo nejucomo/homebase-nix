@@ -29,6 +29,7 @@
           ./mods/mynixpkgs.nix
           ./mods/hostpkgs.nix
           ./mods/hbpkgs.nix
+          ./mods/defaultpkg.nix
         ];
       }
     )
