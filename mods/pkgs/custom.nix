@@ -9,7 +9,7 @@
   perSystem =
     { pkgs, inputs', ... }:
     let
-      templatePackage = import ../lib/templatePackage {
+      templatePackage = import ../../lib/templatePackage {
         basePkgs.nix = pkgs;
         attrsets = pkgs.lib.attrsets;
       };
