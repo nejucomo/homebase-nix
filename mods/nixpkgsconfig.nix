@@ -1,16 +1,19 @@
-# Configure the `pkgs` argument given to every `perSystem` module.
-#
-# `claude-code` is unfree; without this, evaluating it throws. This mirrors
-# the `unfreePackages` allowlist `lib/default.nix` used to pass through to
-# `nixpkgs`.
-{ inputs, ... }:
+# Configure the `pkgs` argument given to every `perSystem` module
+# to enable specific unfree packages.
+{ lib, inputs, ... }:
+let
+  unfreePkgs = [ "claude-code" ];
+
+  inherit (builtins) elem;
+  inherit (lib) getName;
+in
 {
   perSystem =
     { system, ... }:
     {
       _module.args.pkgs = import inputs.nixpkgs {
         inherit system;
-        config.allowUnfreePredicate = pkg: builtins.elem (inputs.nixpkgs.lib.getName pkg) [ "claude-code" ];
+        config.allowUnfreePredicate = pkg: elem (getName pkg) unfreePkgs;
       };
     };
 }
