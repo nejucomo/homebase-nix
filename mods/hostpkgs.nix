@@ -8,6 +8,7 @@
           x86_64-linux = with pkgs; {
             inherit
               acpi
+              adwaita-icon-theme
               coreutils
               dmenu
               i3lock
@@ -19,7 +20,6 @@
               xclip
               xss-lock
               ;
-            gnome3-adwaita-icon-theme = gnome3.adwaita-icon-theme;
             xorg-xhost = xorg.xhost;
             xorg-xsetroot = xorg.xsetroot;
           };
