@@ -24,6 +24,7 @@
           "aarch64-darwin"
         ];
         imports = [
+          ./mods/nixpkgsconfig.nix
           ./mods/flakepkgs.nix
           ./mods/mynixpkgs.nix
         ];
