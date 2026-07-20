@@ -27,6 +27,7 @@
           ./mods/nixpkgsconfig.nix
           ./mods/flakepkgs.nix
           ./mods/mynixpkgs.nix
+          ./mods/hostpkgs.nix
         ];
       }
     )
