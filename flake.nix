@@ -25,12 +25,12 @@
           "aarch64-darwin"
         ];
         imports = [
-          ./mods/nixpkgsconfig.nix
-          ./mods/flakepkgs.nix
-          ./mods/mynixpkgs.nix
-          ./mods/hostpkgs.nix
-          ./mods/hbpkgs.nix
-          ./mods/defaultpkg.nix
+          mods/default-all-package.nix
+          mods/nixpkgs-config.nix
+          mods/pkgs/custom.nix
+          mods/pkgs/from-flakes.nix
+          mods/pkgs/from-nixpkgs-any-system.nix
+          mods/pkgs/from-nixpkgs-system-specific.nix
         ];
       }
     )
