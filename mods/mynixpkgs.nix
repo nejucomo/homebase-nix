@@ -28,6 +28,7 @@
         gnused
         gzip
         helix
+        jj
         jq
         less
         man
