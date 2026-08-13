@@ -15,24 +15,11 @@
 
   outputs = (
     inputs@{ flake-parts, ... }:
-
-    # https://flake.parts/module-arguments.html
-    flake-parts.lib.mkFlake { inherit inputs; } (
-      { lib, ... }:
-      {
-        systems = [
-          "x86_64-linux"
-          "aarch64-darwin"
-        ];
-        imports = [
-          ./mods/nixpkgsconfig.nix
-          ./mods/flakepkgs.nix
-          ./mods/mynixpkgs.nix
-          ./mods/hostpkgs.nix
-          ./mods/hbpkgs.nix
-          ./mods/defaultpkg.nix
-        ];
-      }
-    )
+    let
+      modsInDir = import ./_lib/modsInDir;
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = modsInDir ./config ++ modsInDir ./system;
+    }
   );
 }

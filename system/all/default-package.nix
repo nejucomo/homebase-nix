@@ -1,13 +1,13 @@
 # Reconstructs the old merged "everything in one profile" package that
 # lib/defineHomebase.nix used to build automatically, now that every
-# package is otherwise exposed individually by name (see the other
-# mods/*.nix files). Reads config.packages rather than hand-maintaining
-# a list, so it stays in sync as packages are added/removed elsewhere.
+# package is otherwise exposed individually by name. Reads config.packages
+# rather than hand-maintaining a list, so it stays in sync as packages are
+# added/removed elsewhere.
 {
   perSystem =
     { config, pkgs, ... }:
     let
-      symlinkSplice = import ../lib/symlinkSplice {
+      symlinkSplice = import ../../_lib/symlinkSplice {
         basePkgs.nix = pkgs;
         strings = pkgs.lib.strings;
       };
