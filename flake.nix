@@ -15,8 +15,6 @@
 
   outputs = (
     inputs@{ flake-parts, ... }:
-
-    # https://flake.parts/module-arguments.html
     flake-parts.lib.mkFlake { inherit inputs; } (
       { lib, ... }:
       {
@@ -24,14 +22,14 @@
           "x86_64-linux"
           "aarch64-darwin"
         ];
-        imports = [
+        imports = ([
           mods/default-all-package.nix
           mods/nixpkgs-config.nix
           mods/pkgs/custom.nix
           mods/pkgs/from-flakes.nix
           mods/pkgs/from-nixpkgs-any-system.nix
           mods/pkgs/from-nixpkgs-system-specific.nix
-        ];
+        ]);
       }
     )
   );
