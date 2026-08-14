@@ -1,0 +1,47 @@
+#! /usr/bin/env bash
+
+UPSTREAM='{{claude_code}}/bin/claude'
+
+function main
+{
+  local arg
+  for arg in "$@"
+  do
+    case "$arg" in
+      --no-worktree)
+        delegate-no-worktree "$@"
+        return
+        ;;
+      -c | --continue | -r | --resume | -w | --worktree)
+        # Resuming/continuing a session, or an explicit -w/--worktree,
+        # already determines worktree behavior upstream; don't force
+        # another one.
+        delegate-verbatim "$@"
+        return
+        ;;
+    esac
+  done
+  delegate-worktree "$@"
+}
+
+function delegate-no-worktree
+{
+  local arg args=()
+  for arg in "$@"
+  do
+    [ "$arg" = '--no-worktree' ] || args+=("$arg")
+  done
+  exec "$UPSTREAM" "${args[@]}"
+}
+
+function delegate-verbatim
+{
+  exec "$UPSTREAM" "$@"
+}
+
+function delegate-worktree
+{
+  exec "$UPSTREAM" --worktree "$@"
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'

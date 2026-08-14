@@ -18,7 +18,6 @@
         # radicle
         # sapling
         # sccache
-        claude-code
         fd
         file
         findutils
