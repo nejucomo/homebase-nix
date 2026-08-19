@@ -27,8 +27,8 @@
         gnused
         gzip
         helix
-        jj
         jq
+        jujutsu
         less
         man
         meld
