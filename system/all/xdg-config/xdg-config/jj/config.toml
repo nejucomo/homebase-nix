@@ -3,6 +3,10 @@ name = 'nejucomo'
 email = 'nobody@nowhere.org'
 username = 'nejucomo'
 
+[revset-aliases]
+'fork(x)' = 'fork_point(x)::x'
+'bookmark_fork(x)' = 'fork(bookmarks(exact:x) | remote_bookmarks(exact:x))'
+
 [templates]
 new_description = '''
 if(parents.len() > 1,
