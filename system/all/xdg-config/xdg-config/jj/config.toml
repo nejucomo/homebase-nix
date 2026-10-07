@@ -6,6 +6,7 @@ username = 'nejucomo'
 [revset-aliases]
 'fork(x)' = 'fork_point(x)::x'
 'bookmark_fork(x)' = 'fork(bookmarks(exact:x) | remote_bookmarks(exact:x))'
+'prev_remote' = 'fork_point(::@ & tracked_remote_bookmarks())'
 
 [templates]
 new_description = '''
