@@ -3,10 +3,22 @@ name = 'nejucomo'
 email = 'nobody@nowhere.org'
 username = 'nejucomo'
 
+[revsets]
+# from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
+bookmark-advance-to = "closest_pushable(@)"
+
+[aliases]
+# from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+
 [revset-aliases]
 'fork(x)' = 'fork_point(x)::x'
 'bookmark_fork(x)' = 'fork(bookmarks(exact:x) | remote_bookmarks(exact:x))'
 'prev_remote' = 'fork_point(::@ & tracked_remote_bookmarks())'
+
+# from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
 
 [templates]
 new_description = '''
