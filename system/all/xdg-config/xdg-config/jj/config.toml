@@ -5,20 +5,42 @@ username = 'nejucomo'
 
 [revsets]
 # from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
-bookmark-advance-to = "closest_pushable(@)"
+bookmark-advance-to = "latest_pushable(@)"
 
 [aliases]
 # from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
-tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+tug = ["bookmark", "move", "--from", "latest_bookmark(@)", "--to", "latest_pushable(@)"]
 
 [revset-aliases]
+# Shorthands:
+'lrb(to)' = 'latest_remote_bookmark(to)'
+'lb(to)' = 'latest_bookmark(to)'
+'lp(to)' = 'latest_pushable(to)'
+'slrb(to)' = 'since_latest_remote_bookmark(to)'
+'slb(to)' = 'since_latest_bookmark(to)'
+'slp(to)' = 'since_latest_pushable(to)'
+
+# workdir relatives:
+ 
+# Handy funcs:
 'fork(x)' = 'fork_point(x)::x'
 'bookmark_fork(x)' = 'fork(bookmarks(exact:x) | remote_bookmarks(exact:x))'
-'prev_remote' = 'fork_point(::@ & tracked_remote_bookmarks())'
+'latest_remote_bookmark(to)' = 'latest(::to & tracked_remote_bookmarks())'
 
-# from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
-'closest_bookmark(to)' = 'heads(::to & bookmarks())'
-'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
+# improved from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
+'latest_bookmark(to)' = 'latest(::to & bookmarks())'
+'latest_pushable(to)' = 'latest(::to & stds)'
+
+'since_latest_bookmark(to)' = 'latest_bookmark(to)::to'
+'since_latest_remote_bookmark(to)' = 'latest_remote_bookmark(to)::to'
+'since_latest_pushable(to)' = 'latest_pushable(to)::to'
+
+# Handy sets:
+'no_descs' = 'description(exact:"") & ~merges()'
+'stubs' = 'no_descs & empty() & ~root()'
+'stds' = '~description(exact:"") & (~empty() | merges())'
+'partials' = 'all() ~ (root() | stds | stubs)'
+'squashables' = 'no_descs & ~empty()'
 
 [templates]
 new_description = '''
