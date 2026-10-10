@@ -12,6 +12,8 @@ bookmark-advance-to = "latest_pushable(@)"
 tug = ["bookmark", "move", "--from", "latest_bookmark(@)", "--to", "latest_pushable(@)"]
 
 [revset-aliases]
+'recent' = 'latest(::@, 7) | lrb(@)'
+
 # Shorthands:
 'lrb(to)' = 'latest_remote_bookmark(to)'
 'lb(to)' = 'latest_bookmark(to)'
