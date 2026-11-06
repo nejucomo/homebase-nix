@@ -1,0 +1,74 @@
+#! /usr/bin/env bash
+
+function main
+{
+  if [ $# -eq 0 ]
+  then
+    usage
+    exit 0
+  fi
+
+  local subcmd="$1"
+  shift
+
+  case "$subcmd"
+  in
+    -h|--help|help)
+      usage
+      ;;
+    develop)
+      cmd-develop "$@"
+      ;;
+    *)
+      usage >&2
+      fail "unknown subcommand: $subcmd"
+      ;;
+  esac
+}
+
+function usage
+{
+  cat <<__EOF
+Usage: ${SCRIPT_NAME} <subcommand> [args...]
+
+Everything for homebase-nix.
+
+Subcommands:
+
+  develop [CMD...]
+      Enter a 'nix develop' interactive bash shell for the flake in the
+      current directory. If CMD is given, run it in that shell. Renames
+      the zellij tab when run inside zellij outside of a nix shell.
+
+  help, -h, --help
+      Show this help.
+__EOF
+}
+
+function cmd-develop
+{
+  local title
+  local subcmd=()
+
+  if [ $# -eq 0 ]
+  then
+    title='nixdev'
+  else
+    title="nixdev: $1"
+    subcmd=('-c' "$@")
+  fi
+
+  if [ -z "${IN_NIX_SHELL:-}" ] && [ -n "${ZELLIJ:-}" ]
+  then
+    zellij action rename-tab "$title"
+  fi
+
+  set -x
+  exec '{{nix}}/bin/nix' develop . \
+    --command '{{bashInteractive}}/bin/bash' \
+    --rcfile '{{bashrc_dir}}/etc/bashrc-dir/nix-dev-shell-bashrc' \
+    -i \
+    ${subcmd[@]+"${subcmd[@]}"}
+}
+
+source '{{bash_postlude}}/lib/postlude.bash'
