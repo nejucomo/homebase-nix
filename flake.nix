@@ -5,6 +5,7 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
   inputs.git-clone-canonical.url = "github:nejucomo/flake-git-clone-canonical";
+  inputs.hacknow.url = ./subflakes/hacknow;
 
   # inputs.jj.url = "github:jj-vcs/jj";
   # inputs.cargo-checkmate.url = "github:cargo-checkmate/cargo-checkmate";
