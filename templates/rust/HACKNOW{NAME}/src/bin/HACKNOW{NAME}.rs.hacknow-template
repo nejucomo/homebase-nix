@@ -1,0 +1,7 @@
+//! The [HACKNOW{NAME}] binary
+
+use yaffa::App as _;
+
+fn main() -> yaffa::Result<()> {
+    HACKNOW{NAME_UNDERS}::App::run_main_default()
+}
