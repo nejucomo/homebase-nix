@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -efuo pipefail
+
+function hooks-init
+{
+  [ $# -eq 0 ] || fail "unexpect args: ${a[*]}"
+
+  set -x
+  pwd
+  jj git init
+  jj commit -m 'initial template'
+  
+  commit-script-outcome 'ambient cargo build' \
+    'cargo build && cargo test && cargo doc'
+  
+  commit-script-outcome 'nix build' \
+    'nix build -L'
+}
+
+function commit-script-outcome
+{
+  local -
+  set +x
+
+  [ $# -eq 2 ] || fail "$FUNC_NAME expected 2 args, found: $@"
+
+  local msgfile="$(mktemp '.jj/commit-msg.XXX')"
+
+  (
+    echo "$1"
+    set -efuxo pipefail
+    eval "$2"
+  ) 2>&1 | tee "$msgfile"
+
+  cat "$msgfile" | jj describe --stdin
+  jj new
+  rm "$msgfile"
+}
+
+function fail
+{
+  echo "$*"
+  exit 1
+}
+
+hooks-init "$@"
