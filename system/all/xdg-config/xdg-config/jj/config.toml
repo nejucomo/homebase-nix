@@ -11,6 +11,15 @@ bookmark-advance-to = "latest_pushable(@)"
 # from https://github.com/jj-vcs/jj/discussions/8484#discussioncomment-16801159
 tug = ["bookmark", "move", "--from", "latest_bookmark(@)", "--to", "latest_pushable(@)"]
 
+relog = [
+  "util",
+  "exec",
+  "--",
+  "bash",
+  "-c",
+  '''eval $(history | rg 'jj log ' | rg -v '\| rg' | tail -1 | sd '^\s+\d+\s+' '')''',
+]
+
 [revset-aliases]
 # TODO: simplify this expression:
 'recent' = 'latest(::@, 7) | lrb(@)::@'
