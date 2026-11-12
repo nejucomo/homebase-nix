@@ -22,14 +22,16 @@ let
             inherit system;
             overlays = [ rust-overlay.overlays.default ];
           };
-          toolchain = (pkgsWithRust.rust-bin.fromRustupToolchainFile (src + "/rust-toolchain.toml")).override {
-            extensions = [
-              "clippy"
-              "rust-analyzer"
-              "rust-src"
-              "rustfmt"
-            ];
-          };
+          toolchain =
+            (pkgsWithRust.rust-bin.fromRustupToolchainFile (src + "/rust-toolchain.toml")).override
+              {
+                extensions = [
+                  "clippy"
+                  "rust-analyzer"
+                  "rust-src"
+                  "rustfmt"
+                ];
+              };
           craneLib = (crane.mkLib pkgsWithRust).overrideToolchain toolchain;
           # Like `craneLib.cleanCargoSource`, but also keep any paths listed
           # in a workspace crate's `package.include`.
@@ -68,6 +70,8 @@ let
 in
 # lib interface:
 {
+  inherit mkFlakePartsModule;
+
   mkFlakeOutputs =
     {
       cargoWorkspace,
