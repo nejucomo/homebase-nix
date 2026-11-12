@@ -20,7 +20,11 @@
     let
       lib = import ./lib inputs;
       cargoWorkspaceChecks =
-        (lib.mkFlakeOutputs { cargoWorkspace = ./test/fixtures/cargo-workspace; }).checks;
+        (lib.mkFlakeOutputs {
+          cargoWorkspace = ./test/fixtures/cargo-workspace;
+          # The function form, which needs `perSystem` module arguments:
+          env = { system, ... }: { DRY_FLAKES_FIXTURE_SYSTEM = system; };
+        }).checks;
     in
     {
       inherit lib;

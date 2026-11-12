@@ -14,7 +14,7 @@ let
   cargoIncludes = import ./cargo-includes.nix { inherit lib; };
 
   mkFlakePartsModule = {
-    # forCargoWorkspace :: { src, name ? "default" } -> FlakePartsModule
+    # forCargoWorkspace :: { src, name ? "default", env ? { } } -> FlakePartsModule
     #
     # A flake-parts module which builds the cargo workspace at `src`. It is
     # meant to be imported alongside other modules, so it leaves `systems`
@@ -26,15 +26,28 @@ let
     #   above checks.
     #
     # For `name = "default"` the clippy check is plain `checks.clippy`.
+    #
+    # `env` is a set of environment variables visible to the workspace's
+    # build (so rust code may read them with `env!` / `option_env!`) and in
+    # its dev shell. It is either an attrset, or a function from `perSystem`
+    # module arguments to one, e.g.:
+    #
+    #   env = { config, ... }: { FOO_BIN = "${config.packages.foo}/bin/foo"; };
+    #
+    # Dependency builds don't see `env`, so changing it never rebuilds them.
     forCargoWorkspace =
       {
         src,
         name ? "default",
+        env ? { },
       }:
-      {
+      let
+        envFn = if lib.isFunction env then env else _: env;
+
         perSystem =
-          { system, ... }:
+          { system, ... }@perSystemArgs:
           let
+            resolvedEnv = envFn perSystemArgs;
             suffixed = suffix: if name == "default" then suffix else "${name}-${suffix}";
 
             pkgsWithRust = import nixpkgs {
@@ -65,15 +78,15 @@ let
               strictDeps = true;
             };
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
-            package = craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
+            workspaceArgs = commonArgs // {
+              inherit cargoArtifacts;
+              env = resolvedEnv;
+            };
+            package = craneLib.buildPackage workspaceArgs;
             checks = {
               ${name} = package;
               ${suffixed "clippy"} = craneLib.cargoClippy (
-                commonArgs
-                // {
-                  inherit cargoArtifacts;
-                  cargoClippyExtraArgs = "--all-targets -- --deny warnings";
-                }
+                workspaceArgs // { cargoClippyExtraArgs = "--all-targets -- --deny warnings"; }
               );
             };
           in
@@ -82,8 +95,16 @@ let
             packages.${name} = package;
             # Only this workspace's checks: the importing flake may define
             # many unrelated ones.
-            devShells.${name} = craneLib.devShell { inherit checks; };
+            devShells.${name} = craneLib.devShell {
+              inherit checks;
+              env = resolvedEnv;
+            };
           };
+      in
+      {
+        # The module system passes a module function only the arguments it
+        # names, so advertise those `env` names too, alongside our own.
+        perSystem = lib.setFunctionArgs perSystem (lib.functionArgs perSystem // lib.functionArgs envFn);
       };
   };
 
@@ -96,9 +117,15 @@ in
     {
       cargoWorkspace,
       systems ? systemsDefault,
+      env ? { },
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       inherit systems;
-      imports = [ (mkFlakePartsModule.forCargoWorkspace { src = cargoWorkspace; }) ];
+      imports = [
+        (mkFlakePartsModule.forCargoWorkspace {
+          inherit env;
+          src = cargoWorkspace;
+        })
+      ];
     };
 }
