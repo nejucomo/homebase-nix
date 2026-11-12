@@ -6,6 +6,8 @@ name = "hacknow"
 edition = "2024"
 version = "0.1.0"
 
+include = ["templates/"]   
+
 [dependencies]
 clap = { version = "4.6.7" , features = ["derive"] }
 derive_more = { version = "2.1.1", features = ["debug"] }
