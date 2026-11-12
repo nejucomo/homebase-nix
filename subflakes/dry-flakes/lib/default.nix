@@ -9,6 +9,7 @@
 
 let
   systemsDefault = import systems;
+  cargoIncludes = import ./cargo-includes.nix { inherit (nixpkgs) lib; };
 
   mkFlakePartsModule = {
     forCargoWorkspace = { systems, src }: {
@@ -30,8 +31,16 @@ let
             ];
           };
           craneLib = (crane.mkLib pkgsWithRust).overrideToolchain toolchain;
+          # Like `craneLib.cleanCargoSource`, but also keep any paths listed
+          # in a workspace crate's `package.include`.
+          cargoIncludesFilter = cargoIncludes.mkFilter src;
+          cleanSrc = nixpkgs.lib.cleanSourceWith {
+            src = nixpkgs.lib.cleanSource src;
+            filter = path: type: craneLib.filterCargoSources path type || cargoIncludesFilter path type;
+            name = "source";
+          };
           commonArgs = {
-            src = craneLib.cleanCargoSource src;
+            src = cleanSrc;
             strictDeps = true;
           };
           cargoArtifacts = craneLib.buildDepsOnly commonArgs;
