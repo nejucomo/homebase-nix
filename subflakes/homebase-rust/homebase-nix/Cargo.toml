@@ -1,0 +1,12 @@
+[package]
+name = "homebase-nix"
+description = "Everything for homebase-nix."
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+regex.workspace = true
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+yaffa.workspace = true

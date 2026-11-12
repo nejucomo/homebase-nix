@@ -8,8 +8,12 @@
 
   # Local subflakes
   inputs.dry-flakes.url = ./subflakes/dry-flakes;
+
   inputs.hacknow.url = ./subflakes/hacknow;
   inputs.hacknow.inputs.dry-flakes.follows = "dry-flakes";
+
+  inputs.homebase-rust.url = ./subflakes/homebase-rust;
+  inputs.homebase-rust.inputs.dry-flakes.follows = "dry-flakes";
 
   # inputs.jj.url = "github:jj-vcs/jj";
   # inputs.cargo-checkmate.url = "github:cargo-checkmate/cargo-checkmate";

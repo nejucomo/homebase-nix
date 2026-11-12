@@ -2,9 +2,9 @@ use std::collections::BTreeMap;
 use std::io::Write;
 use std::process::{Command, Stdio};
 
-use anyhow::{Context, Result, bail};
-use regex::{Regex, RegexBuilder};
+use regex::Regex;
 use serde::Deserialize;
+use yaffa::WrapErr as _;
 
 use crate::paths;
 use crate::trace::{debug_enabled, trace_command};
@@ -19,17 +19,13 @@ struct Entry {
 
 /// Search the pinned nixpkgs for packages whose attribute path or package
 /// name matches `pattern` (case-insensitive).
-pub fn search(pattern: &str) -> Result<()> {
-    let re = RegexBuilder::new(pattern)
-        .case_insensitive(true)
-        .build()
-        .with_context(|| format!("invalid regex: {pattern:?}"))?;
-
+pub fn search(re: &Regex) -> yaffa::Result<()> {
     let mut command = Command::new(paths::NIX);
     command
-        .args(["search", "--json", paths::NIXPKGS_REF, pattern])
+        .args(["search", "--json", paths::NIXPKGS_REF, re.as_str()])
         .stdin(Stdio::null())
         .stderr(Stdio::inherit());
+
     if debug_enabled() {
         trace_command(&command);
     }
@@ -38,14 +34,14 @@ pub fn search(pattern: &str) -> Result<()> {
         .output()
         .with_context(|| format!("failed to run {}", paths::NIX))?;
     if !output.status.success() {
-        bail!("nix search failed: {}", output.status);
+        yaffa::bail!("nix search failed: {}", output.status);
     }
 
     let entries: BTreeMap<String, Entry> = serde_json::from_slice(&output.stdout)
         .context("failed to parse `nix search --json` output")?;
 
     let mut stdout = std::io::stdout().lock();
-    for line in render(&re, &entries) {
+    for line in render(re, &entries) {
         stdout.write_all(line.as_bytes())?;
     }
     Ok(())
@@ -100,10 +96,7 @@ mod tests {
             "legacyPackages.aarch64-darwin.rg-alias": {"pname": "RIPGREP-all", "version": "0.1"}
         }"#;
         let entries: BTreeMap<String, Entry> = serde_json::from_str(json).unwrap();
-        let re = RegexBuilder::new("ripgrep")
-            .case_insensitive(true)
-            .build()
-            .unwrap();
+        let re: Regex = "(?i)ripgrep".parse().unwrap();
         let out: String = render(&re, &entries).collect();
         assert_eq!(
             out,

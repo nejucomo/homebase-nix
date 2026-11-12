@@ -1,7 +1,7 @@
 use std::os::unix::process::CommandExt;
 use std::process::Command;
 
-use anyhow::{Context, Result, bail};
+use yaffa::WrapErr as _;
 
 use crate::paths;
 use crate::trace::trace_command;
@@ -9,7 +9,7 @@ use crate::trace::trace_command;
 /// Enter a `nix develop` interactive bash shell for the flake in the current
 /// directory, optionally running `cmd` in it. On success this never returns
 /// because the process is replaced via `exec`.
-pub fn develop(cmd: &[String]) -> Result<()> {
+pub fn develop(cmd: &[String]) -> yaffa::Result<()> {
     let title = match cmd.first() {
         None => "nixdev".to_string(),
         Some(first) => format!("nixdev: {first}"),
@@ -35,13 +35,14 @@ pub fn develop(cmd: &[String]) -> Result<()> {
     Err(err).with_context(|| format!("failed to exec {}", paths::NIX))
 }
 
-fn rename_zellij_tab(title: &str) -> Result<()> {
+fn rename_zellij_tab(title: &str) -> yaffa::Result<()> {
     let status = Command::new("zellij")
         .args(["action", "rename-tab", title])
         .status()
         .context("failed to run zellij")?;
+
     if !status.success() {
-        bail!("zellij action rename-tab failed: {status}");
+        yaffa::bail!("zellij action rename-tab failed: {status}");
     }
     Ok(())
 }

@@ -163,6 +163,22 @@
       },
       "parent": []
     },
+    "homebase-rust": {
+      "inputs": {
+        "dry-flakes": [
+          "dry-flakes"
+        ]
+      },
+      "locked": {
+        "path": "subflakes/homebase-rust",
+        "type": "path"
+      },
+      "original": {
+        "path": "subflakes/homebase-rust",
+        "type": "path"
+      },
+      "parent": []
+    },
     "mk-naked-shell": {
       "flake": false,
       "locked": {
@@ -373,6 +389,7 @@
         "flake-parts": "flake-parts_2",
         "git-clone-canonical": "git-clone-canonical",
         "hacknow": "hacknow",
+        "homebase-rust": "homebase-rust",
         "nixpkgs": "nixpkgs_3"
       }
     },
