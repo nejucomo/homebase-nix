@@ -1,0 +1,11 @@
+[package]
+name = "claude-trust-dir"
+description = "Mark a directory as trusted in the Claude Code state, non-interactively."
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+# `preserve_order` keeps the key order of the rewritten state file stable:
+serde_json = { workspace = true, features = ["preserve_order"] }
+yaffa.workspace = true
