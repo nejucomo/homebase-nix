@@ -10,3 +10,11 @@ export RUSTFLAGS='-D warnings'
 # Disable incremental builds and rely solely on `sccache`:
 # export CARGO_INCREMENTAL='false'
 # export RUSTC_WRAPPER="$(which sccache)"
+
+# Enable `homebase-nix` bash completions. This uses a `PATH` lookup rather
+# than a nix store path because `homebase-rust` already depends on
+# `bashrc-dir`, so a direct reference would be a dependency cycle:
+if command -v homebase-nix > /dev/null
+then
+  eval "$(homebase-nix shcomp bash)"
+fi
