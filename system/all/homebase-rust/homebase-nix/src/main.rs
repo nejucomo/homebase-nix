@@ -1,6 +1,8 @@
 //! Everything for homebase-nix.
+#![feature(exit_status_error)]
 
 mod develop;
+mod hack;
 mod paths;
 mod search;
 mod trace;
@@ -26,6 +28,7 @@ impl yaffa::RunWith<Options> for HbApp {
 
         match opts.cmd {
             Develop { cmd } => develop::develop(&cmd),
+            Hack(opts) => hack::run(opts),
             Search { regex } => search::search(&regex),
         }
     }
@@ -47,6 +50,9 @@ enum Command {
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         cmd: Vec<String>,
     },
+
+    /// Generate new projects from templates
+    Hack(hack::Options),
 
     /// Search the pinned nixpkgs for packages matching REGEX
     #[command(long_about = search_long_about())]

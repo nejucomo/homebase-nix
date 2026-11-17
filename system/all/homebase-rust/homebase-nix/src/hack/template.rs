@@ -1,4 +1,4 @@
-//! The template system _and_ template data for `hacknow`
+//! The template system _and_ template data for `homebase-nix hack`
 
 use std::borrow::Cow;
 use std::path::Path;

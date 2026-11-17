@@ -4,9 +4,22 @@ description = "Everything for homebase-nix."
 edition.workspace = true
 version.workspace = true
 
+include = ["templates/"]
+
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
+derive_more = { version = "2.1.1", features = ["debug"] }
+env_logger = "0.11.11"
+fs-err = "3.3.2"
+include_dir = "0.7.4"
+log = "0.4.35"
+logging-options = "0.1.0"
+oxford_join = "0.8.0"
 regex.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 yaffa.workspace = true
+
+[dev-dependencies]
+tempfile = "3.27.0"
+test-case = "3.4.1"

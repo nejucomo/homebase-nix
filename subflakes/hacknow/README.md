@@ -1,1 +1,0 @@
-# `hacknow` project initialization tool

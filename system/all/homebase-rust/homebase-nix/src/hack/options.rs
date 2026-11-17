@@ -1,12 +1,12 @@
 //! [clap] commandline option types
 use std::path::PathBuf;
 
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, Subcommand};
 
-use crate::Template;
+use crate::hack::Template;
 
-/// Project templating / management system
-#[derive(derive_more::Debug, Parser)]
+/// Generate new projects from templates
+#[derive(derive_more::Debug, Args)]
 pub struct Options {
     /// The [logging_options::StandardConsole] options
     #[debug(skip)]

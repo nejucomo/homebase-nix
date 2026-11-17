@@ -147,22 +147,6 @@
         "type": "github"
       }
     },
-    "hacknow": {
-      "inputs": {
-        "dry-flakes": [
-          "dry-flakes"
-        ]
-      },
-      "locked": {
-        "path": "subflakes/hacknow",
-        "type": "path"
-      },
-      "original": {
-        "path": "subflakes/hacknow",
-        "type": "path"
-      },
-      "parent": []
-    },
     "mk-naked-shell": {
       "flake": false,
       "locked": {
@@ -372,7 +356,6 @@
         "dry-flakes": "dry-flakes",
         "flake-parts": "flake-parts_2",
         "git-clone-canonical": "git-clone-canonical",
-        "hacknow": "hacknow",
         "nixpkgs": "nixpkgs_3"
       }
     },

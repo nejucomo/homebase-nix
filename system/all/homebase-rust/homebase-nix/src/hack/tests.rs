@@ -4,7 +4,7 @@ use regex::{Regex, regex};
 use test_case::test_case;
 use yaffa::ensure;
 
-use crate::Template;
+use crate::hack::Template;
 
 #[test_case("rust", "projectoid", "Cargo.toml", regex!(r#"(?m)^  "projectoid",$"#))]
 #[test_case("rust", "my-proj", "my-proj/Cargo.toml", regex!(r#"(?m)^name = "my-proj"$"#))]
