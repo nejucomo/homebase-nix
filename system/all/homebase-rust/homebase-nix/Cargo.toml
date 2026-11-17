@@ -8,6 +8,7 @@ include = ["templates/"]
 
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
+clap_complete = "4.6.12"
 derive_more = { version = "2.1.1", features = ["debug"] }
 env_logger = "0.11.11"
 fs-err = "3.3.2"
@@ -18,6 +19,7 @@ oxford_join = "0.8.0"
 regex.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
+sysinfo = { version = "0.40.4", default-features = false, features = ["system"] }
 yaffa.workspace = true
 
 [dev-dependencies]

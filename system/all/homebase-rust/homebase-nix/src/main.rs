@@ -5,6 +5,7 @@ mod develop;
 mod hack;
 mod paths;
 mod search;
+mod shcomp;
 mod trace;
 
 use clap::{Parser, Subcommand};
@@ -30,6 +31,7 @@ impl yaffa::RunWith<Options> for HbApp {
             Develop { cmd } => develop::develop(&cmd),
             Hack(opts) => hack::run(opts),
             Search { regex } => search::search(&regex),
+            Shcomp { shell } => shcomp::shcomp::<Options>(shell),
         }
     }
 }
@@ -59,6 +61,12 @@ enum Command {
     Search {
         /// A case-insensitive regex matched against attribute paths and package names
         regex: regex::Regex,
+    },
+
+    /// Print a shell completion script, as in: eval "$(homebase-nix shcomp)"
+    Shcomp {
+        /// The shell to generate completions for [default: detected from the parent process]
+        shell: Option<clap_complete::Shell>,
     },
 }
 
